@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{c5c61629-83dc-40ee-aa56-746378ed5c78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Renderer">
+      <UniqueIdentifier>{1f61d02a-35f5-48ff-8db8-092163b5558b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Texture">
+      <UniqueIdentifier>{63bacf18-a1ad-48a2-9061-79fa9767a0a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Camera">
+      <UniqueIdentifier>{6e52468e-34e3-4d5a-97a9-4c0018019f27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Chatting">
+      <UniqueIdentifier>{3f0402d2-0f0d-4e22-9e14-ffcd129f9d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Obj">
+      <UniqueIdentifier>{a65b6d00-8427-4b4a-8a36-75820c031231}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{4f8e2f7d-9152-449b-83ed-b044012ad0b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helper">
+      <UniqueIdentifier>{57d288d0-9226-4988-8ea4-f5fbc75b9de9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Vehicle">
+      <UniqueIdentifier>{626679ba-74a2-49ad-ae1c-2516436f5c32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Shader">
+      <UniqueIdentifier>{15fe09d3-a721-40e2-a80c-bc9139d6c330}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Render\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatManager.cpp">
+      <Filter>Render\Chatting</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Render\Chatting</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Render\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadPng.cpp">
+      <Filter>Render\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Render\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="VAO_OBJ.cpp">
+      <Filter>Render\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicObj.cpp">
+      <Filter>Render\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>helper</Filter>
+    </ClCompile>
+    <ClCompile Include="game_system.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle.cpp">
+      <Filter>Render\Vehicle</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>Render\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ChatManager.h">
+      <Filter>Render\Chatting</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Render\Chatting</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Render\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadPng.h">
+      <Filter>Render\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Render\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Render\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO_OBJ.h">
+      <Filter>Render\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicObj.h">
+      <Filter>Render\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SUNKUE.hpp">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="game_system.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
+      <Filter>Render\Vehicle</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\fragment.glsl">
+      <Filter>Render\Shader</Filter>
+    </None>
+    <None Include="Shader\png_fragment.glsl">
+      <Filter>Render\Shader</Filter>
+    </None>
+    <None Include="Shader\grass_vertex.glsl">
+      <Filter>Render\Shader</Filter>
+    </None>
+    <None Include="Shader\terrain_fragment.glsl">
+      <Filter>Render\Shader</Filter>
+    </None>
+    <None Include="Shader\vertex.glsl">
+      <Filter>Render\Shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resource\Texture\blueflower.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\grass0.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\grass1.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\greenpaint.jpg">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\greenpaint.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\greenwool.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\redflower.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\RGB.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\RGB_fliped.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Resource\Texture\sunkue_title.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
