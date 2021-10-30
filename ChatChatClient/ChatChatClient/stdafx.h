@@ -51,7 +51,7 @@ using clk = std::chrono::high_resolution_clock;
 #include "texture.h"
 #pragma warning(pop)
 
-#include "SUNKUE.hpp"
-#include "defines.h"
-#include "game_system.h"
 
+#include "gl_defines.h"
+#include "game_system.h"
+#include "../../Share/includes.h"

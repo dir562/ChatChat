@@ -5,7 +5,7 @@
 #include "VAO_OBJ.h"
 #include "Camera.h"
 #include "Game.h"
-#include "SUNKUE.hpp"
+
 
 void RenderScene(void)
 {
@@ -129,6 +129,22 @@ int main(int argc, char** argv)
 	else
 	{
 		std::cout << "GLEW 4.5 not supported\n ";
+	}
+	
+
+	while (true)
+	{
+		int A = 0;
+		timer::TIMER::instance().start();
+		for (int i = 0; i < 10'0000; i++)
+		{
+			volatile cs_try_login x;
+			x.size = rand();
+			A += rand() % x.packet_type._value;
+			A += x.size;
+		}
+		timer::TIMER::instance().end("!");
+		cout << A << endl;
 	}
 
 	glutDisplayFunc(RenderScene);

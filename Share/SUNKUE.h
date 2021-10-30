@@ -17,30 +17,45 @@
 #include <random>
 #include <thread>
 #include <chrono>
-
-//-----types-------------------------
-using BYTE = uint8_t;
-
-using int8 = int8_t;
-using int16 = int16_t;
-using int32 = int32_t;
-using int64 = int64_t;
-
-using uint8 = uint8_t;
-using uint16 = uint16_t;
-using uint32 = uint32_t;
-using uint64 = uint64_t;
-//-----------------------------------
-
-#undef max
-#undef min
-//-----------------------------------
-
+#include <future>
+#include <condition_variable>
+#include <queue>
 #define MY_NAME_SPACE SUNKUE
 
 #ifndef NONAMESPACE
 namespace MY_NAME_SPACE {} using namespace MY_NAME_SPACE; using namespace std;
 #endif // NONAMESPACE
+
+
+/// CODE GENERATE
+namespace MY_NAME_SPACE 
+{
+
+#define DISABLE_COPY(CLASS)								\
+        public:											\
+            CLASS(const CLASS&) = delete;				\
+            CLASS& operator=(const CLASS&) = delete;
+
+
+#define SINGLE_TON(CLASS)								\
+		DISABLE_COPY(CLASS)								\
+		private:										\
+			CLASS() = default;							\
+		public:											\
+			static CLASS& get()							\
+			{											\
+				static CLASS _instance;					\
+				return _instance;						\
+			}
+
+#define GET(_var) auto get##_var()const { return _var; }
+#define GET_REF(_var) const auto& get##_var()const { return _var; }
+#define GET_REF_UNSAFE(_var) auto& get##_var() { return _var; }
+#define SET(_var) void set##_var(auto _value) { _var = _value; }
+#define SET_REF(_var) void set##_var(const auto& _value) { _var = _value; }
+
+}
+
 
 
 
@@ -98,10 +113,11 @@ namespace MY_NAME_SPACE {
 	{
 		using value_type = decltype(_GetValueType<_Ty>());
 
-
-		static constexpr size_t bits{ sizeof(_Ty) * 8 };
+		static consteval size_t bits() { return sizeof(_Ty) * 8; };
 	};
-
+	
+	template <class _T>
+	concept primitive_t = is_arithmetic_v<_T> || is_enum_v<_T>;
 }
 
 // OPTIMAIZE benchmark_nessasary
@@ -130,11 +146,10 @@ namespace MY_NAME_SPACE {
 //	compile_time
 namespace MY_NAME_SPACE {
 	template<class Lambda, int = (Lambda{}(), 0) >
-	constexpr bool _is_constexpr(Lambda) { return true; }
-	constexpr bool _is_constexpr(...) { return false; }
-
+	constexpr bool _is_consteval(Lambda) { return true; }
+	constexpr bool _is_consteval(...) { return false; }
 	// 함수 반환값 컴파일 타임인지 확인
-#define is_constexpr(Ret_val) _is_constexpr([]() {return Ret_val; })
+#define is_consteval(Ret_val) _is_consteval([]() {return Ret_val; })
 }
 
 //	Thread
@@ -202,7 +217,31 @@ namespace MY_NAME_SPACE {
 	// length_of_array
 #define sizeof_array(t) sizeof(t) / sizeof(t[0])
 
+	template<unsigned_integral _uint>
+	constexpr inline bool check_overflow_sum(_uint a, _uint b) noexcept
+	{
+		if constexpr (a < numeric_limits<_uint>::max() - b) [[likely]]
+		{
+			return false;
+		}
+		else /* overflowed */
+		{
+			return true;
+		}
+	}
 
+	template<unsigned_integral _uint>
+	constexpr inline bool check_underflow_sub(_uint a, _uint b) noexcept
+	{
+		if constexpr (b < a) [[likely]]
+		{
+			return false;
+		}
+		else /* underflow */
+		{
+			return true;
+		}
+	} 
 }
 
 

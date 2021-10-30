@@ -89,6 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +105,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -119,6 +121,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,6 +137,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Share\SocketUtil.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ChatManager.cpp" />
     <ClCompile Include="DynamicObj.cpp" />
@@ -151,16 +161,29 @@
     <ClCompile Include="LoadPng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="VAO_OBJ.cpp" />
     <ClCompile Include="Vehicle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Share\SocketUtil.h" />
+    <ClInclude Include="..\..\Share\types.h" />
+    <ClInclude Include="..\..\Share\enum.h" />
+    <ClInclude Include="..\..\Share\FastSpinlock.h" />
+    <ClInclude Include="..\..\Share\includes.h" />
+    <ClInclude Include="..\..\Share\Protocol.h" />
+    <ClInclude Include="..\..\Share\SUNKUE.h" />
+    <ClInclude Include="..\..\Share\Thread_Pool.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChatManager.h" />
-    <ClInclude Include="defines.h" />
+    <ClInclude Include="gl_defines.h" />
     <ClInclude Include="DynamicObj.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="game_system.h" />
@@ -168,7 +191,6 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="SUNKUE.hpp" />
     <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="VAO_OBJ.h" />

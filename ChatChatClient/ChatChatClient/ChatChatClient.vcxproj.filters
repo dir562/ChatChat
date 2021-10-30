@@ -35,6 +35,18 @@
     <Filter Include="Render\Shader">
       <UniqueIdentifier>{15fe09d3-a721-40e2-a80c-bc9139d6c330}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Share">
+      <UniqueIdentifier>{4c7ec9fe-73db-4f2c-abcd-c588133fbb17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Share\helper">
+      <UniqueIdentifier>{4a8e28d4-ff2d-4bde-99fd-11778f630ef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Share\NetworkHelper">
+      <UniqueIdentifier>{200cced7-b4ae-4379-ad57-3dcd7f651ced}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Share\defineds">
+      <UniqueIdentifier>{e4a4b4e1-39ee-4d5f-a7ed-671a36a6b3ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -74,6 +86,9 @@
       <Filter>Render\Vehicle</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\Share\SocketUtil.cpp">
+      <Filter>Share\NetworkHelper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -106,13 +121,10 @@
     <ClInclude Include="Game.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="SUNKUE.hpp">
-      <Filter>helper</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>helper</Filter>
     </ClInclude>
-    <ClInclude Include="defines.h">
+    <ClInclude Include="gl_defines.h">
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="game_system.h">
@@ -120,6 +132,30 @@
     </ClInclude>
     <ClInclude Include="Vehicle.h">
       <Filter>Render\Vehicle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\includes.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\FastSpinlock.h">
+      <Filter>Share\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SUNKUE.h">
+      <Filter>Share\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Thread_Pool.h">
+      <Filter>Share\helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SocketUtil.h">
+      <Filter>Share\NetworkHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\enum.h">
+      <Filter>Share\defineds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\types.h">
+      <Filter>Share\defineds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Protocol.h">
+      <Filter>Share\defineds</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
