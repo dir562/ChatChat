@@ -1,41 +1,11 @@
 #include "stdafx.h"
 
 
-constexpr short SERVER_PORT{ 8888 };
-constexpr size_t BUFSIZE{ 256 };
-
-
 void Disconnect(int);
 
-enum COMP_OP { OP_RECV = 1, OP_SEND, OP_ACCEPT };
-class EXP_OVER {
-public:
-	WSAOVERLAPPED	_wsa_over;
-	COMP_OP			_comp_op;
-	WSABUF			_wsa_buf;
-	unsigned char	_net_buf[BUFSIZE];
-public:
-	EXP_OVER(COMP_OP comp_op, char num_bytes, void* mess) : _comp_op(comp_op)
-	{
-		ZeroMemory(&_wsa_over, sizeof(_wsa_over));
-		_wsa_buf.buf = reinterpret_cast<char*>(_net_buf);
-		_wsa_buf.len = num_bytes;
-		memcpy(_net_buf, mess, num_bytes);
-	}
 
-	EXP_OVER(COMP_OP comp_op) : _comp_op(comp_op) {}
+BETTER_ENUM(STATE, int8, ST_FREE, ST_ACCEPT, ST_INGAME);
 
-	EXP_OVER()
-	{
-		EXP_OVER(OP_RECV);
-	}
-
-	~EXP_OVER()
-	{
-	}
-};
-
-enum class STATE { ST_FREEE, ST_ACCEPT, ST_INGAME };
 class CLIENT {
 private:
 public:
@@ -43,7 +13,7 @@ public:
 	char _name[MAX_NAME_SIZE];	// => logout login 시에 바뀜, _in_use 먼저 체크하고 사용하자.
 	short  x = 0, y = 0;		// => 성능을 위해서 보호하지 말자. => 위치랙
 	SOCKET _socket;				// => reuse // => _state 추가, accept 했지만 login_in_game 하지 않은 경우. {free, in_lobby, in_game}
-	STATE _state{ STATE::ST_FREEE };
+	STATE _state{ STATE::ST_FREE };
 	mutex _state_lock;
 
 	/* no data race */
@@ -91,7 +61,7 @@ public:
 	void disconnect()
 	{
 		scoped_lock lock{ _state_lock };
-		_state = STATE::ST_FREEE;
+		_state = STATE::ST_FREE;
 		closesocket(_socket);
 	}
 };
@@ -104,7 +74,7 @@ size_t get_new_id()
 	for (int i = 0; i < MAX_PLAYER; i++)
 	{
 		scoped_lock lock{ clients[i]._state_lock };
-		if (STATE::ST_FREEE == clients[i]._state)
+		if (+STATE::ST_FREE == clients[i]._state)
 		{
 			clients[i]._state = STATE::ST_ACCEPT;
 			return i;
@@ -114,52 +84,6 @@ size_t get_new_id()
 	return -1;
 }
 
-void send_login_ok_packet(int c_id)
-{
-	sc_packet_login_ok p;
-	p.id = c_id;
-	p.size = sizeof(p);
-	p.type = SC_PACKET_LOGIN_OK;
-	p.x = clients[c_id].x;
-	p.y = clients[c_id].y;
-	cout << "logined:" << c_id << " bytes:" << (int)p.size << " x:" << p.x << ", y:" << p.y << endl;
-	clients[c_id].do_send(sizeof(p), &p);
-}
-
-void send_move_packet(int c_id, int mover)
-{
-	sc_packet_move p;
-	p.id = mover;
-	p.size = sizeof(p);
-	p.type = SC_PACKET_MOVE;
-	p.x = clients[mover].x;
-	p.y = clients[mover].y;
-	clients[c_id].do_send(sizeof(p), &p);
-
-}
-
-void send_put_obj_packet(int c_id, int new_client)
-{
-	sc_packet_put_object p;
-	p.id = new_client;
-	strcpy_s(p.name, clients[new_client]._name);
-	p.size = sizeof(p);
-	p.object_type = 0;
-	p.x = clients[new_client].x;
-	p.y = clients[new_client].y;
-	p.type = SC_PACKET_PUT_OBJECT;
-	cout << "->send _ putobj_ logined:" << new_client << " bytes:" << p.size << " x:" << p.x << ", y:" << p.y << endl;
-	clients[c_id].do_send(sizeof(p), &p);
-}
-
-void send_remove_object(int c_id, int victim)
-{
-	sc_packet_remove_object p;
-	p.id = victim;
-	p.size = sizeof(p);
-	p.type = SC_PACKET_REMOVE_OBJECT;
-	clients[c_id].do_send(sizeof(p), &p);
-}
 
 void process_packet(int client_id, unsigned char* packet_start)
 {
@@ -247,7 +171,7 @@ void Disconnect(int c_id)
 		send_remove_object(cl._id, c_id);
 	}
 }
-     
+
 concurrent_queue packet_queue;
 
 // IOCP SERVER NETWORKER.
@@ -276,51 +200,10 @@ class ServerNetwork
 		iocp_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
 	}
 
-	
+
 	// IOCP LISTENSOCKET 2 ACCEPT.
-public :
-	class ListenSocket
-	{
-		friend ServerNetwork;
+public:
 
-		SINGLE_TON(ListenSocket)
-		{
-			listen_socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-			SOCKADDR_IN server_addr;
-			ZeroMemory(&server_addr, sizeof(server_addr));
-			server_addr.sin_family = AF_INET;
-			server_addr.sin_port = htons(SERVER_PORT);
-			server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-			bind(listen_socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
-			listen(listen_socket_, SOMAXCONN);
-			CreateIoCompletionPort(reinterpret_cast<HANDLE>(listen_socket_), ServerNetwork::get().iocp_, 0, 0);
-		};
-
-		~ListenSocket()
-		{
-			/// <summary>
-			///  우아한 종료 도전중/////
-			/// </summary>
-		}
-
-	public:
-		void do_accept()
-		{
-			newface_socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-			ZeroMemory(&accept_ex_._wsa_over, sizeof(accept_ex_._wsa_over));
-			accept_ex_._comp_op = OP_ACCEPT;
-			cout << "wait_for_accept" << endl;
-			auto x = AcceptEx(listen_socket_, newface_socket_, accept_buf_, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, NULL, &accept_ex_._wsa_over);
-			*reinterpret_cast<SOCKET*>(accept_ex_._net_buf) = newface_socket_;
-			cout << x << "non_blocking_accept_start" << endl;
-		};
-
-	private:
-		SOCKET		listen_socket_;
-		SOCKET		newface_socket_;
-		EXP_OVER	accept_ex_;
-		char		accept_buf_[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
-	};
 
 public:
 	void DoQueuedCompletionStatus()
@@ -391,7 +274,7 @@ public:
 				}
 				{
 					scoped_lock lock{ cl._state_lock };
-					if (STATE::ST_FREEE != cl._state)
+					if (STATE::ST_FREE != cl._state)
 						cl.do_recv();
 				}
 			}
@@ -460,7 +343,7 @@ int main()
 
 	for (auto& cl : clients)
 	{
-		if (STATE::ST_FREEE != cl._state)
+		if (STATE::ST_FREE != cl._state)
 			cl.disconnect();
 	}
 

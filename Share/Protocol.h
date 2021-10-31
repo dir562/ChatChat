@@ -6,7 +6,7 @@
 
 //====================================
 
-const uint16_t SEVER_PORT = 8282;
+const uint16_t SERVER_PORT = 8282;
 const auto SERVER_IP = "127.0.0.1";
 
 //====================================
@@ -15,7 +15,7 @@ const int MAX_NAME_SIZE = 10;
 const int MAX_PLAYER = 20;
 const int MAX_ENEMY = 30;
 const int MAX_OBJECT = MAX_PLAYER + MAX_ENEMY;
-const int MAX_PACKET_SIZE = 800;
+const int MAX_PACKET_SIZE = 256;
 
 //====================================
 

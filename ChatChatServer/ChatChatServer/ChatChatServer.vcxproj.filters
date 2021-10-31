@@ -7,6 +7,24 @@
     <Filter Include="helper">
       <UniqueIdentifier>{870da44e-f30c-47c9-b4cb-c96b85d22452}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Server">
+      <UniqueIdentifier>{7e1253c4-9993-467f-9659-24aa60b27a06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\GameData">
+      <UniqueIdentifier>{5fcd6ec0-936d-47ff-bb51-4a63dfc449ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\ListenSocket">
+      <UniqueIdentifier>{586c08bd-4bdd-4e83-af47-580c69ae3917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\LogicThread">
+      <UniqueIdentifier>{6d1583e9-adc1-4607-a361-2dd3e3ee2a51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\MainThread">
+      <UniqueIdentifier>{3f12df2f-835d-41db-8929-71ed97bb876f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\IocpHelper">
+      <UniqueIdentifier>{faea5df5-c103-4daa-93bd-73f007da2917}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Share\defines.h">
@@ -39,14 +57,37 @@
     <ClInclude Include="stdafx.h">
       <Filter>helper</Filter>
     </ClInclude>
+    <ClInclude Include="GameData.h">
+      <Filter>Server\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="ListenSocket.h">
+      <Filter>Server\ListenSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicThread.h">
+      <Filter>Server\LogicThread</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpHelper.h">
+      <Filter>Server\IocpHelper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Share\SocketUtil.cpp">
       <Filter>Share</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <Filter>helper</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Server\MainThread</Filter>
+    </ClCompile>
+    <ClCompile Include="GameData.cpp">
+      <Filter>Server\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="ListenSocket.cpp">
+      <Filter>Server\ListenSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicThread.cpp">
+      <Filter>Server\LogicThread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -132,23 +132,6 @@ int main(int argc, char** argv)
 	}
 	
 
-	while (true)
-	{
-		int A = 0;
-		timer::TIMER::instance().start();
-		for (int i = 0; i < 10'0000; i++)
-		{
-			volatile cs_try_login x;
-			x.size = rand();
-			A += rand() % x.packet_type._value;
-			A += x.size;
-			// 3ms
-			// 20~25ms.
-		}
-		timer::TIMER::instance().end("!");
-		cout << A << endl;
-	}
-
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);

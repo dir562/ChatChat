@@ -28,6 +28,10 @@
     <ClInclude Include="..\..\Share\SUNKUE.h" />
     <ClInclude Include="..\..\Share\Thread_Pool.h" />
     <ClInclude Include="..\..\Share\types.h" />
+    <ClInclude Include="GameData.h" />
+    <ClInclude Include="IocpHelper.h" />
+    <ClInclude Include="ListenSocket.h" />
+    <ClInclude Include="LogicThread.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +41,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="GameData.cpp" />
+    <ClCompile Include="ListenSocket.cpp" />
+    <ClCompile Include="LogicThread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
