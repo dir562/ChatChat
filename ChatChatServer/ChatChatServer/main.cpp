@@ -96,12 +96,12 @@ public:
 	}
 };
 
-array <CLIENT, MAX_USER> clients;
+array <CLIENT, MAX_PLAYER> clients;
 
 size_t get_new_id()
 {
 	static size_t g_id = 0;
-	for (int i = 0; i < MAX_USER; i++)
+	for (int i = 0; i < MAX_PLAYER; i++)
 	{
 		scoped_lock lock{ clients[i]._state_lock };
 		if (STATE::ST_FREEE == clients[i]._state)
@@ -247,163 +247,210 @@ void Disconnect(int c_id)
 		send_remove_object(cl._id, c_id);
 	}
 }
+     
+concurrent_queue packet_queue;
 
-
-HANDLE g_h_iocp;
-SOCKET g_s_socket;
-
-void worker()
+// IOCP SERVER NETWORKER.
+class ServerNetwork
 {
-	SOCKET c_socket;
-	EXP_OVER accept_ex;
-	char accept_buf[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
+	SINGLE_TON(ServerNetwork)
+	{
+		InitServer();
+	}
 
-	auto do_accept = [&] {
-		c_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-		ZeroMemory(&accept_ex._wsa_over, sizeof(accept_ex._wsa_over));
-		accept_ex._comp_op = OP_ACCEPT;
-		cout << "wait_for_accept" << endl;
-		auto x = AcceptEx(g_s_socket, c_socket, accept_buf, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, NULL, &accept_ex._wsa_over);
-		*reinterpret_cast<SOCKET*>(accept_ex._net_buf) = c_socket;
+	~ServerNetwork()
+	{
 
-		cout << x << "accepted" << endl;
+		/// <summary>
+		///  우아한 종료 도전중/////
+		/// </summary>
+		shutdown(ListenSocket::get().listen_socket_, 2);
+		closesocket(ListenSocket::get().listen_socket_);
+		WSACleanup();
+	}
+
+	void InitServer()
+	{
+		WSADATA WSAData;
+		WSAStartup(MAKEWORD(2, 2), &WSAData);
+		iocp_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
+	}
+
+	
+	// IOCP LISTENSOCKET 2 ACCEPT.
+public :
+	class ListenSocket
+	{
+		friend ServerNetwork;
+
+		SINGLE_TON(ListenSocket)
+		{
+			listen_socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+			SOCKADDR_IN server_addr;
+			ZeroMemory(&server_addr, sizeof(server_addr));
+			server_addr.sin_family = AF_INET;
+			server_addr.sin_port = htons(SERVER_PORT);
+			server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+			bind(listen_socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
+			listen(listen_socket_, SOMAXCONN);
+			CreateIoCompletionPort(reinterpret_cast<HANDLE>(listen_socket_), ServerNetwork::get().iocp_, 0, 0);
+		};
+
+		~ListenSocket()
+		{
+			/// <summary>
+			///  우아한 종료 도전중/////
+			/// </summary>
+		}
+
+	public:
+		void do_accept()
+		{
+			newface_socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+			ZeroMemory(&accept_ex_._wsa_over, sizeof(accept_ex_._wsa_over));
+			accept_ex_._comp_op = OP_ACCEPT;
+			cout << "wait_for_accept" << endl;
+			auto x = AcceptEx(listen_socket_, newface_socket_, accept_buf_, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, NULL, &accept_ex_._wsa_over);
+			*reinterpret_cast<SOCKET*>(accept_ex_._net_buf) = newface_socket_;
+			cout << x << "non_blocking_accept_start" << endl;
+		};
+
+	private:
+		SOCKET		listen_socket_;
+		SOCKET		newface_socket_;
+		EXP_OVER	accept_ex_;
+		char		accept_buf_[sizeof(SOCKADDR_IN) * 2 + 32 + 100];
 	};
 
-	do_accept();
-
-	for (int i = 0; i < MAX_USER; i++)
+public:
+	void DoQueuedCompletionStatus()
 	{
-		clients[i]._id = i;
-	}
+		ServerNetwork::ListenSocket::get().do_accept();
 
-	for (;;)
-	{
-		DWORD num_bytes;
-		LONG64 iocp_key{};
-		WSAOVERLAPPED* p_over = new WSAOVERLAPPED;
-		BOOL res = GetQueuedCompletionStatus(g_h_iocp, &num_bytes, (PULONG_PTR)&iocp_key, &p_over, INFINITE);
-		cout << "\n\nGQCS returned\n";
-		int client_id = static_cast<int>(iocp_key);
-		cout << "id::" << client_id << " ";
-		auto ex_over = reinterpret_cast<EXP_OVER*>(p_over);
-		if (ex_over == nullptr)
+		for (int i = 0; i < MAX_PLAYER; i++)
 		{
-			cout << "?";
+			clients[i]._id = i;
 		}
-		if (res == FALSE)
+
+		for (;;)
 		{
-			cout << "missconnect" << endl;
-			Disconnect(client_id);
-			if (ex_over->_comp_op == OP_SEND)
+			DWORD num_bytes;
+			LONG64 iocp_key{};
+			WSAOVERLAPPED* p_over = new WSAOVERLAPPED;
+			BOOL res = GetQueuedCompletionStatus(iocp_, &num_bytes, (PULONG_PTR)&iocp_key, &p_over, INFINITE);
+			cout << "\n\nGQCS returned\n";
+			int client_id = static_cast<int>(iocp_key);
+			cout << "id::" << client_id << " ";
+			auto ex_over = reinterpret_cast<EXP_OVER*>(p_over);
+			if (ex_over == nullptr)
 			{
+				cout << "?";
+			}
+			if (res == FALSE)
+			{
+				cout << "missconnect" << endl;
+				Disconnect(client_id);
+				if (ex_over->_comp_op == OP_SEND)
+				{
+					continue;
+				}
 				continue;
 			}
-			continue;
-		}
-		switch (ex_over->_comp_op)
-		{
-		case OP_RECV:
-		{
-			cout << "RECV ";
-
-			CLIENT& cl = clients[client_id];
-			int remain_data = num_bytes + cl._prev_size;
-			unsigned char* packet_start = ex_over->_net_buf;
-			int packet_size = packet_start[0];
-			cout << num_bytes << "nsize:prev size" << cl._prev_size << " ! ";
-			cout << packet_size << "psize:remain_data";
-			cout << remain_data << endl;
-			if (num_bytes == 0) //  0 바이트가  recv 들어오는 경우는 접속이 종료되었을 경우다. 잊지 말자.
+			switch (ex_over->_comp_op)
 			{
-				cout << "recved 0 bytes. disconnect." << endl;
-				Disconnect(client_id);
-			}
-			while (packet_size <= remain_data)
+			case OP_RECV:
 			{
-				cout << "[r]";
-				process_packet(client_id, packet_start);
-				remain_data -= packet_size;
-				packet_start += packet_size;
-				if (0 < remain_data)packet_size - packet_start[0];
-				else break;
+				cout << "RECV ";
+
+				CLIENT& cl = clients[client_id];
+				int remain_data = num_bytes + cl._prev_size;
+				unsigned char* packet_start = ex_over->_net_buf;
+				int packet_size = packet_start[0];
+				cout << num_bytes << "nsize:prev size" << cl._prev_size << " ! ";
+				cout << packet_size << "psize:remain_data";
+				cout << remain_data << endl;
+				if (num_bytes == 0) //  0 바이트가  recv 들어오는 경우는 접속이 종료되었을 경우다. 잊지 말자.
+				{
+					cout << "recved 0 bytes. disconnect." << endl;
+					Disconnect(client_id);
+				}
+				while (packet_size <= remain_data)
+				{
+					cout << "[r]";
+					process_packet(client_id, packet_start);
+					remain_data -= packet_size;
+					packet_start += packet_size;
+					if (0 < remain_data)packet_size - packet_start[0];
+					else break;
+				}
+				if (0 < remain_data)
+				{
+					cout << "{r}";
+					cl._prev_size = remain_data;
+					memcpy(&ex_over->_net_buf, packet_start, remain_data);
+				}
+				{
+					scoped_lock lock{ cl._state_lock };
+					if (STATE::ST_FREEE != cl._state)
+						cl.do_recv();
+				}
 			}
-			if (0 < remain_data)
-			{
-				cout << "{r}";
-				cl._prev_size = remain_data;
-				memcpy(&ex_over->_net_buf, packet_start, remain_data);
-			}
-			{
-				scoped_lock lock{ cl._state_lock };
-				if (STATE::ST_FREEE != cl._state)
-					cl.do_recv();
-			}
-		}
-		break;
-		case OP_SEND:
-		{
-			cout << "SEND ";
-
-			if (num_bytes != ex_over->_wsa_buf.len)
-			{
-				Disconnect(client_id);
-			}
-			delete ex_over;
-		}
-		break;
-		case OP_ACCEPT:
-		{
-			cout << "ACCEPT ";
-
-			SOCKET c_socket = *(reinterpret_cast<SOCKET*>(ex_over->_net_buf));
-
-			size_t new_id = get_new_id();
-			CLIENT& cl = clients[new_id];
-			cl.x = 0;
-			cl.y = 0;
-			cl._id = new_id;
-			cl._prev_size = 0;
-			cl._recv_over._comp_op = OP_RECV;
-			cl._recv_over._wsa_buf.buf = reinterpret_cast<char*>(cl._recv_over._net_buf);
-			cl._recv_over._wsa_buf.len = sizeof(cl._recv_over._net_buf);
-			ZeroMemory(&cl._recv_over._wsa_over, sizeof(cl._recv_over._wsa_over));
-			cl._socket = c_socket;
-
-			cout << new_id << "E ";
-			CreateIoCompletionPort(reinterpret_cast<HANDLE>(cl._socket), g_h_iocp, new_id, 0);
-			cout << new_id << "E ";
-			cl.do_recv();
-
-			do_accept();
-		}
-		break;
-		default:
-			cout << "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE";
 			break;
+			case OP_SEND:
+			{
+				cout << "SEND ";
+
+				if (num_bytes != ex_over->_wsa_buf.len)
+				{
+					Disconnect(client_id);
+				}
+				delete ex_over;
+			}
+			break;
+			case OP_ACCEPT:
+			{
+				cout << "ACCEPT ";
+				SOCKET c_socket = *(reinterpret_cast<SOCKET*>(ex_over->_net_buf));
+				size_t new_id = get_new_id();
+				CLIENT& cl = clients[new_id];
+				cl.x = 0;
+				cl.y = 0;
+				cl._id = new_id;
+				cl._prev_size = 0;
+				cl._recv_over._comp_op = OP_RECV;
+				cl._recv_over._wsa_buf.buf = reinterpret_cast<char*>(cl._recv_over._net_buf);
+				cl._recv_over._wsa_buf.len = sizeof(cl._recv_over._net_buf);
+				ZeroMemory(&cl._recv_over._wsa_over, sizeof(cl._recv_over._wsa_over));
+				cl._socket = c_socket;
+
+				cout << new_id << "E ";
+				CreateIoCompletionPort(reinterpret_cast<HANDLE>(cl._socket), iocp_, new_id, 0);
+				cout << new_id << "E ";
+				cl.do_recv();
+
+				ServerNetwork::ListenSocket::get().do_accept();
+			}
+			}
 		}
 	}
-}
+
+public:
+	GET(iocp);
+
+private:
+	HANDLE iocp_;
+};
+
 
 int main()
 {
-	WSADATA WSAData;
-	WSAStartup(MAKEWORD(2, 2), &WSAData);
-	g_s_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-	SOCKADDR_IN server_addr;
-	ZeroMemory(&server_addr, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(SERVER_PORT);
-	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	bind(g_s_socket, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
-	listen(g_s_socket, SOMAXCONN);
+	ServerNetwork::get();
 
-	g_h_iocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
-	CreateIoCompletionPort(reinterpret_cast<HANDLE>(g_s_socket), g_h_iocp, 0, 0);
 
 	vector<thread> workers;
 	for (int i = 0; i < 6; i++)
 	{
-		workers.emplace_back(worker);
+		workers.emplace_back(DoQueuedCompletionStatus);
 	}
 
 	for (auto& w : workers)
@@ -417,8 +464,7 @@ int main()
 			cl.disconnect();
 	}
 
-	closesocket(g_s_socket);
-	WSACleanup();
+
 }
 
 

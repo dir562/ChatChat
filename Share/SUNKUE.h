@@ -39,20 +39,20 @@ namespace MY_NAME_SPACE
 
 #define SINGLE_TON(CLASS)								\
 		DISABLE_COPY(CLASS)								\
-		private:										\
-			CLASS() = default;							\
 		public:											\
 			static CLASS& get()							\
 			{											\
 				static CLASS _instance;					\
 				return _instance;						\
-			}
+			}											\
+		private:										\
+			CLASS()
 
-#define GET(_var) auto get##_var()const { return _var; }
-#define GET_REF(_var) const auto& get##_var()const { return _var; }
-#define GET_REF_UNSAFE(_var) auto& get##_var() { return _var; }
-#define SET(_var) void set##_var(auto _value) { _var = _value; }
-#define SET_REF(_var) void set##_var(const auto& _value) { _var = _value; }
+#define GET(var) auto get_##var()const { return var##_; }
+#define GET_REF(var) const auto& get_##var()const { return var##_; }
+#define GET_REF_UNSAFE(var) auto& get_##var() { return var##_; }
+#define SET(var) void set##var(auto value) { var##_ = value; }
+#define SET_REF(var) void set##var(const auto& value) { var##_ = value; }
 
 }
 

@@ -7,7 +7,6 @@
 //====================================
 
 const uint16_t SEVER_PORT = 8282;
-const uint16_t LISTENNIG_PORT = 5858;
 const auto SERVER_IP = "127.0.0.1";
 
 //====================================
@@ -20,40 +19,64 @@ const int MAX_PACKET_SIZE = 800;
 
 //====================================
 
+#pragma warning(push)
+#pragma warning(disable: 26812)
+
 BETTER_ENUM
 (
 	PAKCET_TYPE, int8
 
-	, CS_TRY_LOGIN222 = 0
-	, CS_TRY_LOGIN = 86
-	, CS_LOGIN_PACKET = 1
-	, CS_MAKE_MAP_DONE = 2
-	, CS_NEW_CHARATOR = 77
+	, NONE = 0
+	
+	/* Client 2 Server */
+	
+	, CS_NONE			= 10
+	, CS_TRY_LOGIN
+	, CS_LOGIN_PACKET
+	, CS_MAKE_MAP_DONE
+	, CS_NEW_CHARATOR
+
+
+
+
+	/* Server 2 Client */
+
+	, SC_NONE			= 100
+
+
+
+
+
 );
+
+#pragma warning(pop)
+
 
 #pragma pack (push, 1)
 //================ BASE ================
 
-#define PACKET(name)															\
-template<class T>																\
-struct packet_base_##name														\
-{																				\
-	int8 size = sizeof(T);														\
-	PAKCET_TYPE packet_type = +PAKCET_TYPE::_from_string_nocase(#name);			\
-};																				\
-struct name : packet_base_##name<name>											\
+
+template<class T>
+struct packet_base
+{
+	int8 size = sizeof(T);
+	PAKCET_TYPE packet_type = +PAKCET_TYPE::_from_string_nocase(typeid(T).name() + 7);
+};
+#define PACKET(name) struct name : packet_base<name>											
+
+PACKET(none)
+{
+};
 
 //=============== LOG_IN =================
 
 // => 이 이름으로 로그인 할래
-struct cs_try_login										
+PACKET(cs_try_login)
 {
-	volatile int8 size = sizeof(cs_try_login);
-	volatile PAKCET_TYPE packet_type = PAKCET_TYPE::CS_TRY_LOGIN;
-	volatile char name[MAX_NAME_SIZE];
+	char name[MAX_NAME_SIZE];
 };
 
-/*
+
 // => ok 너의 id는 이거야
 
 PACKET(sc_ok_login)
@@ -186,5 +209,5 @@ PACKET(sc_model_change)
 
 //================================================
 
-*/
+
 #pragma pack(pop)

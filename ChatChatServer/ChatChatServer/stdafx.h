@@ -19,6 +19,7 @@
 #include <memory>
 #include <list>
 #include <unordered_map>
-
-
+#include <ppl.h>
+#include <concurrent_queue.h>
+using namespace concurrency;
 #include "../../Share/includes.h"

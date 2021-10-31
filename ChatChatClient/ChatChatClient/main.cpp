@@ -142,6 +142,8 @@ int main(int argc, char** argv)
 			x.size = rand();
 			A += rand() % x.packet_type._value;
 			A += x.size;
+			// 3ms
+			// 20~25ms.
 		}
 		timer::TIMER::instance().end("!");
 		cout << A << endl;
