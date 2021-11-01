@@ -3,7 +3,7 @@
 #include "ListenSocket.h"
 
 
-ListenSocket::ListenSocket()
+void ListenSocket::Init(HANDLE iocp)
 {
 	listen_socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	SOCKADDR_IN server_addr;
@@ -13,12 +13,13 @@ ListenSocket::ListenSocket()
 	server_addr.sin_addr.s_addr = ::htonl(INADDR_ANY);
 	auto res = ::bind(listen_socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
 	res = ::listen(listen_socket_, SOMAXCONN);
-	::CreateIoCompletionPort(reinterpret_cast<HANDLE>(listen_socket_), iocp_, 0, 0);
+	::CreateIoCompletionPort(reinterpret_cast<HANDLE>(listen_socket_), iocp, 0, 0);
 };
 
 
 ListenSocket::~ListenSocket()
 {
+	::closesocket(listen_socket_);
 	REPORT_ERROR("Maybe ServerDown");
 }
 
@@ -29,6 +30,7 @@ void ListenSocket::do_accept()
 	accept_ex_.comp_op = COMP_OP::OP_ACCEPT;
 	constexpr auto len = sizeof(SOCKADDR_IN) + 16;
 	*reinterpret_cast<SOCKET*>(accept_ex_.net_buf) = newface_socket_;
-	auto res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, NULL, len, len, nullptr, &accept_ex_.wsa_over);
-	cerr << boolalpha << res << " non_blocking_accept_start" << endl;
+	int res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, NULL, len, len, nullptr, &accept_ex_.wsa_over);
+	if (ERROR_IO_PENDING != GetLastError())SocketUtil::DisplayError(GetLastError());
+	cerr << "accept_start" << endl;
 }

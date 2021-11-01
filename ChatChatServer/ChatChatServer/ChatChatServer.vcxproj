@@ -19,9 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Share\defines.h" />
     <ClInclude Include="..\..\Share\enum.h" />
-    <ClInclude Include="..\..\Share\FastSpinlock.h" />
+    <ClInclude Include="..\..\Share\Spinlock.h" />
     <ClInclude Include="..\..\Share\includes.h" />
     <ClInclude Include="..\..\Share\Protocol.h" />
     <ClInclude Include="..\..\Share\SocketUtil.h" />
@@ -31,7 +30,7 @@
     <ClInclude Include="GameData.h" />
     <ClInclude Include="IocpHelper.h" />
     <ClInclude Include="ListenSocket.h" />
-    <ClInclude Include="IocpThread.h" />
+    <ClInclude Include="IOCP.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -44,8 +43,9 @@
     </ClCompile>
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="ListenSocket.cpp" />
-    <ClCompile Include="IocpThread.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="IOCP.cpp" />
+    <ClCompile Include="temp.cpp" />
+    <ClCompile Include="server_main.cpp" />
     <ClCompile Include="Session.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

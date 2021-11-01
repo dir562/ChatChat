@@ -18,9 +18,9 @@
 #include <queue>
 #include <memory>
 #include <list>
-#include <unordered_map>
 #include <ppl.h>
 #include <concurrent_queue.h>
+#include <concurrent_unordered_map.h>
 
 using namespace concurrency;
 
@@ -28,4 +28,3 @@ using namespace concurrency;
 #include "../../Share/includes.h"
 
 
-#include "ListenSocket.h"

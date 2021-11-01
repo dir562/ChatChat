@@ -3,10 +3,10 @@
 
 #include "types.h"
 #include "enum.h"
-
 //====================================
 
-using packet_size_t = int8;
+using NetID = uint8;
+using packet_size_t = uint8;
 
 //====================================
 
@@ -39,6 +39,7 @@ BETTER_ENUM
 	, CS_LOGIN_PACKET
 	, CS_MAKE_MAP_DONE
 	, CS_NEW_CHARATOR
+	, CS_CHAT
 
 
 
@@ -46,6 +47,7 @@ BETTER_ENUM
 	/* Server 2 Client */
 
 	, SC_NONE			= 100
+	, SC_CHAT
 
 
 
@@ -85,7 +87,7 @@ PACKET(cs_try_login)
 
 PACKET(sc_ok_login)
 {
-	int8 login_id;
+	NetID login_id;
 };
 
 // 맵에 누구누구가 어디어디에 있는지 알려주어야 함
@@ -93,7 +95,7 @@ PACKET(sc_ok_login)
 
 PACKET(sc_new_charator)
 {
-	int8 login_id;
+	NetID login_id;
 	char name[MAX_NAME_SIZE];
 	float x;
 	float y;
@@ -113,14 +115,14 @@ PACKET(cs_make_map_done)
 
 PACKET(sc_logout)
 {
-	int8 logout_id;
+	NetID logout_id;
 };
 
 // => recv 의 리턴값이 0 인 경우 또는 PACKET(sc_logout) 패킷이 왔을 경우.
 
 PACKET(cs_logout)
 {
-	int8 logout_id;
+	NetID logout_id;
 };
 
 // => 맵에서 플레이어 제거.
@@ -147,7 +149,7 @@ PACKET(cs_moved)
 
 PACKET(sc_moved)
 {
-	int8 mover_id;
+	NetID mover_id;
 	MOVE_DIR arrow_key;
 };
 
@@ -165,7 +167,7 @@ PACKET(cs_chat)
 
 PACKET(sc_chat)
 {
-	int8 chatter_id;
+	NetID chatter_id;
 	char chat[30];
 	char padding = '\0';
 };
@@ -176,15 +178,15 @@ PACKET(sc_chat)
 
 PACKET(sc_try_attack)
 {
-	int8 defender_id;
+	NetID defender_id;
 };
 
 // => 서버에서 위치와 접속여부를 토대로 검증
 
 PACKET(cs_attacked)
 {
-	int8 attacker_id;
-	int8 defender_id;
+	NetID attacker_id;
+	NetID defender_id;
 };
 
 // => attacket 의 공격 이펙트 발동
@@ -198,15 +200,15 @@ PACKET(cs_attacked)
 
 PACKET(cs_model_change)
 {
-	int8 model_id;
+	NetID model_id;
 };
 
 // => ok, 모든 플레이어들한테 전송
 
 PACKET(sc_model_change)
 {
-	int8 id;
-	int8 model_id;
+	NetID id;
+	NetID model_id;
 };
 
 // => 적용.

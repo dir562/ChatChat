@@ -183,7 +183,11 @@ namespace MY_NAME_SPACE {
 //	UTIL
 namespace MY_NAME_SPACE {
 	using namespace std;
-
+	
+	bool CAS(auto& target, auto expected, auto desired)
+	{
+		return target.compare_exchange_strong(expected, desired);
+	}
 
 	// 컨테이너 [b,e) macro
 #define ALLOF(cont)(std::begin(cont)),(std::end(cont))

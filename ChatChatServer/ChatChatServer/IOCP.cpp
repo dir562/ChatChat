@@ -2,20 +2,28 @@
 #include "IocpHelper.h"
 #include "ListenSocket.h"
 #include "Session.h"
-#include "IocpThread.h"
-
+#include "GameData.h"
+#include "IOCP.h"
 
 // =============================================== // 
 
-void IocpThread::ProcessQueuedCompleteOperationLoop()
+IOCP::IOCP()
+{
+	iocp_ = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
+	ListenSocket::get().Init(iocp_);
+	ListenSocket::get().do_accept();
+}
+
+// =============================================== // 
+
+void IOCP::ProcessQueuedCompleteOperationLoop()
 {
 	while (true)
 	{
 		DWORD returned_bytes;
-		LONG64 iocp_key;
+		NetID net_id;
 		WSAOVERLAPPED* p_over;
-		BOOL res = GetQueuedCompletionStatus(iocp_, &returned_bytes, (PULONG_PTR)&iocp_key, &p_over, INFINITE);
-		int net_id = static_cast<int>(iocp_key);
+		BOOL res = GetQueuedCompletionStatus(iocp_, &returned_bytes, (PULONG_PTR)&net_id, &p_over, INFINITE);
 		auto ex_over = reinterpret_cast<EXP_OVER*>(p_over);
 		cerr << "GQCS returned. net_id::" << net_id << endl;
 
@@ -29,19 +37,18 @@ void IocpThread::ProcessQueuedCompleteOperationLoop()
 		case COMP_OP::OP_RECV: OnRecvComplete(net_id, returned_bytes, ex_over); break;
 		case COMP_OP::OP_SEND: OnSendComplete(net_id, returned_bytes, ex_over); break;
 		case COMP_OP::OP_ACCEPT: OnAcceptComplete(ex_over); break;
-		default: cerr << "couldn't be here!! COMPO_OP ERROR ::" << ex_over->comp_op << "::" << endl;
+		default: cerr << "couldn't be here!! COMPO_OP ERROR ::" << (int)ex_over->comp_op << "::" << endl;
 		}
 	}
 }
 
 // =============================================== // 
 
-
-void IocpThread::OnRecvComplete(int net_id, DWORD returned_bytes, EXP_OVER* ex_over)
+void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 {
 	cerr << "RECV " << endl;
 
-	Session& client = sessions[net_id];
+	Session& client = sessions_[net_id];
 
 	if (0 == returned_bytes) [[unlikely]]
 	{
@@ -82,19 +89,20 @@ void IocpThread::OnRecvComplete(int net_id, DWORD returned_bytes, EXP_OVER* ex_o
 		memcpy(&ex_over->net_buf, pck_start, remain_bytes);
 	}
 
-	if (+SESSION_STATE::ST_FREE != client.get_state())
+	if (SESSION_STATE::ST_FREE != client.state_)
 		client.do_recv();
 }
 
 
-
-void IocpThread::OnSendComplete(int netid, DWORD returned_bytes, EXP_OVER* ex_over)
+void IOCP::OnSendComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 {
 	cerr << "SEND " << endl;
 
+	cout << "send :: " << *(packet_size_t*)ex_over->net_buf << " bytes" << endl;
+
 	if (returned_bytes != ex_over->wsa_buf.len)
 	{
-		Session& client = sessions[net_id];
+		Session& client = sessions_[net_id];
 		client.do_disconnect();
 	}
 
@@ -102,17 +110,34 @@ void IocpThread::OnSendComplete(int netid, DWORD returned_bytes, EXP_OVER* ex_ov
 }
 
 
-
-void IocpThread::OnAcceptComplete(EXP_OVER* ex_over)
+void IOCP::OnAcceptComplete(EXP_OVER* ex_over) // 유일성 보장 함수.
 {
+	//scoped_lock accept_lock{ connection_lock_ };
 	cerr << "ACCEPT " << endl;
 	SOCKET new_socket = *(reinterpret_cast<SOCKET*>(ex_over->net_buf));
-	size_t new_id = get_new_net_id();
-	new_client = sessions.emplace(new_id, new_socket);
+	NetID new_id = get_new_net_id();
+	Session& new_client = sessions_[new_id];
+	new_client.NewSession(new_socket, new_id);
 
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(new_socket), iocp_, new_id, 0);
-	cout << "new id::" << new_id << ". accept. ";
+	cout << "new id::" << (int)new_id << ". accept. ";
 	new_client.do_recv();
 
 	ListenSocket::get().do_accept();
 }
+
+// =============================================== // 
+
+
+NetID IOCP::get_new_net_id() // 유일성 보장 함수.
+{
+	for (int net_id = 1; net_id < sessions_.size(); net_id++)
+	{
+		if (CAS(sessions_[net_id].state_, ST_FREE, ST_ACCEPT))
+		{
+			return net_id;
+		}
+	}
+	cerr << "SESSION_FULL!!!!!" << sessions_.size() << MAX_PLAYER << endl;
+}
+

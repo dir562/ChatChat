@@ -30,13 +30,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Share\defines.h">
-      <Filter>Share</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Share\enum.h">
       <Filter>Share</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Share\FastSpinlock.h">
+    <ClInclude Include="..\..\Share\Spinlock.h">
       <Filter>Share</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Share\includes.h">
@@ -66,7 +63,7 @@
     <ClInclude Include="ListenSocket.h">
       <Filter>Server\ListenSocket</Filter>
     </ClInclude>
-    <ClInclude Include="IocpThread.h">
+    <ClInclude Include="IOCP.h">
       <Filter>Server\IocpThread</Filter>
     </ClInclude>
     <ClInclude Include="IocpHelper.h">
@@ -83,7 +80,7 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>helper</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="temp.cpp">
       <Filter>Server\MainThread</Filter>
     </ClCompile>
     <ClCompile Include="GameData.cpp">
@@ -92,11 +89,14 @@
     <ClCompile Include="ListenSocket.cpp">
       <Filter>Server\ListenSocket</Filter>
     </ClCompile>
-    <ClCompile Include="IocpThread.cpp">
+    <ClCompile Include="IOCP.cpp">
       <Filter>Server\IocpThread</Filter>
     </ClCompile>
     <ClCompile Include="Session.cpp">
       <Filter>Server\Session</Filter>
+    </ClCompile>
+    <ClCompile Include="server_main.cpp">
+      <Filter>Server\MainThread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,14 +3,20 @@
 constexpr int MAX_BUFFER_SIZE = MAX_PACKET_SIZE;
 static_assert(MAX_PACKET_SIZE <= MAX_BUFFER_SIZE);
 
-BETTER_ENUM(COMP_OP, int8, OP_NONE, OP_RECV, OP_SEND, OP_ACCEPT);
+enum class COMP_OP : int8
+{
+	OP_NONE,
+	OP_RECV,
+	OP_SEND,
+	OP_ACCEPT
+};
 
 struct EXP_OVER
 {
 	WSAOVERLAPPED	wsa_over{};
 	COMP_OP			comp_op{ COMP_OP::OP_NONE };
-	unsigned char	net_buf[MAX_BUFFER_SIZE]{};
-	WSABUF			wsa_buf{ sizeof(net_buf), reinterpret_cast<char*>(net_buf) };
+	char			net_buf[MAX_BUFFER_SIZE]{};
+	WSABUF			wsa_buf{ sizeof(net_buf), net_buf };
 
 
 	// maybe send_over
@@ -23,4 +29,11 @@ struct EXP_OVER
 	EXP_OVER(COMP_OP op) : comp_op(op) {}
 
 	EXP_OVER() = default;
+
+	void clear()
+	{
+		ZeroMemory(this, sizeof(*this));
+		wsa_buf.len = sizeof(net_buf);
+		wsa_buf.buf = net_buf;
+	}
 };
