@@ -47,6 +47,9 @@
     <Filter Include="Share\defineds">
       <UniqueIdentifier>{e4a4b4e1-39ee-4d5f-a7ed-671a36a6b3ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Communication">
+      <UniqueIdentifier>{4e69ab00-4088-4236-9773-ff3b105c50d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -88,6 +91,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\Share\SocketUtil.cpp">
       <Filter>Share\NetworkHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="CCommunication.cpp">
+      <Filter>Communication</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +162,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Share\Protocol.h">
       <Filter>Share\defineds</Filter>
+    </ClInclude>
+    <ClInclude Include="CCommunication.h">
+      <Filter>Communication</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

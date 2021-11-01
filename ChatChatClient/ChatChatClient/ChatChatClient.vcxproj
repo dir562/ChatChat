@@ -154,6 +154,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CCommunication.cpp" />
     <ClCompile Include="ChatManager.cpp" />
     <ClCompile Include="DynamicObj.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -182,7 +183,9 @@
     <ClInclude Include="..\..\Share\SUNKUE.h" />
     <ClInclude Include="..\..\Share\Thread_Pool.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CCommunication.h" />
     <ClInclude Include="ChatManager.h" />
+    <ClInclude Include="define.h" />
     <ClInclude Include="gl_defines.h" />
     <ClInclude Include="DynamicObj.h" />
     <ClInclude Include="Game.h" />

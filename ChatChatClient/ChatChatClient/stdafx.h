@@ -55,3 +55,4 @@ using clk = std::chrono::high_resolution_clock;
 #include "gl_defines.h"
 #include "game_system.h"
 #include "../../Share/includes.h"
+#include "define.h"
