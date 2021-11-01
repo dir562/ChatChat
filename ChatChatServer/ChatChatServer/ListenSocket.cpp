@@ -28,7 +28,7 @@ void ListenSocket::do_accept()
 	ZeroMemory(&accept_ex_.wsa_over, sizeof(accept_ex_.wsa_over));
 	accept_ex_.comp_op = COMP_OP::OP_ACCEPT;
 	constexpr auto len = sizeof(SOCKADDR_IN) + 16;
-	auto res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, 0, len, len, NULL, &accept_ex_.wsa_over);
 	*reinterpret_cast<SOCKET*>(accept_ex_.net_buf) = newface_socket_;
+	auto res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, NULL, len, len, nullptr, &accept_ex_.wsa_over);
 	cerr << boolalpha << res << " non_blocking_accept_start" << endl;
 }

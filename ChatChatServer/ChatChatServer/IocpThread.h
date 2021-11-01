@@ -8,10 +8,12 @@ public:
 	IocpThread(HANDLE iocp) :iocp_{ iocp } {}
 
 public:
-	void DoQueuedCompletionStatus();
-	void ProcessRecv(int netid, EXP_OVER* ex_over);
-	void ProcessSend(int netid, EXP_OVER* ex_over);
-	void ProcessAccept(EXP_OVER* ex_over);
+	void ProcessQueuedCompleteOperationLoop();
+
+private:
+	void OnRecvComplete(int netid, DWORD returned_bytes, EXP_OVER* ex_over);
+	void OnSendComplete(int netid, DWORD returned_bytes, EXP_OVER* ex_over);
+	void OnAcceptComplete(EXP_OVER* ex_over);
 
 private:
 	HANDLE iocp_;
