@@ -1,25 +1,26 @@
 #pragma once
 
+constexpr int MAX_BUFFER_SIZE = MAX_PACKET_SIZE;
+static_assert(MAX_PACKET_SIZE <= MAX_BUFFER_SIZE);
 
-BETTER_ENUM(COMP_OP, int8, OP_RECV = 1, OP_SEND, OP_ACCEPT);
+BETTER_ENUM(COMP_OP, int8, OP_NONE, OP_RECV, OP_SEND, OP_ACCEPT);
 
-class EXP_OVER
+struct EXP_OVER
 {
-public:
-	WSAOVERLAPPED	_wsa_over;
-	COMP_OP			_comp_op;
-	WSABUF			_wsa_buf;
-	unsigned char	_net_buf[MAX_PACKET_SIZE];
+	WSAOVERLAPPED	wsa_over{};
+	COMP_OP			comp_op{ COMP_OP::OP_NONE };
+	WSABUF			wsa_buf{};
+	unsigned char	net_buf[MAX_BUFFER_SIZE]{};
 
-public:
-	EXP_OVER(COMP_OP comp_op, char num_bytes, void* mess) : _comp_op(comp_op)
+
+	EXP_OVER(COMP_OP op, size_t packet_len, void* packet) : comp_op(op)
 	{
-		ZeroMemory(&_wsa_over, sizeof(_wsa_over));
-		_wsa_buf.buf = reinterpret_cast<char*>(_net_buf);
-		_wsa_buf.len = num_bytes;
-		memcpy(_net_buf, mess, num_bytes);
+		ZeroMemory(&wsa_over, sizeof(wsa_over));
+		wsa_buf.buf = reinterpret_cast<char*>(net_buf);
+		wsa_buf.len = static_cast<ULONG>(packet_len);
+		memcpy(net_buf, packet, packet_len);
 	}
 
-	EXP_OVER(COMP_OP comp_op) : _comp_op(comp_op) {}
+	EXP_OVER(COMP_OP op) : comp_op(op) {}
 	EXP_OVER() = default;
 };

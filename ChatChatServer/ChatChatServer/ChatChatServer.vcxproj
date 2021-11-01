@@ -31,7 +31,8 @@
     <ClInclude Include="GameData.h" />
     <ClInclude Include="IocpHelper.h" />
     <ClInclude Include="ListenSocket.h" />
-    <ClInclude Include="LogicThread.h" />
+    <ClInclude Include="IocpThread.h" />
+    <ClInclude Include="Session.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -43,8 +44,9 @@
     </ClCompile>
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="ListenSocket.cpp" />
-    <ClCompile Include="LogicThread.cpp" />
+    <ClCompile Include="IocpThread.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Session.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -3,7 +3,7 @@
 
 ////////////////////////////////////////////////////////////////////////////
 
-void SocketUtil::err_display(int err, std::wostream& wos)
+void SocketUtil::DisplayError(int err, std::wostream& wos)
 {
 	TCHAR* w_msg = nullptr;
 	FormatMessage(
@@ -19,7 +19,7 @@ void SocketUtil::err_display(int err, std::wostream& wos)
 
 void SocketUtil::terminate()
 {
-	err_display(WSAGetLastError());
+	DisplayError(WSAGetLastError());
 	exit(-1);
 }
 

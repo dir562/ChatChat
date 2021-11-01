@@ -6,6 +6,10 @@
 
 //====================================
 
+using packet_size_t = int8;
+
+//====================================
+
 const uint16_t SERVER_PORT = 8282;
 const auto SERVER_IP = "127.0.0.1";
 
@@ -59,7 +63,7 @@ BETTER_ENUM
 template<class T>
 struct packet_base
 {
-	int8 size = sizeof(T);
+	packet_size_t size = sizeof(T);
 	PAKCET_TYPE packet_type = +PAKCET_TYPE::_from_string_nocase(typeid(T).name() + 7);
 };
 #define PACKET(name) struct name : packet_base<name>											

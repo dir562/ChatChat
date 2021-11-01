@@ -51,8 +51,8 @@ namespace MY_NAME_SPACE
 #define GET(var) auto get_##var()const { return var##_; }
 #define GET_REF(var) const auto& get_##var()const { return var##_; }
 #define GET_REF_UNSAFE(var) auto& get_##var() { return var##_; }
-#define SET(var) void set##var(auto value) { var##_ = value; }
-#define SET_REF(var) void set##var(const auto& value) { var##_ = value; }
+#define SET(var) void set_##var(auto value) { var##_ = value; }
+#define SET_REF(var) void set_##var(const auto& value) { var##_ = value; }
 
 }
 

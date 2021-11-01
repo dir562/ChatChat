@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "IocpHelper.h"
 #include "ListenSocket.h"
 
 
@@ -10,26 +11,24 @@ ListenSocket::ListenSocket()
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = ::htons(SERVER_PORT);
 	server_addr.sin_addr.s_addr = ::htonl(INADDR_ANY);
-	::bind(listen_socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
-	::listen(listen_socket_, SOMAXCONN);
+	auto res = ::bind(listen_socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
+	res = ::listen(listen_socket_, SOMAXCONN);
 	::CreateIoCompletionPort(reinterpret_cast<HANDLE>(listen_socket_), iocp_, 0, 0);
 };
 
 
 ListenSocket::~ListenSocket()
 {
-	/// <summary>
-	///  우아한 종료 도전중/////
-	/// </summary>
+	REPORT_ERROR("Maybe ServerDown");
 }
 
 void ListenSocket::do_accept()
 {
 	newface_socket_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
-	ZeroMemory(&accept_ex_._wsa_over, sizeof(accept_ex_._wsa_over));
-	accept_ex_._comp_op = +COMP_OP::OP_ACCEPT;
-	cout << "wait_for_accept" << endl;
-	auto res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, 0, sizeof(SOCKADDR_IN) + 16, sizeof(SOCKADDR_IN) + 16, NULL, &accept_ex_._wsa_over);
-	*reinterpret_cast<SOCKET*>(accept_ex_._net_buf) = newface_socket_;
-	cout << res << "non_blocking_accept_start" << endl;
+	ZeroMemory(&accept_ex_.wsa_over, sizeof(accept_ex_.wsa_over));
+	accept_ex_.comp_op = COMP_OP::OP_ACCEPT;
+	constexpr auto len = sizeof(SOCKADDR_IN) + 16;
+	auto res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, 0, len, len, NULL, &accept_ex_.wsa_over);
+	*reinterpret_cast<SOCKET*>(accept_ex_.net_buf) = newface_socket_;
+	cerr << boolalpha << res << " non_blocking_accept_start" << endl;
 }
