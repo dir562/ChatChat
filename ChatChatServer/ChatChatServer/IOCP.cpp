@@ -109,35 +109,37 @@ void IOCP::OnSendComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 	delete ex_over;
 }
 
+// =============================================== // 
+
+// diconnect -> send 중  accept의 인터럽트..? => 우아한 종료 구현되어야 할듯.
 
 void IOCP::OnAcceptComplete(EXP_OVER* ex_over) // 유일성 보장 함수.
 {
-	//scoped_lock accept_lock{ connection_lock_ };
 	cerr << "ACCEPT " << endl;
 	SOCKET new_socket = *(reinterpret_cast<SOCKET*>(ex_over->net_buf));
-	NetID new_id = get_new_net_id();
+	NetID new_id = get_new_net_id();	// ON_ACCEPT
 	Session& new_client = sessions_[new_id];
 	new_client.NewSession(new_socket, new_id);
 
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(new_socket), iocp_, new_id, 0);
 	cout << "new id::" << (int)new_id << ". accept. ";
+	new_client.set_state(ST_ACCEPT);	//ACCEPT
+
 	new_client.do_recv();
 
 	ListenSocket::get().do_accept();
 }
 
-// =============================================== // 
-
-
 NetID IOCP::get_new_net_id() // 유일성 보장 함수.
 {
 	for (int net_id = 1; net_id < sessions_.size(); net_id++)
 	{
-		if (CAS(sessions_[net_id].state_, ST_FREE, ST_ACCEPT))
+		if (CAS(sessions_[net_id].state_, ST_FREE, ST_ON_ACCEPT))
 		{
 			return net_id;
 		}
 	}
-	cerr << "SESSION_FULL!!!!!" << sessions_.size() << MAX_PLAYER << endl;
+	cerr << "SESSION_FULL!!!!!" << sessions_.size() << ":" << MAX_PLAYER << endl;
 }
 
+// =============================================== // 

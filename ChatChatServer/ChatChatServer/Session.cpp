@@ -14,7 +14,7 @@ void Session::NewSession(SOCKET socket, NetID net_id) // 유일성 보장함수 -> doAc
 	socket_ = socket;
 }
 
-void Session::clear()
+void Session::clear() // do_disconnect 에서만 사용. // ON_DICONNECT
 {
 	ZeroMemory(this, sizeof(*this));
 	socket_ = INVALID_SOCKET;
@@ -41,13 +41,13 @@ void Session::do_send(void* packet, size_t packet_len)
 	HandleIoError(res);
 }
 
-void Session::do_disconnect()
+void Session::do_disconnect() // recv or send HandleIoError 에서 발생. IOCP에서도 발생가능.
 {
-	scoped_lock disconnect_lock{ connection_lock_ };
+	state_ = SESSION_STATE::ST_ON_DISCONNECT; // ON_DISCONNCET
 
 	if (INVALID_SOCKET != socket_)
 	{
-		state_ = SESSION_STATE::ST_FREE;
+		// flush or no send
 		auto res = ::closesocket(socket_);
 		cerr << "disconnect::" << net_id_ << endl;
 		if (SOCKET_ERROR == WSAGetLastError())
@@ -57,7 +57,10 @@ void Session::do_disconnect()
 		}
 	}
 
-	clear();
+	if (SESSION_STATE::ST_ON_DISCONNECT == state_) clear();
+	else REPORT_ERROR("could't be here!! state != ST_ON_DISCONNECT ??");
+
+	state_ = SESSION_STATE::ST_FREE; // FREE
 }
 
 // ===========================================================
@@ -75,7 +78,8 @@ void Session::HandleIoError(int res)
 				cerr << "서버 부하 최대치, 메모리 부족!" << endl;
 			}
 			REPORT_ERROR("");
-			do_disconnect();
+			if (ST_ACCEPT <= state_)
+				do_disconnect();
 		}
 	}
 }
