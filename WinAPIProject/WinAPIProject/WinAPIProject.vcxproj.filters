@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{608a2735-2dd9-4a73-8054-792ef2e34198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{d6987cfb-917f-42ec-8ee3-9254e026edc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\00. Header">
+      <UniqueIdentifier>{478ee179-e62e-40be-9b7e-fd0b3d7bf9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\01. Core">
+      <UniqueIdentifier>{2578dfce-ac55-4309-b535-6a87ad792add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\02. Manager">
+      <UniqueIdentifier>{e45ddc9f-7b50-4e3b-8f94-9e9d52114117}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\03. Object">
+      <UniqueIdentifier>{bda7ce33-6e52-4be5-8509-240907b28ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\04. Scene">
+      <UniqueIdentifier>{78ebc555-81ea-4975-a3cf-6a3a75c42d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\04. Scene\Start">
+      <UniqueIdentifier>{c5ef6f64-ede1-46c8-9c62-0c2c7e602496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\04. Scene\Stage_01">
+      <UniqueIdentifier>{d1a4acbf-c36f-41e8-b875-e361e87f1dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Resource">
+      <UniqueIdentifier>{f0412d2d-a205-4ffe-9ec7-a363cca89cb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Resource\Sound">
+      <UniqueIdentifier>{95b4edaf-3fd8-4578-aaaf-8da2e9d40b1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\05. Resource\Texture">
+      <UniqueIdentifier>{a37b8306-7d3d-44e5-981b-14a8e2a69c4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\03. Object\Player">
+      <UniqueIdentifier>{1e598e7e-a453-4ad3-afdb-d7b92c33c561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\06. Component">
+      <UniqueIdentifier>{7b3019e6-9603-4f63-84bc-ddb1af77816c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\06. Component\Collider">
+      <UniqueIdentifier>{af2f3603-3368-4dff-a916-e3c56eaed2fb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="CCore.h">
+      <Filter>Game\01. Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CObj.h">
+      <Filter>Game\03. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="struct.h">
+      <Filter>Game\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Game\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimeMgr.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyMgr.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CScene.h">
+      <Filter>Game\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneMgr.h">
+      <Filter>Game\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CStartScene.h">
+      <Filter>Game\04. Scene\Start</Filter>
+    </ClInclude>
+    <ClInclude Include="CStage01Scene.h">
+      <Filter>Game\04. Scene\Stage_01</Filter>
+    </ClInclude>
+    <ClInclude Include="CRes.h">
+      <Filter>Game\05. Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="CSound.h">
+      <Filter>Game\05. Resource\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="CTexture.h">
+      <Filter>Game\05. Resource\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="CResMgr.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CPathMgr.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayer.h">
+      <Filter>Game\03. Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionMgr.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollider.h">
+      <Filter>Game\06. Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventMgr.h">
+      <Filter>Game\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="func.h">
+      <Filter>Game\00. Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CCore.cpp">
+      <Filter>Game\01. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="CObj.cpp">
+      <Filter>Game\03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimeMgr.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyMgr.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CScene.cpp">
+      <Filter>Game\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneMgr.cpp">
+      <Filter>Game\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CStartScene.cpp">
+      <Filter>Game\04. Scene\Start</Filter>
+    </ClCompile>
+    <ClCompile Include="CStage01Scene.cpp">
+      <Filter>Game\04. Scene\Stage_01</Filter>
+    </ClCompile>
+    <ClCompile Include="CRes.cpp">
+      <Filter>Game\05. Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="CSound.cpp">
+      <Filter>Game\05. Resource\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="CTexture.cpp">
+      <Filter>Game\05. Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CResMgr.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CPathMgr.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayer.cpp">
+      <Filter>Game\03. Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollisionMgr.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollider.cpp">
+      <Filter>Game\06. Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventMgr.cpp">
+      <Filter>Game\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="func.cpp">
+      <Filter>Game\00. Header</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WinAPIProject.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="WinAPIProject.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
