@@ -88,7 +88,7 @@ void Renderer::load_model()
 	_cars.emplace_back(make_shared<OBJ>(box_data, _default_shader));
 	_cars[1]->move({ 2.f,0.f,14.f });
 
-	_player = make_shared<ControllObj>(size_t{0}, box_data, _default_shader);
+	_player = make_shared<ControllObj>(size_t{ 0 }, box_data, _default_shader);
 
 	_main_camera = make_shared<Camera>();
 	_main_camera->set_ownner(_player.get());
@@ -357,13 +357,12 @@ void Renderer::draw()
 
 
 
-
 	glUseProgram(_terrain_shader);
 	_terrain->bind_vao();
 	_terrain->update_uniform_vars(_terrain_shader);
 	update_texture(_terrain_shader, glGetUniformLocation(_terrain_shader, "u_tex_sampler"), _terrain_tex);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-	
+
 
 
 
@@ -402,4 +401,42 @@ void Renderer::draw()
 	auto fps = 1000 / (GAME_SYSTEM::instance().tick_time().count() + 1);
 	string title = "("s + to_string(fps) + " fps)"s;
 	glutSetWindowTitle(title.c_str());
+}
+
+
+struct data
+{
+	mutex m;
+
+	vector<player> players;
+}
+
+void render()
+{
+	while (true)
+	{
+		m.lock();
+		read_data();
+		draw();
+		m.unlock();
+	}
+}
+
+void networking()
+{
+	while (true)
+	{
+		if (recv_sometihing)
+		{
+			m.lock();
+			writedata();
+			m.unlock();
+		}
+	}
+}
+
+int main()
+{
+	thread renderthread{ render };
+	thread networkingthred{ networking };
 }
