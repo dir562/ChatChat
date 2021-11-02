@@ -24,7 +24,13 @@ void do_recv()
 	char buf[MAX_PACKET_SIZE];
 	while (true)
 	{
-		recv(g_socket, buf, MAX_PACKET_SIZE, NULL);
+		auto ret = recv(g_socket, buf, MAX_PACKET_SIZE, NULL);
+		if (0 == ret || GetLastError())
+		{
+			cout << "disconnected server" << endl;
+			closesocket(g_socket);
+			exit(-1);
+		}
 		const packet_base<void>* pck_base = reinterpret_cast<const packet_base<void>*>(buf);
 		const packet_size_t pck_size = pck_base->size;
 		const PAKCET_TYPE pck_type = pck_base->packet_type;
@@ -47,7 +53,7 @@ void do_send()
 	while (true)
 	{
 		cs_chat packet;
-		cin >> packet.chat;
+		cin.getline(packet.chat, sizeof(packet.chat));
 		send(g_socket, reinterpret_cast<const char*>(&packet), sizeof(packet), NULL);
 	}
 }
