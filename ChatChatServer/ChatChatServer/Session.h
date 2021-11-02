@@ -44,6 +44,7 @@ public:
 
 	SET(prerecv_size);
 	SET(state);
+	bool check_state(const SESSION_STATE state)const { return  state == state_; }
 
 private:
 	EXP_OVER recv_over_{ COMP_OP::OP_RECV };

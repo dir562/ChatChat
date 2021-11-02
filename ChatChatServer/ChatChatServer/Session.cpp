@@ -57,8 +57,14 @@ void Session::do_disconnect() // recv or send HandleIoError 에서 발생. IOCP에서�
 		}
 	}
 
-	if (SESSION_STATE::ST_ON_DISCONNECT == state_) clear();
-	else REPORT_ERROR("could't be here!! state != ST_ON_DISCONNECT ??");
+	if (SESSION_STATE::ST_ON_DISCONNECT == state_)
+	{
+		clear();
+	}
+	else
+	{
+		REPORT_ERROR("could't be here!! state != ST_ON_DISCONNECT ??");
+	}
 
 	state_ = SESSION_STATE::ST_FREE; // FREE
 }
@@ -79,7 +85,9 @@ void Session::HandleIoError(int res)
 			}
 			REPORT_ERROR("");
 			if (ST_ACCEPT <= state_)
+			{
 				do_disconnect();
+			}
 		}
 	}
 }
