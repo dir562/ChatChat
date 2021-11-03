@@ -51,31 +51,31 @@ void CObj::finalupdate()
 		m_pCollider->finalupdate();
 
 	// 가속도를 구한다.
-	Vec2 vAccel = m_vForce / m_fMass; 
-
-	// 가속도를 시간동기화, 속도에 더해준다
-	m_vVelocity += vAccel * fDT;
-	if (abs(m_vVelocity.length()) > 200.f)
-	{
-		m_vVelocity.normalize();
-		m_vVelocity *= 200.f;
-	}
-
-	// 속도에 따른 이동
-	if (m_vForce.IsZero() && !m_vVelocity.IsZero())
-	{
-		Vec2 vAntiVelocity = m_vVelocity;
-		vAntiVelocity.normalize();
-		vAntiVelocity = vAntiVelocity * -400.f * fDT;
-
-		if (vAntiVelocity.length() > m_vVelocity.length())
-			vAntiVelocity = -m_vVelocity;
-		m_vVelocity += vAntiVelocity;		
-	}
-
-	m_vPos += m_vVelocity * fDT;		
-
-	m_vForce = Vec2(0.f, 0.f);
+//	Vec2 vAccel = m_vForce / m_fMass; 
+//
+//	// 가속도를 시간동기화, 속도에 더해준다
+//	m_vVelocity += vAccel * fDT;
+//	if (abs(m_vVelocity.length()) > 200.f)
+//	{
+//		m_vVelocity.normalize();
+//		m_vVelocity *= 200.f;
+//	}
+//
+//	// 속도에 따른 이동
+//	if (m_vForce.IsZero() && !m_vVelocity.IsZero())
+//	{
+//		Vec2 vAntiVelocity = m_vVelocity;
+//		vAntiVelocity.normalize();
+//		vAntiVelocity = vAntiVelocity * -400.f * fDT;
+//
+//		if (vAntiVelocity.length() > m_vVelocity.length())
+//			vAntiVelocity = -m_vVelocity;
+//		m_vVelocity += vAntiVelocity;		
+//	}
+//
+//	m_vPos += m_vVelocity * fDT;		
+//
+//	m_vForce = Vec2(0.f, 0.f);
 }
 
 void CObj::render(HDC _dc)

@@ -84,15 +84,15 @@ void CPlayer::CheckState()
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
-		
+			m_eState = PLAYER_STATE::JUMP;
 		}
 		if (KEY_TAP(KEY_TYPE::KEY_RIGHT))
 		{
 			m_eState = PLAYER_STATE::MOVE;
-			m_eDir = DIR::DOWN;
+			m_eDir = DIR::RIGHT;
 		}
 
-		if (KEY_NONE(KEY_TYPE::KEY_W) && KEY_NONE(KEY_TYPE::KEY_S) && KEY_NONE(KEY_TYPE::KEY_A) && KEY_NONE(KEY_TYPE::KEY_D))
+		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT) )
 		{
 			m_eState = PLAYER_STATE::IDLE;			
 		}
@@ -109,17 +109,12 @@ void CPlayer::Move()
 
 	switch (m_eDir)
 	{
-	case DIR::UP:
-		AddForce(Vec2(0,-1000.f));
-		break;
-	case DIR::DOWN:
-		vPos.y += fDT * m_fMoveSpeed;
-		break;
+	
 	case DIR::LEFT:
-		AddForce(Vec2(-200.f, 0));
+		vPos.x -= fDT * m_fMoveSpeed;
 		break;
 	case DIR::RIGHT:
-		AddForce(Vec2(200.f, 0));
+		vPos.x += fDT * m_fMoveSpeed;
 		break;	
 	}
 
