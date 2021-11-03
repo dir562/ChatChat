@@ -25,7 +25,7 @@ void IOCP::ProcessQueuedCompleteOperationLoop()
 		WSAOVERLAPPED* p_over;
 		BOOL res = GetQueuedCompletionStatus(iocp_, &returned_bytes, (PULONG_PTR)&net_id, &p_over, INFINITE);
 		auto ex_over = reinterpret_cast<EXP_OVER*>(p_over);
-		cerr << "GQCS returned. net_id::" << net_id << endl;
+		//cerr << "GQCS returned. net_id::" << (int)net_id << endl;
 
 		if (FALSE == res) [[unlikely]]
 		{
@@ -52,7 +52,7 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 
 	if (0 == returned_bytes) [[unlikely]]
 	{
-		cout << "ID::" << net_id << ". recved 0 bytes. disconnect." << endl;
+		cerr << "ID::" << (int)net_id << ". recved 0 bytes. disconnect." << endl;
 		client.do_disconnect();
 		// clientlist -> delete client.
 	};
@@ -64,8 +64,8 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 	auto remain_bytes = returned_bytes;
 
 	cerr << " return_bytes::" << returned_bytes;
-	cerr << " prerecv_len::" << prerecved_size;
-	cerr << " expected_pck_size::" << pck_size << endl;
+	cerr << " prerecv_len::" << (int)prerecved_size;
+	cerr << " expected_pck_size::" << (int)pck_size << endl;
 
 	// process completed packets.
 	while (need_bytes <= remain_bytes)
@@ -96,9 +96,9 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 
 void IOCP::OnSendComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 {
-	cerr << "SEND " << endl;
+	//cerr << "SEND " << endl;
 
-	cout << "send :: " << (int)((packet_base<void>*)ex_over->net_buf)->size << " bytes" << endl;
+	//cerr << "send :: " << (int)((packet_base<void>*)ex_over->net_buf)->size << " bytes" << endl;
 
 	if (returned_bytes != ex_over->wsa_buf.len)
 	{
@@ -117,13 +117,16 @@ void IOCP::OnAcceptComplete(EXP_OVER* ex_over) // 유일성 보장 함수.
 {
 	cerr << "ACCEPT " << endl;
 	SOCKET new_socket = *(reinterpret_cast<SOCKET*>(ex_over->net_buf));
-	NetID new_id = get_new_net_id();	// ON_ACCEPT
+	NetID new_id = get_new_net_id();		// ON_ACCEPT
 	Session& new_client = sessions_[new_id];
-	new_client.NewSession(new_socket, new_id);
+	{
+		scoped_lock write_lck{ new_client.connection_lock_ };
+		new_client.NewSession(new_socket, new_id);
 
-	CreateIoCompletionPort(reinterpret_cast<HANDLE>(new_socket), iocp_, new_id, 0);
-	cout << "new id::" << (int)new_id << ". accept. ";
-	new_client.set_state(ST_ACCEPT);	//ACCEPT
+		CreateIoCompletionPort(reinterpret_cast<HANDLE>(new_socket), iocp_, new_id, 0);
+		cout << "new id::" << (int)new_id << ". accept. ";
+		new_client.set_state(ST_ACCEPT);	// ACCEPT
+	}
 
 	new_client.do_recv();
 
@@ -152,7 +155,7 @@ void IOCP::RepeatSendLoop(milliseconds repeat_time)
 		auto curr = std::chrono::high_resolution_clock::now();
 		static auto TimeAfterSend = 0ms;
 		static auto past = curr;
-		
+
 		TimeAfterSend += duration_cast<milliseconds>(curr - past);
 
 		if (TimeAfterSend < repeat_time)
@@ -162,7 +165,7 @@ void IOCP::RepeatSendLoop(milliseconds repeat_time)
 
 		for (auto& s : sessions_)
 		{
-			if (s.check_state(SESSION_STATE::ST_ACCEPT))
+			if (s.check_state_good())
 			{
 				sc_test_heart_bit x;
 				x.time_after_send = TimeAfterSend;

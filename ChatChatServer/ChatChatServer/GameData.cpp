@@ -10,7 +10,6 @@ void process_packet(const NetID net_id, const char* const packet)
 	const packet_base<void>* pck_base = reinterpret_cast<const packet_base<void>*>(packet);
 	const packet_size_t pck_size = pck_base->size;
 	const PAKCET_TYPE pck_type = pck_base->packet_type;
-
 	switch (pck_type)
 	{
 	case PAKCET_TYPE::CS_TEST_CHAT:
@@ -31,8 +30,11 @@ void process_packet(const NetID net_id, const char* const packet)
 			}
 		}
 	}
-	CASE PAKCET_TYPE::CS_NONE: { }
-	break; default: cerr << "couldn't be here!! PAKCET_TYPE ERROR ::" << pck_type << "::" << endl;
+	CASE PAKCET_TYPE::NONE: 
+	{
+		cerr << "@@@@@@@@@@@@@@@@@@@@@@@@@@::" << endl; Beep(500, 2000);
+	}
+	break; default: cerr << "couldn't be here!! PAKCET_TYPE ERROR ::" << (int)pck_type << "::" << endl; Beep(500, 2000);
 	}
 }
 

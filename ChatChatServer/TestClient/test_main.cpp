@@ -40,7 +40,8 @@ void do_recv()
 		case PAKCET_TYPE::SC_TEST_HEART_BIT:
 		{
 			auto pck = reinterpret_cast<const sc_test_heart_bit*>(buf);
-			cout << boolalpha << "alive ::" << pck->time_after_send << "::" << endl;
+			cout << ".";
+			//cout << boolalpha << "alive ::" << pck->time_after_send << "::" << endl;
 		}
 		CASE PAKCET_TYPE::SC_TEST_CHAT:
 		{
@@ -48,7 +49,7 @@ void do_recv()
 			cout << (int)pck->chatter_id << "::" << pck->chat << endl;
 		}
 		CASE PAKCET_TYPE::CS_NONE : { }
-		break; default: cerr << "couldn't be here!! PAKCET_TYPE ERROR ::" << pck_type << "::" << endl;
+		break; default: cerr << "couldn't be here!! PAKCET_TYPE ERROR ::" << pck_type << "::" << endl; Beep(500, 2000);
 		}
 	}
 }
@@ -57,14 +58,21 @@ void do_send()
 {
 	while (true)
 	{
-		cs_test_chat packet;
-		cin.getline(packet.chat, sizeof(packet.chat));
-		send(g_socket, reinterpret_cast<const char*>(&packet), sizeof(packet), NULL);
+		 cs_test_chat packet;
+		cin.getline(packet.chat, sizeof(packet.chat)); 
+		auto res = send(g_socket, reinterpret_cast<const char*>(&packet), sizeof(packet), NULL);
+		if (SOCKET_ERROR == res)
+		{
+			SocketUtil::DisplayError(WSAGetLastError());
+		}
 	}
 }
 
 int main()
 {
+	cout << "press any key to start." << endl; string a; cin >> a;
+
+	
 	InitWsa();
 
 	g_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);

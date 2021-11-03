@@ -35,10 +35,6 @@ BETTER_ENUM
 	/* Client 2 Server */
 	
 	, CS_NONE			= 10
-	, CS_TRY_LOGIN
-	, CS_LOGIN_PACKET
-	, CS_MAKE_MAP_DONE
-	, CS_NEW_CHARATOR
 	, CS_TEST_CHAT
 
 
