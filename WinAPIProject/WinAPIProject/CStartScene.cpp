@@ -14,6 +14,8 @@ void CStartScene::init()
 	pObj->init();
 	pObj->SetPos(Vec2((float)WIN_X / 2.f, (float)WIN_Y / 2.f + 200.f));
 	pObj->SetScale(Vec2(50.f, 50.f));
+	CPlayer* player=dynamic_cast<CPlayer*>(pObj);
+	player->SetStartPos(player->GetPos());
 	AddObj(pObj, OBJ_TYPE::PLAYER);	
 
 	// 충돌 그룹 지정

@@ -18,6 +18,7 @@ class CPlayer :
 	public CObj
 {
 private:
+	Vec2 m_vStartPos;
 	CTexture*		m_pTex;	
 	UINT			m_iHP;
 
@@ -32,19 +33,25 @@ private:
 	bool			m_bGround;
 	HBRUSH m_Color;
 
+	float m_fJumpPower;
+	
+
 public:
 	virtual void init();
+
 	virtual void update();	
 	virtual void render(HDC _dc);
-
+	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }
 	virtual void OnCollisionEnter(CCollider* _pOther);
 
+	
 	virtual CPlayer* Clone() { return new CPlayer(*this); }
 
 private:
 	void CheckState();
-	void CheckAnimation();
+	void Jumping();	
 	void Move();
+	void ValueInit();
 
 public:
 	CPlayer();

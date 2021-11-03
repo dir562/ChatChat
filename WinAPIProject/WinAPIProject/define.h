@@ -22,7 +22,7 @@
 #define WIN_X 1280
 #define WIN_Y 768
 
-#define TILE_SIZE 64
+#define GRAVITY 2400
 
 enum class SCENE_TYPE
 {

@@ -23,6 +23,7 @@ CPlayer::CPlayer()
 	, m_ePrevDir(DIR::NONE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
 	, m_fMoveSpeed(100.f)
+	,m_fJumpPower(1200.f)
 	,m_Color(CreateSolidBrush(RGB(255,0,0)))
 {
 }
@@ -40,6 +41,8 @@ void CPlayer::init()
 	pCollider->SetScale(Vec2(30.f, 30.f));
 	AddCollider(pCollider);
 
+	m_vStartPos = GetPos();
+
 
 }
 
@@ -48,6 +51,7 @@ void CPlayer::update()
 
 	CheckState();
 	Move();
+	Jumping();
 }
 
 void CPlayer::render(HDC _dc)
@@ -75,7 +79,7 @@ void CPlayer::CheckState()
 	m_ePrevState = m_eState;
 	m_ePrevDir = m_eDir;
 
-	if (PLAYER_STATE::IDLE == m_eState || PLAYER_STATE::MOVE == m_eState)
+	if (PLAYER_STATE::IDLE == m_eState || PLAYER_STATE::MOVE == m_eState||PLAYER_STATE::JUMP==m_eState)
 	{
 		if (KEY_TAP(KEY_TYPE::KEY_LEFT))
 		{		
@@ -92,17 +96,34 @@ void CPlayer::CheckState()
 			m_eDir = DIR::RIGHT;
 		}
 
-		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT) )
+		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT) &&PLAYER_STATE::JUMP!=m_eState)
 		{
 			m_eState = PLAYER_STATE::IDLE;			
 		}
 	}
 }
 
+void CPlayer::Jumping()
+{
+
+
+	if (PLAYER_STATE::JUMP == m_eState) {
+		Vec2 vPos = GetPos();
+		if (vPos.y > m_vStartPos.y) {
+			ValueInit();
+			return;
+		}
+		vPos.y -= m_fJumpPower * fDT;
+		m_fJumpPower -= GRAVITY * fDT;
+
+		SetPos(vPos);
+	}
+}
+
 
 void CPlayer::Move()
 {
-	if (PLAYER_STATE::MOVE != m_eState)
+	if (PLAYER_STATE::MOVE != m_eState||PLAYER_STATE::JUMP!=m_eState)
 		return;
 
 	Vec2 vPos = GetPos();
@@ -119,6 +140,16 @@ void CPlayer::Move()
 	}
 
 	SetPos(vPos);
+}
+
+void CPlayer::ValueInit()
+{
+	Vec2 vPos = GetPos();
+	vPos.y = m_vStartPos.y;
+	SetPos(vPos);
+	m_eState = PLAYER_STATE::IDLE;
+	m_fJumpPower = 1200.f;
+	
 }
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
