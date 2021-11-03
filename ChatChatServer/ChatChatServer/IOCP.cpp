@@ -89,7 +89,7 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 		memcpy(&ex_over->net_buf, pck_start, remain_bytes);
 	}
 
-	if (SESSION_STATE::ST_FREE != client.state_)
+	if (client.check_state_good())
 		client.do_recv();
 }
 
@@ -120,7 +120,7 @@ void IOCP::OnAcceptComplete(EXP_OVER* ex_over) // 유일성 보장 함수.
 	NetID new_id = get_new_net_id();		// ON_ACCEPT
 	Session& new_client = sessions_[new_id];
 	{
-		scoped_lock write_lck{ new_client.connection_lock_ };
+		unique_lock write_lck{ new_client.connection_lock_ };
 		new_client.NewSession(new_socket, new_id);
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(new_socket), iocp_, new_id, 0);

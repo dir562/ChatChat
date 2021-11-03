@@ -56,7 +56,7 @@ void Session::do_send(void* packet, size_t packet_len)
 
 void Session::do_disconnect() // recv or send HandleIoError 에서 발생. IOCP에서도 발생가능.
 {
-	scoped_lock write_lck{ connection_lock_ };	// write lock
+	unique_lock write_lck{ connection_lock_ };	// write lock
 
 	if (INVALID_SOCKET != socket_)
 	{
