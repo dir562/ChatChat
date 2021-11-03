@@ -98,7 +98,7 @@ void IOCP::OnSendComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 {
 	cerr << "SEND " << endl;
 
-	cout << "send :: " << *(packet_size_t*)ex_over->net_buf << " bytes" << endl;
+	cout << "send :: " << (int)((packet_base<void>*)ex_over->net_buf)->size << " bytes" << endl;
 
 	if (returned_bytes != ex_over->wsa_buf.len)
 	{
@@ -140,6 +140,39 @@ NetID IOCP::get_new_net_id() // 유일성 보장 함수.
 		}
 	}
 	cerr << "SESSION_FULL!!!!!" << sessions_.size() << ":" << MAX_PLAYER << endl;
+	return 0;
+}
+
+// =============================================== // 
+
+void IOCP::RepeatSendLoop(milliseconds repeat_time)
+{
+	while (true)
+	{
+		auto curr = std::chrono::high_resolution_clock::now();
+		static auto TimeAfterSend = 0ms;
+		static auto past = curr;
+		
+		TimeAfterSend += duration_cast<milliseconds>(curr - past);
+
+		if (TimeAfterSend < repeat_time)
+		{
+			continue;
+		}
+
+		for (auto& s : sessions_)
+		{
+			if (s.check_state(SESSION_STATE::ST_ACCEPT))
+			{
+				sc_test_heart_bit x;
+				x.time_after_send = TimeAfterSend;
+				s.do_send(&x, sizeof(sc_test_heart_bit));
+			}
+		}
+
+		past = curr;
+		TimeAfterSend = 0ms;
+	}
 }
 
 // =============================================== // 

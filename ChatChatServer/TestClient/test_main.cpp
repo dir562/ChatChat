@@ -37,9 +37,14 @@ void do_recv()
 
 		switch (pck_type)
 		{
-		case PAKCET_TYPE::SC_CHAT:
+		case PAKCET_TYPE::SC_TEST_HEART_BIT:
 		{
-			auto pck = reinterpret_cast<const sc_chat*>(buf);
+			auto pck = reinterpret_cast<const sc_test_heart_bit*>(buf);
+			cout << boolalpha << "alive ::" << pck->time_after_send << "::" << endl;
+		}
+		CASE PAKCET_TYPE::SC_TEST_CHAT:
+		{
+			auto pck = reinterpret_cast<const sc_test_chat*>(buf);
 			cout << (int)pck->chatter_id << "::" << pck->chat << endl;
 		}
 		CASE PAKCET_TYPE::CS_NONE : { }
@@ -52,7 +57,7 @@ void do_send()
 {
 	while (true)
 	{
-		cs_chat packet;
+		cs_test_chat packet;
 		cin.getline(packet.chat, sizeof(packet.chat));
 		send(g_socket, reinterpret_cast<const char*>(&packet), sizeof(packet), NULL);
 	}

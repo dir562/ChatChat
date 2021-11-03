@@ -96,7 +96,7 @@ void Renderer::load_model()
 
 	box_vao = create_vao(_terrain_shader, box, 36);
 	_terrain = make_shared<OBJ>(box_data, _terrain_shader);
-	glm::vec3 scale_ = { 100.f, 0.25f, 100.f };
+	glm::vec3 scale_ = { 100000.f, 0.25f, 100000.f };
 	_terrain->scaling(scale_);
 	glm::vec3 move_ = { 0.f,(scale_.y * -1.f) - 1.f,0.f };
 	_terrain->move(move_);
@@ -312,8 +312,8 @@ void Renderer::reshape(const int w, const int h)
 void Renderer::ready_draw()
 {
 	_vp_mat = proj_mat() * _main_camera->view_mat();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// GL_COLOR_BUFFER_BIT |  빼면 재미난 효과 ㅋㅋ
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 }
 
@@ -334,15 +334,24 @@ void Renderer::draw()
 	Sleep(1);
 	float milli_tick = static_cast<float>(GAME_SYSTEM::instance().tick_time().count());
 	float tick = milli_tick / 1000.f;
+
 	_player->update(tick);
 	_main_camera->update(tick);
 	GAME_SYSTEM::instance().tick();
 	// 로직분리, 카메라 회전 , 스크롤로 거리조절 >>  1tick == 최소 1ms.
 
 
+	/* fps test */
+	static int i = 0;
+	i += GAME_SYSTEM::instance().tick_time().count();
+	if (i < 20) //ms 지연 실험
+	{
+		cout << i <<" " << endl;
+		return;
+	}
+	i = 0;
 
 	/* draw */
-
 
 	glUseProgram(_default_shader);
 	_cars[0]->bind_vao();
@@ -401,42 +410,6 @@ void Renderer::draw()
 	auto fps = 1000 / (GAME_SYSTEM::instance().tick_time().count() + 1);
 	string title = "("s + to_string(fps) + " fps)"s;
 	glutSetWindowTitle(title.c_str());
-}
 
-
-struct data
-{
-	mutex m;
-
-	vector<player> players;
-}
-
-void render()
-{
-	while (true)
-	{
-		m.lock();
-		read_data();
-		draw();
-		m.unlock();
-	}
-}
-
-void networking()
-{
-	while (true)
-	{
-		if (recv_sometihing)
-		{
-			m.lock();
-			writedata();
-			m.unlock();
-		}
-	}
-}
-
-int main()
-{
-	thread renderthread{ render };
-	thread networkingthred{ networking };
+	glutSwapBuffers();
 }

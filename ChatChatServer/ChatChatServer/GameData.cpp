@@ -13,14 +13,14 @@ void process_packet(const NetID net_id, const char* const packet)
 
 	switch (pck_type)
 	{
-	case PAKCET_TYPE::CS_CHAT:
+	case PAKCET_TYPE::CS_TEST_CHAT:
 	{
-		auto pck = reinterpret_cast<const cs_chat*>(packet);
+		auto pck = reinterpret_cast<const cs_test_chat*>(packet);
 		cout << (int)net_id << "::" << pck->chat << endl;
 
-		sc_chat react_pck;
+		sc_test_chat react_pck;
 		react_pck.chatter_id = net_id;
-		memcpy(react_pck.chat, pck->chat, sizeof(sc_chat::chat));
+		memcpy(react_pck.chat, pck->chat, sizeof(sc_test_chat::chat));
 
 		auto& sessions = IOCP::get().get_sessions();
 		for (auto& s : sessions)

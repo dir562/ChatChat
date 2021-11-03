@@ -11,7 +11,6 @@ void RenderScene(void)
 {
 	Game::instance().renderer.draw();
 
-	glutSwapBuffers();
 }
 
 void Idle(void)
