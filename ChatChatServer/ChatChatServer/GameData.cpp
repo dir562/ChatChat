@@ -32,7 +32,8 @@ void process_packet(const NetID net_id, const char* const packet)
 	}
 	CASE PAKCET_TYPE::NONE: 
 	{
-		cerr << "@@@@@@@@@@@@@@@@@@@@@@@@@@::" << endl; Beep(500, 2000);
+		cerr << "@@@@@@@@@@@@@@@@@@@@@@@@@@::" << endl; 
+		Beep(500, 1000);
 	}
 	break; default: cerr << "couldn't be here!! PAKCET_TYPE ERROR ::" << (int)pck_type << "::" << endl; Beep(500, 2000);
 	}

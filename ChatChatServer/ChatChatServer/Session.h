@@ -8,6 +8,8 @@ enum SESSION_STATE : int8
 {
 	ST_FREE,
 
+	ST_ON_DICONNECT,
+
 	ST_ON_ACCEPT,
 
 	ST_IO_ABLE_LINE = 100,

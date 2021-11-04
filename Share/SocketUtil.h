@@ -21,7 +21,7 @@ public:
 		os << "[ERROR] " << msg << " " << WSAGetLastError() << std::endl;
 		//SocketUtil::err_display(SocketUtil::GetLastError());
 	}
-	static int GetLastError() { return ::GetLastError(); }
+
 
 public:
 	static uint32 caculate_bytes_form_WSABUFs(LPWSABUF buf, uint32 count_of_bufs);
