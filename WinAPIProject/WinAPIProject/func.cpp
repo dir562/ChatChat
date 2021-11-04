@@ -34,7 +34,7 @@ void ChangeScene(SCENE_TYPE _eNextScene)
 
 void SaveWString(const wstring& _str, FILE* _pFile)
 {
-	BYTE length = _str.length();
+	BYTE length = (BYTE)_str.length();
 	const wchar_t* pStr = _str.c_str();
 
 	fwrite(&length, sizeof(BYTE), 1, _pFile);

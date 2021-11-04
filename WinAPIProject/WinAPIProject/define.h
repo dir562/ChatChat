@@ -24,6 +24,10 @@
 
 #define GRAVITY 2400
 
+#define BUFSIZE 512
+#define SERVERPORT 9000
+
+
 enum class SCENE_TYPE
 {
 	TOOL,
@@ -39,8 +43,7 @@ enum class OBJ_TYPE
 {
 	DEFAULT,	
 	PLAYER,
-	MONSTER,
-	PROJECTILE,
+	OTHERPLAYER,
 
 	END = 32,
 };

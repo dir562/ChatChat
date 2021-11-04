@@ -50,6 +50,9 @@
     <Filter Include="Game\06. Component\Collider">
       <UniqueIdentifier>{af2f3603-3368-4dff-a916-e3c56eaed2fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. MultiThread">
+      <UniqueIdentifier>{6902f3e3-6c3d-478e-9ad8-d1b186e4d33d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">

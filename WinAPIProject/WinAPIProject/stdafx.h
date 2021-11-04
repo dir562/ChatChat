@@ -19,7 +19,7 @@
 
 // Library
 #pragma comment(lib, "msimg32")
-
+#pragma comment(lib, "ws2_32")
 
 // Header
 #include <assert.h>
@@ -28,6 +28,9 @@
 #include <map>
 #include <math.h>
 #include <string>
+#include <stdio.h>
+#include <WinSock2.h>
+#include <stdlib.h>
 
 #include <commdlg.h>
 

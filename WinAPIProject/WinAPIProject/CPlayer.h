@@ -30,7 +30,6 @@ private:
 
 	float			m_fMoveSpeed;
 
-	bool			m_bGround;
 	HBRUSH m_Color;
 
 	float m_fJumpPower;
