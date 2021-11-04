@@ -30,7 +30,7 @@ public:
 	void NewSession(SOCKET socket, NetID net_id);
 
 private:
-	void clear();
+	void clear(SESSION_STATE state = SESSION_STATE::ST_FREE);
 	bool HandleIoError(int res);
 
 public:

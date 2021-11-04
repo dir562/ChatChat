@@ -30,7 +30,7 @@ namespace MY_NAME_SPACE {} using namespace MY_NAME_SPACE; using namespace std;
 
 
 /// CODE GENERATE
-namespace MY_NAME_SPACE 
+namespace MY_NAME_SPACE
 {
 
 #define DISABLE_COPY(CLASS)								\
@@ -117,7 +117,7 @@ namespace MY_NAME_SPACE {
 
 		static consteval size_t bits() { return sizeof(_Ty) * 8; };
 	};
-	
+
 	template <class _T>
 	concept primitive_t = is_arithmetic_v<_T> || is_enum_v<_T>;
 }
@@ -185,7 +185,32 @@ namespace MY_NAME_SPACE {
 //	UTIL
 namespace MY_NAME_SPACE {
 	using namespace std;
-	
+#define TRY_LOCK_SHARED_OR_RETURN(shared_m) if (false == shared_m.try_lock_shared()) { return; }
+#define UNLOCK_SHARED(shared_m) {shared_m.unlock_shared();}
+
+#define LOCK_SHARED(shared_m) {shared_m.lock_shared();}
+#define UNLOCK_SHARED(shared_m) {shared_m.unlock_shared();}
+#define UNIQUE_LOCK	unique_lock
+#define SHARED_LOCK	shared_lock
+
+	class try_shared_lock
+	{
+	public:
+		try_shared_lock(shared_mutex& m) :m_{ m }
+		{
+			success_ = m_.try_lock_shared();
+		}
+		~try_shared_lock()
+		{
+			if (success_) m_.unlock_shared();
+		}
+		bool success()const { return success_; }
+		bool fail()const { return !success(); }
+	private:
+		bool success_;
+		shared_mutex& m_;
+	};
+
 	bool CAS(auto& target, auto expected, auto desired)
 	{
 		return target.compare_exchange_strong(expected, desired);
@@ -247,7 +272,7 @@ namespace MY_NAME_SPACE {
 		{
 			return true;
 		}
-	} 
+	}
 }
 
 

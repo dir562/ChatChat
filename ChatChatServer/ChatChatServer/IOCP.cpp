@@ -25,8 +25,7 @@ void IOCP::ProcessQueuedCompleteOperationLoop()
 		WSAOVERLAPPED* p_over;
 		BOOL res = GetQueuedCompletionStatus(iocp_, &returned_bytes, (PULONG_PTR)&net_id, &p_over, INFINITE);
 		auto ex_over = reinterpret_cast<EXP_OVER*>(p_over);
-		cerr << "GQCS returned. net_id::" << (int)net_id << "::" << (int)ex_over->comp_op << endl;
-
+		// cerr << "GQCS returned. net_id::" << (int)net_id << "::" << (int)ex_over->comp_op << endl;
 
 		if (FALSE == res) [[unlikely]]
 		{
@@ -55,25 +54,17 @@ void IOCP::ProcessQueuedCompleteOperationLoop()
 
 void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 {
-
-	cerr << "RECV " << endl;
+	//cerr << "RECV " << endl;
 
 	Session& client = sessions_[net_id];
 
 	if (0 == returned_bytes) [[unlikely]]
 	{
-		cerr << "ID::" << (int)net_id << ". recved 0 bytes. disconnect." << endl;
 		client.do_disconnect();
 		return;
-		// clientlist -> delete client.
 	};
 
-	client.connection_lock_.lock_shared();
-	if (client.check_state_bad())
-	{
-		client.connection_lock_.unlock_shared();
-		return;
-	}
+	TRY_LOCK_SHARED_OR_RETURN(client.connection_lock_); // try lock;
 
 	auto pck_start = ex_over->net_buf;
 	auto remain_bytes = returned_bytes + client.get_prerecv_size();
@@ -82,15 +73,12 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 	for (auto need_bytes = *reinterpret_cast<packet_size_t*>(pck_start);
 		need_bytes <= remain_bytes;)
 	{
-		cerr << "completed_packet..";
-		client.connection_lock_.unlock_shared();
+		UNLOCK_SHARED(client.connection_lock_);	// unlock;
+
 		process_packet(net_id, pck_start);
-		client.connection_lock_.lock_shared();
-		if (client.check_state_bad())
-		{
-			client.connection_lock_.unlock_shared();
-			return;
-		}
+
+		TRY_LOCK_SHARED_OR_RETURN(client.connection_lock_); // try lock;
+
 		pck_start += need_bytes;
 		remain_bytes -= need_bytes;
 		need_bytes = *reinterpret_cast<packet_size_t*>(pck_start);
@@ -104,11 +92,11 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 	// remain_bytes가 남아있으면 미완성패킷의 데이터임. prerecv 해주기.
 	if (0 != remain_bytes)
 	{
-		cerr << "prerecv_packet::" << remain_bytes << endl;
 		client.set_prerecv_size(remain_bytes);
 		memmove(&ex_over->net_buf, pck_start, remain_bytes);
 	}
-	client.connection_lock_.unlock_shared();
+
+	UNLOCK_SHARED(client.connection_lock_);		// unlock;
 
 	if (client.check_state_good())
 		client.do_recv();
@@ -119,10 +107,8 @@ void IOCP::OnSendComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 {
 	//cerr << "SEND " << endl;
 
-
 	if (returned_bytes != ex_over->wsa_buf.len)
 	{
-		cerr << "^^^^^^^^^^^^^^^^send :: " << (int)((packet_base<void>*)ex_over->net_buf)->size << " bytes" << endl;
 		Session& client = sessions_[net_id];
 		client.do_disconnect();
 	}
@@ -132,32 +118,29 @@ void IOCP::OnSendComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 
 // =============================================== // 
 
-// diconnect -> send 중  accept의 인터럽트..? => 우아한 종료 구현되어야 할듯.
 
 void IOCP::OnAcceptComplete(EXP_OVER* ex_over) // 유일성 보장 함수.
 {
 	cerr << "ACCEPT " << endl;
 	SOCKET new_socket = *(reinterpret_cast<SOCKET*>(ex_over->net_buf));
-	NetID new_id = get_new_net_id();		// ON_ACCEPT
+	NetID new_id = get_new_net_id();
 	Session& new_client = sessions_[new_id];
 	{
-		unique_lock write_lck{ new_client.connection_lock_ };
+		UNIQUE_LOCK write_lck{ new_client.connection_lock_ };
+
+		new_client.clear(ST_ON_ACCEPT);
 		new_client.NewSession(new_socket, new_id);
 
 		CreateIoCompletionPort(reinterpret_cast<HANDLE>(new_socket), iocp_, new_id, 0);
-		cout << "new id::" << (int)new_id << ". accept. " << endl;
-		new_client.set_state(ST_ACCEPT);	// ACCEPT
+		cerr << "new id::" << (int)new_id << ". accept. " << endl;
+		new_client.set_state(ST_ACCEPT);
 	}
-
 	new_client.do_recv();
-
 	ListenSocket::get().do_accept();
 }
 
 NetID IOCP::get_new_net_id() // 유일성 보장 함수.
 {
-	//static int netid = 1;
-	//return netid++;
 	for (int net_id = 1; net_id < sessions_.size(); net_id++)
 	{
 		if (CAS(sessions_[net_id].state_, ST_FREE, ST_ON_ACCEPT))
@@ -173,7 +156,7 @@ NetID IOCP::get_new_net_id() // 유일성 보장 함수.
 
 void IOCP::OnDisconnectComplete(SOCKET s, NetID net_id, EXP_OVER* ex_over)
 {
-	unique_lock write_lck{ sessions_[net_id].connection_lock_ };
+	UNIQUE_LOCK write_lck{ sessions_[net_id].connection_lock_ };
 	cout << "diconnectd!!!" << (int)net_id << "::socket" << s << "::" << endl;
 
 	auto res = closesocket(s);
