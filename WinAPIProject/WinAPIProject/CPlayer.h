@@ -7,7 +7,6 @@ enum class PLAYER_STATE
 {
 	IDLE,
 	MOVE,	
-	JUMP,
 	ATTACK,
 	DEAD,
 };
@@ -18,6 +17,7 @@ class CPlayer :
 	public CObj
 {
 private:
+	bool m_bJump;
 	Vec2 m_vStartPos;
 	CTexture*		m_pTex;	
 	UINT			m_iHP;

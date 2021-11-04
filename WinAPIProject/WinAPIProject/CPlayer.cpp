@@ -79,7 +79,7 @@ void CPlayer::CheckState()
 	m_ePrevState = m_eState;
 	m_ePrevDir = m_eDir;
 
-	if (PLAYER_STATE::IDLE == m_eState || PLAYER_STATE::MOVE == m_eState||PLAYER_STATE::JUMP==m_eState)
+	if (PLAYER_STATE::IDLE == m_eState || PLAYER_STATE::MOVE == m_eState)
 	{
 		if (KEY_TAP(KEY_TYPE::KEY_LEFT))
 		{		
@@ -88,7 +88,7 @@ void CPlayer::CheckState()
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
-			m_eState = PLAYER_STATE::JUMP;
+			m_bJump = true;
 		}
 		if (KEY_TAP(KEY_TYPE::KEY_RIGHT))
 		{
@@ -96,7 +96,7 @@ void CPlayer::CheckState()
 			m_eDir = DIR::RIGHT;
 		}
 
-		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT) &&PLAYER_STATE::JUMP!=m_eState)
+		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT) )
 		{
 			m_eState = PLAYER_STATE::IDLE;			
 		}
@@ -107,7 +107,7 @@ void CPlayer::Jumping()
 {
 
 
-	if (PLAYER_STATE::JUMP == m_eState) {
+	if (m_bJump) {
 		Vec2 vPos = GetPos();
 		if (vPos.y > m_vStartPos.y) {
 			ValueInit();
@@ -123,7 +123,7 @@ void CPlayer::Jumping()
 
 void CPlayer::Move()
 {
-	if (PLAYER_STATE::MOVE != m_eState||PLAYER_STATE::JUMP!=m_eState)
+	if (PLAYER_STATE::MOVE != m_eState)
 		return;
 
 	Vec2 vPos = GetPos();
@@ -147,7 +147,7 @@ void CPlayer::ValueInit()
 	Vec2 vPos = GetPos();
 	vPos.y = m_vStartPos.y;
 	SetPos(vPos);
-	m_eState = PLAYER_STATE::IDLE;
+	m_bJump = false;
 	m_fJumpPower = 1200.f;
 	
 }
