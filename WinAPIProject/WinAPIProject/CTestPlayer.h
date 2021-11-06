@@ -3,7 +3,7 @@
 
 class CTexture;
 
-enum class PLAYER_STATE
+enum class TESTPLAYER_STATE
 {
 	IDLE,
 	MOVE,	
@@ -13,7 +13,7 @@ enum class PLAYER_STATE
 
 
 
-class CPlayer :
+class CTestPlayer :
 	public CObj
 {
 private:
@@ -23,38 +23,35 @@ private:
 	UINT			m_iHP;
 
 	DIR				m_eDir;
-	PLAYER_STATE	m_eState;
+	TESTPLAYER_STATE	m_eState;
 
 	DIR				m_ePrevDir;
-	PLAYER_STATE	m_ePrevState;
+	TESTPLAYER_STATE	m_ePrevState;
 
 	float			m_fMoveSpeed;
 
 	HBRUSH m_Color;
 
 	float m_fJumpPower;
-	
+	int m_iLife;
+	vector<COLORREF> m_BrushColor;
 
 public:
 	virtual void init();
 
-	float GetJumpPower() { return m_fJumpPower; }
 	virtual void update();	
 	virtual void render(HDC _dc);
 	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }
 	virtual void OnCollisionEnter(CCollider* _pOther);
 
 	
-	virtual CPlayer* Clone() { return new CPlayer(*this); }
+	virtual CTestPlayer* Clone() { return new CTestPlayer(*this); }
 
 private:
-	void CheckState();
-	void Jumping();	
-	void Move();
-	void ValueInit();
+
 
 public:
-	CPlayer();
-	~CPlayer();
+	CTestPlayer();
+	~CTestPlayer();
 };
 

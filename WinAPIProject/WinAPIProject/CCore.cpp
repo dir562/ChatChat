@@ -64,6 +64,7 @@ void CCore::init(HWND _hWnd, POINT _ptResolution)
 	CPathMgr::init();
 	CTimeMgr::GetInst()->init();
 	CKeyMgr::GetInst()->init();
+
 	CSceneMgr::GetInst()->init();
 
 	// Create GDI Object

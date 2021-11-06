@@ -50,3 +50,5 @@ void LoadWString(wstring& _str, FILE* _pFile)
 	fread(szBuffer, sizeof(wchar_t), (size_t)length, _pFile);
 	_str = szBuffer;
 }
+
+

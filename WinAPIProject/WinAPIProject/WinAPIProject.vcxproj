@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -156,6 +156,7 @@
     <ClInclude Include="CObj.h" />
     <ClInclude Include="CPathMgr.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="CProcessServer.h" />
     <ClInclude Include="CRes.h" />
     <ClInclude Include="CResMgr.h" />
     <ClInclude Include="CScene.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="CSound.h" />
     <ClInclude Include="CStartScene.h" />
     <ClInclude Include="CStage01Scene.h" />
+    <ClInclude Include="CTestPlayer.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTimeMgr.h" />
     <ClInclude Include="define.h" />
@@ -182,6 +184,7 @@
     <ClCompile Include="CObj.cpp" />
     <ClCompile Include="CPathMgr.cpp" />
     <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="CProcessServer.cpp" />
     <ClCompile Include="CRes.cpp" />
     <ClCompile Include="CResMgr.cpp" />
     <ClCompile Include="CScene.cpp" />
@@ -189,6 +192,7 @@
     <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CStartScene.cpp" />
     <ClCompile Include="CStage01Scene.cpp" />
+    <ClCompile Include="CTestPlayer.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTimeMgr.cpp" />
     <ClCompile Include="func.cpp" />

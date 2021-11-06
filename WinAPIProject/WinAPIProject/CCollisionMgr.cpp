@@ -134,6 +134,7 @@ bool CCollisionMgr::Collision(CCollider* _pLeftCol, CCollider* _pRightCol)
 }
 
 
+
 void CCollisionMgr::CollisionCheckClear()
 {
 	memset(m_arrCheck, 0, sizeof(UINT) * (UINT)OBJ_TYPE::END);

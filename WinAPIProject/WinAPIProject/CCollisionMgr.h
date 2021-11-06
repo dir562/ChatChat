@@ -30,5 +30,6 @@ public:
 private:
 	void CollisionGroup(OBJ_TYPE _eLeft, OBJ_TYPE _eRight);
 	bool Collision(CCollider* _pLeftCol, CCollider* _pRightCol);
+	
 };
 

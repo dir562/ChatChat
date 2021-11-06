@@ -2,6 +2,7 @@
 #include "CStartScene.h"
 
 #include "CPlayer.h"
+#include "CTestPlayer.h"
 #include "CCollisionMgr.h"
 #include "CCamera.h"
 
@@ -18,9 +19,15 @@ void CStartScene::init()
 	player->SetStartPos(player->GetPos());
 	AddObj(pObj, OBJ_TYPE::PLAYER);	
 
+	CTestPlayer* pObj2 = new CTestPlayer;
+	pObj2->init();
+	pObj2->SetPos(Vec2((float)WIN_X / 2.f+50, (float)WIN_Y / 2.f + 200.f));
+	pObj2->SetScale(Vec2(50.f, 50.f));
+	AddObj(pObj2, OBJ_TYPE::OTHERPLAYER);
+
 	// 충돌 그룹 지정
 	CCollisionMgr::GetInst()->CollisionCheckClear();
-	CCollisionMgr::GetInst()->CollisionCheck(OBJ_TYPE::PLAYER, OBJ_TYPE::MONSTER);
+	CCollisionMgr::GetInst()->CollisionCheck(OBJ_TYPE::PLAYER, OBJ_TYPE::OTHERPLAYER);
 
 	// 카메라 초기화
 	CCamera::GetInst()->init();
