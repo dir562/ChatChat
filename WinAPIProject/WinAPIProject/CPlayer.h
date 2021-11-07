@@ -43,7 +43,7 @@ public:
 	virtual void render(HDC _dc);
 	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }
 	virtual void OnCollisionEnter(CCollider* _pOther);
-
+	virtual void OnCollision(CCollider* _pOther);
 	
 	virtual CPlayer* Clone() { return new CPlayer(*this); }
 

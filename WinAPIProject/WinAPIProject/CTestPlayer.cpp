@@ -85,8 +85,6 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 {
 	if (7 == m_iLife)
 		return;
-	
-
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
 	bool  b=false;
 	if (player->GetJumpPower() < 0) {

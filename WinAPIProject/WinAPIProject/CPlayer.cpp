@@ -74,6 +74,15 @@ void CPlayer::render(HDC _dc)
 		,&rect,m_Color);
 }
 
+void CPlayer::OnCollisionEnter(CCollider* _pOther)
+{
+}
+
+void CPlayer::OnCollision(CCollider* _pOther)
+{
+	m_fJumpPower = 700.f;
+}
+
 
 void CPlayer::CheckState()
 {	
@@ -154,8 +163,4 @@ void CPlayer::ValueInit()
 	
 }
 
-void CPlayer::OnCollisionEnter(CCollider* _pOther)
-{
-	int a = 0;
-}
 
