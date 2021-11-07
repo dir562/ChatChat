@@ -47,6 +47,9 @@ public:
 	
 	virtual CTestPlayer* Clone() { return new CTestPlayer(*this); }
 
+	float GetJumpPower() { return m_fJumpPower; }
+
+	void SetJumpPower(float _Power) { m_fJumpPower = _Power; }
 private:
 
 

@@ -12,7 +12,7 @@
 #include "CResMgr.h"
 #include "CTexture.h"
 
-
+#include "CTestPlayer.h"
 #include "CEventMgr.h"
 
 CPlayer::CPlayer()
@@ -76,10 +76,20 @@ void CPlayer::render(HDC _dc)
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
+	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
+	if (player->GetJumpPower() < 0&&m_fJumpPower>0) {
+		m_fJumpPower = -100.f;
+	}
+
 }
 
 void CPlayer::OnCollision(CCollider* _pOther)
 {
+	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
+	bool b = false;
+	if (player->GetJumpPower() < 0)
+		b = true;
+	if(!b)
 	m_fJumpPower = 700.f;
 }
 

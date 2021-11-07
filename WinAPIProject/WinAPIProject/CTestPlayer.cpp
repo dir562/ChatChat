@@ -23,7 +23,7 @@ CTestPlayer::CTestPlayer()
 	, m_ePrevDir(DIR::NONE)
 	, m_ePrevState(TESTPLAYER_STATE::IDLE)
 	, m_fMoveSpeed(100.f)
-	,m_fJumpPower(1200.f)
+	,m_fJumpPower(-1.f)
 	,m_bJump(false)
 	, m_iLife(0)
 	
