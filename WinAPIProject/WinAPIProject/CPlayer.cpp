@@ -25,7 +25,7 @@ CPlayer::CPlayer()
 	, m_fMoveSpeed(100.f)
 	,m_fJumpPower(1200.f)
 	,m_bJump(false)
-	,m_Color(CreateSolidBrush(RGB(255,0,0)))
+
 	,m_iLife(0)
 {
 }
