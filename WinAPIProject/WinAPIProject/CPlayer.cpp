@@ -25,8 +25,8 @@ CPlayer::CPlayer()
 	, m_fMoveSpeed(100.f)
 	,m_fJumpPower(1200.f)
 	,m_bJump(false)
-	
 	,m_Color(CreateSolidBrush(RGB(255,0,0)))
+	,m_iLife(0)
 {
 }
 
@@ -39,12 +39,20 @@ void CPlayer::init()
 
 	// 中宜端 持失
 	CCollider* pCollider = new CCollider;
-	pCollider->SetOffsetPos(Vec2(0.f, 10.f));
+	pCollider->SetOffsetPos(Vec2(0.f, 0.f));
 	pCollider->SetScale(Vec2(30.f, 30.f));
 	AddCollider(pCollider);
 
 	m_vStartPos = GetPos();
-
+	m_BrushColor.push_back(RGB(255, 0, 0));
+	m_BrushColor.push_back(RGB(255, 127, 0));
+	m_BrushColor.push_back(RGB(255, 255, 0));
+	m_BrushColor.push_back(RGB(0, 255, 0));
+	m_BrushColor.push_back(RGB(0, 0, 255));
+	m_BrushColor.push_back(RGB(0, 0, 128));
+	m_BrushColor.push_back(RGB(112, 93, 168));
+	m_BrushColor.push_back(RGB(0, 0, 0));
+	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
 
 }
 
@@ -76,6 +84,26 @@ void CPlayer::render(HDC _dc)
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
+<<<<<<< Updated upstream
+=======
+
+	if (7 == m_iLife)
+		return;
+	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
+	bool  b = false;
+	if (player->GetJumpPower() < 0) {
+		b = true;
+	}
+	if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
+		m_iLife += 1;
+		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
+	}
+
+	if (player->GetJumpPower() < 0&&m_fJumpPower>0) {
+		m_fJumpPower = -100.f;
+	}
+
+>>>>>>> Stashed changes
 }
 
 void CPlayer::OnCollision(CCollider* _pOther)

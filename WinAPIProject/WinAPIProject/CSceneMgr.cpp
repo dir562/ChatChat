@@ -58,3 +58,5 @@ void CSceneMgr::ChangeScene(SCENE_TYPE _eNextScene)
 
 	m_pCurScene->Enter();
 }
+
+
