@@ -29,6 +29,7 @@ void CStartScene::init()
 	CTestPlayer* pObj3 = new CTestPlayer;
 	pObj3->init();
 	pObj3->SetPos(Vec2((float)WIN_X / 2.f + 50, (float)WIN_Y / 2.f - 100.f));
+	pObj3->SetJumpPower(-1);
 	pObj3->SetScale(Vec2(50.f, 50.f));
 	AddObj(pObj3, OBJ_TYPE::OTHERPLAYER);
 
