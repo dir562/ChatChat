@@ -109,6 +109,19 @@ void CPlayer::OnCollision(CCollider* _pOther)
 }
 
 
+void CPlayer::PressSpaceBar()
+{
+	m_iLife = 0;
+	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
+	
+	Vec2 vPos = GetPos();
+
+	int random = rand() + 200 - 100;
+	vPos.x += random;
+	SetPos(vPos);
+
+}
+
 void CPlayer::CheckState()
 {	
 	// 현재상태를 이전상태로 저장해둠
@@ -124,6 +137,10 @@ void CPlayer::CheckState()
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
+			if (7 == m_iLife) {
+				PressSpaceBar();
+				return;
+			}
 			m_bJump = true;
 		}
 		if (KEY_TAP(KEY_TYPE::KEY_RIGHT))
@@ -141,8 +158,7 @@ void CPlayer::CheckState()
 
 void CPlayer::Jumping()
 {
-
-
+	
 	if (m_bJump) {
 		Vec2 vPos = GetPos();
 		if (vPos.y > m_vStartPos.y) {
@@ -159,7 +175,7 @@ void CPlayer::Jumping()
 
 void CPlayer::Move()
 {
-	if (PLAYER_STATE::MOVE != m_eState)
+	if (PLAYER_STATE::MOVE != m_eState||7==m_iLife)
 		return;
 
 	Vec2 vPos = GetPos();

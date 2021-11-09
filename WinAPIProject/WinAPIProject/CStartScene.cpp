@@ -25,6 +25,15 @@ void CStartScene::init()
 	pObj2->SetScale(Vec2(50.f, 50.f));
 	AddObj(pObj2, OBJ_TYPE::OTHERPLAYER);
 
+
+
+
+	CTestPlayer* pObj3 = new CTestPlayer;
+	pObj3->init();
+	pObj3->SetPos(Vec2((float)WIN_X / 2.f + 50, (float)WIN_Y / 2.f -100.f));
+	pObj3->SetScale(Vec2(50.f, 50.f));
+	AddObj(pObj3, OBJ_TYPE::OTHERPLAYER);
+
 	// 충돌 그룹 지정
 	CCollisionMgr::GetInst()->CollisionCheckClear();
 	CCollisionMgr::GetInst()->CollisionCheck(OBJ_TYPE::PLAYER, OBJ_TYPE::OTHERPLAYER);

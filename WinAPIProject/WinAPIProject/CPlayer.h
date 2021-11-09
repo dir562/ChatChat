@@ -50,6 +50,8 @@ public:
 	
 	virtual CPlayer* Clone() { return new CPlayer(*this); }
 
+	void PressSpaceBar();
+
 private:
 	void CheckState();
 	void Jumping();	
