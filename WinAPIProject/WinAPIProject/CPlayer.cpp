@@ -11,7 +11,7 @@
 #include "CCamera.h"
 #include "CResMgr.h"
 #include "CTexture.h"
-
+#include "CTestPlayer.h"
 
 #include "CEventMgr.h"
 
@@ -84,8 +84,6 @@ void CPlayer::render(HDC _dc)
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-<<<<<<< Updated upstream
-=======
 
 	if (7 == m_iLife)
 		return;
@@ -103,7 +101,6 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 		m_fJumpPower = -100.f;
 	}
 
->>>>>>> Stashed changes
 }
 
 void CPlayer::OnCollision(CCollider* _pOther)
