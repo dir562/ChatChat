@@ -17,10 +17,16 @@ private:
 
 	bool		m_bDead;
 
+	int m_ID;
+
+
 private:
 	void SetDead() { m_bDead = true; }
 
 public:
+	void SetID(int _ID) { m_ID = _ID; }
+	int GetID() { return m_ID; }
+
 	Vec2 GetPos() { return m_vPos; }
 	Vec2 GetScale() { return m_vScale; }
 

@@ -17,9 +17,11 @@ public:
 
 private:
 	void ChangeScene(SCENE_TYPE _eNextScene);
-
+	
+	
 public:
 	CScene* GetCurScene() { return m_pCurScene; }
+
 
 	friend class CEventMgr;
 };

@@ -11,7 +11,6 @@
 #include "CCamera.h"
 #include "CResMgr.h"
 #include "CTexture.h"
-
 #include "CTestPlayer.h"
 #include "CEventMgr.h"
 
@@ -25,8 +24,8 @@ CPlayer::CPlayer()
 	, m_fMoveSpeed(100.f)
 	,m_fJumpPower(1200.f)
 	,m_bJump(false)
-	
-	,m_Color(CreateSolidBrush(RGB(255,0,0)))
+
+	,m_iLife(0)
 {
 }
 
@@ -39,12 +38,20 @@ void CPlayer::init()
 
 	// 中宜端 持失
 	CCollider* pCollider = new CCollider;
-	pCollider->SetOffsetPos(Vec2(0.f, 10.f));
+	pCollider->SetOffsetPos(Vec2(0.f, 0.f));
 	pCollider->SetScale(Vec2(30.f, 30.f));
 	AddCollider(pCollider);
 
 	m_vStartPos = GetPos();
-
+	m_BrushColor.push_back(RGB(255, 0, 0));
+	m_BrushColor.push_back(RGB(255, 127, 0));
+	m_BrushColor.push_back(RGB(255, 255, 0));
+	m_BrushColor.push_back(RGB(0, 255, 0));
+	m_BrushColor.push_back(RGB(0, 0, 255));
+	m_BrushColor.push_back(RGB(0, 0, 128));
+	m_BrushColor.push_back(RGB(112, 93, 168));
+	m_BrushColor.push_back(RGB(0, 0, 0));
+	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
 
 }
 
@@ -76,7 +83,18 @@ void CPlayer::render(HDC _dc)
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
+	if (7 == m_iLife)
+		return;
 	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
+	bool  b = false;
+	if (player->GetJumpPower() < 0) {
+		b = true;
+	}
+	if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
+		m_iLife += 1;
+		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
+	}
+
 	if (player->GetJumpPower() < 0&&m_fJumpPower>0) {
 		m_fJumpPower = -100.f;
 	}
@@ -89,10 +107,24 @@ void CPlayer::OnCollision(CCollider* _pOther)
 	bool b = false;
 	if (player->GetJumpPower() < 0)
 		b = true;
-	if(!b)
-	m_fJumpPower = 700.f;
+	if (!b)
+		m_fJumpPower = 700.f;
+	
 }
 
+
+void CPlayer::PressSpaceBar()
+{
+	m_iLife = 0;
+	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
+	
+	Vec2 vPos = GetPos();
+
+	int random = rand() + 200 - 100;
+	vPos.x += random;
+	SetPos(vPos);
+
+}
 
 void CPlayer::CheckState()
 {	
@@ -109,6 +141,10 @@ void CPlayer::CheckState()
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
+			if (7 == m_iLife) {
+				PressSpaceBar();
+				return;
+			}
 			m_bJump = true;
 		}
 		if (KEY_TAP(KEY_TYPE::KEY_RIGHT))
@@ -126,8 +162,7 @@ void CPlayer::CheckState()
 
 void CPlayer::Jumping()
 {
-
-
+	
 	if (m_bJump) {
 		Vec2 vPos = GetPos();
 		if (vPos.y > m_vStartPos.y) {
@@ -144,7 +179,7 @@ void CPlayer::Jumping()
 
 void CPlayer::Move()
 {
-	if (PLAYER_STATE::MOVE != m_eState)
+	if (PLAYER_STATE::MOVE != m_eState||7==m_iLife)
 		return;
 
 	Vec2 vPos = GetPos();

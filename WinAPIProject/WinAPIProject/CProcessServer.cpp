@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "CProcessServer.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
+#include "CObj.h"
 
-void CProcessServer::ErrorQuit(char* msg) {
+
+void CProcessServer::ErrorQuit(const char* msg) {
 	LPVOID lpMsgBuf;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, WSAGetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCWSTR)msg, MB_ICONERROR);
@@ -9,7 +13,7 @@ void CProcessServer::ErrorQuit(char* msg) {
 	exit(1);
 }
 
-void CProcessServer::ErrorDisplay(char* msg)
+void CProcessServer::ErrorDisplay(const char* msg)
 {
 	LPVOID lpMsgBuf;
 
@@ -42,4 +46,43 @@ int CProcessServer::Init()
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 
 	return 0;
+}
+
+void CProcessServer::ProcessServer(LPVOID arg)
+{
+	SOCKET client_sock = (SOCKET)arg;
+	int retval;
+	SOCKADDR_IN clientaddr;
+	int addrlen;
+	CObj* pObj=nullptr;
+	char buf[BUFSIZE + 1];
+	//getpeername(client_sock, (SOCKADDR*)&clientaddr, &addrlen);
+	while (true)
+	{
+		retval = recvn(client_sock, (char*)pObj, BUFSIZE, 0);
+		if (SOCKET_ERROR == retval) {
+			ErrorDisplay("recv()");
+			break;
+		}
+		else if (0 == retval) {
+			break;
+		}
+
+	}
+	vector<CObj*> objects=const_cast<vector<CObj*>&>(CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER));
+	std::vector<CObj*>::iterator it=objects.begin();
+	bool bIsFind = false;
+	for (; it != objects.end(); ++it) {
+		if ((*it)->GetID() == (pObj)->GetID()) {
+			bIsFind = true;
+			break;
+		}
+	}
+
+	if(!bIsFind)
+		CSceneMgr::GetInst()->GetCurScene()->AddObj(pObj, OBJ_TYPE::OTHERPLAYER);
+	
+
+	closesocket(client_sock);
+
 }

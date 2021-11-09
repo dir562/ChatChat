@@ -38,7 +38,7 @@ private:
 
 public:
 	virtual void init();
-
+	float GetJumpPower() { return m_fJumpPower; }
 	virtual void update();	
 	virtual void render(HDC _dc);
 	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }

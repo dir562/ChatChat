@@ -33,7 +33,10 @@ private:
 	HBRUSH m_Color;
 
 	float m_fJumpPower;
-	
+
+
+	int m_iLife;
+	vector<COLORREF> m_BrushColor;
 
 public:
 	virtual void init();
@@ -46,6 +49,8 @@ public:
 	virtual void OnCollision(CCollider* _pOther);
 	
 	virtual CPlayer* Clone() { return new CPlayer(*this); }
+
+	void PressSpaceBar();
 
 private:
 	void CheckState();

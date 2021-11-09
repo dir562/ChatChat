@@ -31,6 +31,8 @@
 #include <stdio.h>
 #include <WinSock2.h>
 #include <stdlib.h>
+#include <thread>
+#include <mutex>
 
 #include <commdlg.h>
 
