@@ -78,3 +78,15 @@ enum class DIR
 	RIGHT,
 	NONE,
 };
+
+struct Move_Packet {
+	float X;
+	float Y;
+	int ClientID;
+};
+struct Disconnet_Packet {
+	int GetClientID;
+};
+
+
+#define PACKET 

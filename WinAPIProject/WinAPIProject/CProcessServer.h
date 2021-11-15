@@ -10,7 +10,7 @@ private:
 	int retval;
 	HANDLE hMultiThread;
 
-//	std::thread t=
+
 public:
 	void ErrorQuit(const char* msg);
 	void ErrorDisplay(const char* msg);
@@ -19,5 +19,6 @@ public:
 	int Init();
 	void ProcessServer(LPVOID arg);
 	
+
 };
 

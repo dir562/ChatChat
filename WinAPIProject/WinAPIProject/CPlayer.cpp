@@ -122,7 +122,7 @@ void CPlayer::PressSpaceBar()
 	
 	Vec2 vPos = GetPos();
 
-	int random = rand() + 200 - 100;
+	int random = rand()% 200 - 100;
 	vPos.x += random;
 	SetPos(vPos);
 
