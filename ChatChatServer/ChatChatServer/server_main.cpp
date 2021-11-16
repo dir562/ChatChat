@@ -32,7 +32,7 @@ int main()
 	cerr << NUM_IOCP_THREADS << " threads are do GQCS work(except main thread)." << endl;
 
 	// ToDo On MainThread.
-	IOCP::get().RepeatSendLoop();
+	//IOCP::get().RepeatSendLoop();
 	//
 
 
