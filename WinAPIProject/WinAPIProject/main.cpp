@@ -3,6 +3,8 @@
 
 #include "CCore.h"
 
+#include "Networker.h"
+
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
@@ -30,6 +32,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: 여기에 코드를 입력합니다.
+    // 콘솔등롤함수.
+    AllocConsole();
+    FILE* stream;
+    freopen_s(&stream, "freopen.out", "w", stderr);
+    freopen_s(&stream, "freopen.out", "w", stdout);
+    freopen_s(&stream, "freopen.in", "r", stdin);
+    std::cerr << "Hi" << std::endl;
+    std::cout << "Hi~~" << std::endl;
+   // thread networking{ []{ Networker::get().do_recv(); } };
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);

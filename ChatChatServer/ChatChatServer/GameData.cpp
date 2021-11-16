@@ -30,9 +30,28 @@ void process_packet(const NetID net_id, const char* const packet)
 			}
 		}
 	}
-	CASE PAKCET_TYPE::NONE: 
+	CASE PAKCET_TYPE::CS_TEST_MOVE:
 	{
-		cerr << "@@@@@@@@@@@@@@@@@@@@@@@@@@::" << endl; 
+		auto pck = reinterpret_cast<const cs_test_move*>(packet);
+		auto dir = to_string(pck->dir);
+		cout << (int)net_id << "::" << dir << endl;
+
+		sc_test_chat react_pck;
+		react_pck.chatter_id = net_id;
+		memcpy(react_pck.chat, &dir, sizeof(sc_test_chat::chat));
+
+		auto& sessions = IOCP::get().get_sessions();
+		for (auto& s : sessions)
+		{
+			if (s.check_state(SESSION_STATE::ST_ACCEPT))
+			{
+				s.do_send(&react_pck, react_pck.size);
+			}
+		}
+	}
+	CASE PAKCET_TYPE::NONE :
+	{
+		cerr << "@@@@@@@@@@@@@@@@@@@@@@@@@@::" << endl;
 		Beep(500, 1000);
 	}
 	break; default: cerr << "couldn't be here!! PAKCET_TYPE ERROR ::" << (int)pck_type << "::" << endl; Beep(500, 2000);

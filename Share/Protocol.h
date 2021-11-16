@@ -31,17 +31,18 @@ BETTER_ENUM
 	PAKCET_TYPE, int8
 
 	, NONE = 0
-	
+
 	/* Client 2 Server */
-	
-	, CS_NONE			= 10
+
+	, CS_NONE = 10
 	, CS_TEST_CHAT
+	, CS_TEST_MOVE
 
 
 
 	/* Server 2 Client */
 
-	, SC_NONE			= 100
+	, SC_NONE = 100
 	, SC_TEST_CHAT
 	, SC_TEST_HEART_BIT
 
@@ -73,7 +74,7 @@ PACKET(none)
 //=============== MOVE_INPUT =================
 
 // 이동연잔자들, 비트연산으로 press,unpress 설정
-enum class MOVE_DIR : int8
+enum MOVE_DIR : int8
 {
 	FORWARD = 1 << 0,
 	BACK = 1 << 1,
@@ -81,6 +82,10 @@ enum class MOVE_DIR : int8
 	RIGHT = 1 << 3
 };
 
+PACKET(cs_test_move)
+{
+	int8 dir{};
+};
 
 //===============  test CHATTING =================
 

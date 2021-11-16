@@ -56,6 +56,12 @@
     <Filter Include="Game\03. Object\Player\Test">
       <UniqueIdentifier>{2c4af8b1-4e9f-4a16-8f1d-2bbf9f2e3c58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Share">
+      <UniqueIdentifier>{a92632af-9a68-4bf8-af06-33594ef40cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{bdd7d524-864b-4e15-bab6-83f9e7e92ef7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -136,6 +142,33 @@
     <ClInclude Include="CTestPlayer.h">
       <Filter>Game\03. Object\Player\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Share\enum.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\includes.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Protocol.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SocketUtil.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Spinlock.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SUNKUE.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Thread_Pool.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\types.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="Networker.h">
+      <Filter>Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -203,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="CTestPlayer.cpp">
       <Filter>Game\03. Object\Player\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Share\SocketUtil.cpp">
+      <Filter>Share</Filter>
+    </ClCompile>
+    <ClCompile Include="Networker.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

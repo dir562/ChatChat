@@ -29,7 +29,7 @@ void ListenSocket::do_accept()
 	accept_ex_.comp_op = COMP_OP::OP_ACCEPT;
 	constexpr auto len = sizeof(SOCKADDR_IN) + 16;
 	*reinterpret_cast<SOCKET*>(accept_ex_.net_buf) = newface_socket_;
-	BOOL res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, NULL, len, len, nullptr, &accept_ex_.wsa_over);
+	BOOL res = ::AcceptEx(listen_socket_, newface_socket_, accept_buf_, 0, len, len, nullptr, &accept_ex_.wsa_over);
 	if (false == res)
 	{
 		if (ERROR_IO_PENDING != WSAGetLastError())SocketUtil::DisplayError(WSAGetLastError());

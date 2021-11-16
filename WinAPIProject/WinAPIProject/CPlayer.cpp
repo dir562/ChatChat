@@ -14,6 +14,8 @@
 #include "CTestPlayer.h"
 #include "CEventMgr.h"
 
+#include "Networker.h"
+
 CPlayer::CPlayer()
 	: m_pTex(nullptr)
 	, m_iHP(10)
@@ -22,10 +24,10 @@ CPlayer::CPlayer()
 	, m_ePrevDir(DIR::NONE)
 	, m_ePrevState(PLAYER_STATE::IDLE)
 	, m_fMoveSpeed(100.f)
-	,m_fJumpPower(1200.f)
-	,m_bJump(false)
+	, m_fJumpPower(1200.f)
+	, m_bJump(false)
 
-	,m_iLife(0)
+	, m_iLife(0)
 {
 }
 
@@ -78,7 +80,7 @@ void CPlayer::render(HDC _dc)
 		, (int)(vPos.y + vScale.y / 2.f)
 	};
 	FillRect(_dc
-		,&rect,m_Color);
+		, &rect, m_Color);
 }
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
@@ -95,7 +97,7 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
 	}
 
-	if (player->GetJumpPower() < 0&&m_fJumpPower>0) {
+	if (player->GetJumpPower() < 0 && m_fJumpPower > 0) {
 		m_fJumpPower = -100.f;
 	}
 
@@ -111,7 +113,7 @@ void CPlayer::OnCollision(CCollider* _pOther)
 		b = true;
 	if (!b)
 		m_fJumpPower = 700.f;
-	
+
 }
 
 
@@ -119,17 +121,17 @@ void CPlayer::PressSpaceBar()
 {
 	m_iLife = 0;
 	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
-	
+
 	Vec2 vPos = GetPos();
 
-	int random = rand()% 200 - 100;
+	int random = rand() % 200 - 100;
 	vPos.x += random;
 	SetPos(vPos);
 
 }
 
 void CPlayer::CheckState()
-{	
+{
 	// 현재상태를 이전상태로 저장해둠
 	m_ePrevState = m_eState;
 	m_ePrevDir = m_eDir;
@@ -137,7 +139,7 @@ void CPlayer::CheckState()
 	if (PLAYER_STATE::IDLE == m_eState || PLAYER_STATE::MOVE == m_eState)
 	{
 		if (KEY_TAP(KEY_TYPE::KEY_LEFT))
-		{		
+		{
 			m_eState = PLAYER_STATE::MOVE;
 			m_eDir = DIR::LEFT;
 		}
@@ -155,16 +157,16 @@ void CPlayer::CheckState()
 			m_eDir = DIR::RIGHT;
 		}
 
-		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT) )
+		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT))
 		{
-			m_eState = PLAYER_STATE::IDLE;			
+			m_eState = PLAYER_STATE::IDLE;
 		}
 	}
 }
 
 void CPlayer::Jumping()
 {
-	
+
 	if (m_bJump) {
 		Vec2 vPos = GetPos();
 		if (vPos.y > m_vStartPos.y) {
@@ -181,20 +183,30 @@ void CPlayer::Jumping()
 
 void CPlayer::Move()
 {
-	if (PLAYER_STATE::MOVE != m_eState||7==m_iLife)
+	if (PLAYER_STATE::MOVE != m_eState || 7 == m_iLife)
 		return;
 
 	Vec2 vPos = GetPos();
 
 	switch (m_eDir)
 	{
-	
+
 	case DIR::LEFT:
+	{
 		vPos.x -= fDT * m_fMoveSpeed;
-		break;
+
+		cs_test_move packet; packet.dir |= MOVE_DIR::LEFT;
+		Networker::get().do_send(&packet);
+
+	} break;
 	case DIR::RIGHT:
+	{
 		vPos.x += fDT * m_fMoveSpeed;
-		break;	
+
+		cs_test_move packet; packet.dir |= MOVE_DIR::RIGHT;
+		Networker::get().do_send(&packet);
+
+	}break;
 	}
 
 	SetPos(vPos);
@@ -207,7 +219,7 @@ void CPlayer::ValueInit()
 	SetPos(vPos);
 	m_bJump = false;
 	m_fJumpPower = 1200.f;
-	
+
 }
 
 

@@ -38,7 +38,6 @@ void process_packet(const char* const packet)
 		auto pck = reinterpret_cast<const sc_test_chat*>(pck_base);
 		cout << (int)pck->chatter_id << "::" << pck->chat << endl;
 	}
-	CASE PAKCET_TYPE::CS_NONE : { }
 	break; default: 
 		SocketUtil::DisplayError(WSAGetLastError());
 		cerr << "###########couldn't be here!! PAKCET_TYPE ERROR ::" << pck_type << "::" << endl; 

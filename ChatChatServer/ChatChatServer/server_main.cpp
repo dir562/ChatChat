@@ -5,7 +5,7 @@
 void InitWsa()
 {
 	WSADATA WSAData; 
-	int res = WSAStartup(MAKEWORD(2, 3), &WSAData);
+	int res = WSAStartup(MAKEWORD(2, 2), &WSAData);
 	if (SOCKET_ERROR == res)
 	{
 		SocketUtil::ReportError("InitWsa FAIL.");

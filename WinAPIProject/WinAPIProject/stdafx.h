@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <thread>
 #include <mutex>
+#include <iostream>
 
 #include <commdlg.h>
 
