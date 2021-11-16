@@ -1,2 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Share">
+      <UniqueIdentifier>{78ab13fb-7d95-4914-9b05-df73afc2dfb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestClient">
+      <UniqueIdentifier>{ff598a35-9c58-487e-8808-06db31f7d7f8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Share\SocketUtil.cpp">
+      <Filter>Share</Filter>
+    </ClCompile>
+    <ClCompile Include="test_main.cpp">
+      <Filter>TestClient</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Share\enum.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Spinlock.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\includes.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Protocol.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SocketUtil.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SUNKUE.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Thread_Pool.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\types.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

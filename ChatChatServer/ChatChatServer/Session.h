@@ -3,12 +3,20 @@
 #include "IocpHelper.h"
 
 
-// 세션을 list 혹은 vector 로 관리?
-// 세션을 ppl::unodered_map 으로 관리?
-
-enum SESSION_STATE : int8
+// => atomic enum으로 세션의 동시성을 지킨다.
+enum SESSION_STATE : int8 
 {
-	ST_FREE, ST_ACCEPT, ST_INGAME
+	ST_FREE,
+
+	ST_ON_DICONNECT,
+
+	ST_ON_ACCEPT,
+
+	ST_IO_ABLE_LINE = 100,
+
+	ST_ACCEPT, 
+	
+	ST_INGAME
 };
 
 class Session
@@ -22,8 +30,8 @@ public:
 	void NewSession(SOCKET socket, NetID net_id);
 
 private:
-	void clear();
-	void HandleIoError(int res);
+	void clear(SESSION_STATE state = SESSION_STATE::ST_FREE);
+	bool HandleIoError(int res);
 
 public:
 	void do_recv();
@@ -38,12 +46,14 @@ public:
 
 	SET(prerecv_size);
 	SET(state);
-
+	bool check_state(const SESSION_STATE state)const { return  state == state_; }
+	bool check_state_good()const { return ST_IO_ABLE_LINE < state_; }
+	bool check_state_bad()const { return !check_state_good(); }
 private:
 	EXP_OVER recv_over_{ COMP_OP::OP_RECV };
+	shared_mutex connection_lock_;
 	DWORD	prerecv_size_{ 0 };
 	SOCKET	socket_{ INVALID_SOCKET };
-	Spinlock connection_lock_;
 	atomic<SESSION_STATE> state_{ SESSION_STATE::ST_FREE }; // is lock free.
 
 	NetID	net_id_{ 0 };

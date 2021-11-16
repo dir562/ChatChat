@@ -88,7 +88,7 @@ void Renderer::load_model()
 	_cars.emplace_back(make_shared<OBJ>(box_data, _default_shader));
 	_cars[1]->move({ 2.f,0.f,14.f });
 
-	_player = make_shared<ControllObj>(size_t{0}, box_data, _default_shader);
+	_player = make_shared<ControllObj>(size_t{ 0 }, box_data, _default_shader);
 
 	_main_camera = make_shared<Camera>();
 	_main_camera->set_ownner(_player.get());
@@ -96,7 +96,7 @@ void Renderer::load_model()
 
 	box_vao = create_vao(_terrain_shader, box, 36);
 	_terrain = make_shared<OBJ>(box_data, _terrain_shader);
-	glm::vec3 scale_ = { 100.f, 0.25f, 100.f };
+	glm::vec3 scale_ = { 100000.f, 0.25f, 100000.f };
 	_terrain->scaling(scale_);
 	glm::vec3 move_ = { 0.f,(scale_.y * -1.f) - 1.f,0.f };
 	_terrain->move(move_);
@@ -312,8 +312,8 @@ void Renderer::reshape(const int w, const int h)
 void Renderer::ready_draw()
 {
 	_vp_mat = proj_mat() * _main_camera->view_mat();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// GL_COLOR_BUFFER_BIT |  빼면 재미난 효과 ㅋㅋ
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	glClearColor(0.0f, 0.2f, 0.2f, 1.0f);
 }
 
@@ -334,15 +334,24 @@ void Renderer::draw()
 	Sleep(1);
 	float milli_tick = static_cast<float>(GAME_SYSTEM::instance().tick_time().count());
 	float tick = milli_tick / 1000.f;
+
 	_player->update(tick);
 	_main_camera->update(tick);
 	GAME_SYSTEM::instance().tick();
 	// 로직분리, 카메라 회전 , 스크롤로 거리조절 >>  1tick == 최소 1ms.
 
 
+	/* fps test */
+	static int i = 0;
+	i += GAME_SYSTEM::instance().tick_time().count();
+	if (i < 20) //ms 지연 실험
+	{
+		cout << i <<" " << endl;
+		return;
+	}
+	i = 0;
 
 	/* draw */
-
 
 	glUseProgram(_default_shader);
 	_cars[0]->bind_vao();
@@ -357,13 +366,12 @@ void Renderer::draw()
 
 
 
-
 	glUseProgram(_terrain_shader);
 	_terrain->bind_vao();
 	_terrain->update_uniform_vars(_terrain_shader);
 	update_texture(_terrain_shader, glGetUniformLocation(_terrain_shader, "u_tex_sampler"), _terrain_tex);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-	
+
 
 
 
@@ -402,4 +410,6 @@ void Renderer::draw()
 	auto fps = 1000 / (GAME_SYSTEM::instance().tick_time().count() + 1);
 	string title = "("s + to_string(fps) + " fps)"s;
 	glutSetWindowTitle(title.c_str());
+
+	glutSwapBuffers();
 }

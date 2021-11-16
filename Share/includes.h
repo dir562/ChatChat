@@ -20,6 +20,7 @@
 #include <span>
 #include <concepts>
 #include <type_traits>
+#include <shared_mutex>
 #undef max
 #undef min
 #include "../Share/types.h"

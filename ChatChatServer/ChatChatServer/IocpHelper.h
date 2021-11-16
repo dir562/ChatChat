@@ -8,7 +8,8 @@ enum class COMP_OP : int8
 	OP_NONE,
 	OP_RECV,
 	OP_SEND,
-	OP_ACCEPT
+	OP_ACCEPT,
+	OP_DISCONNECT
 };
 
 struct EXP_OVER
@@ -32,7 +33,8 @@ struct EXP_OVER
 
 	void clear()
 	{
-		ZeroMemory(this, sizeof(*this));
+		ZeroMemory(&wsa_over, sizeof(wsa_over));
+		ZeroMemory(net_buf, sizeof(net_buf));
 		wsa_buf.len = sizeof(net_buf);
 		wsa_buf.buf = net_buf;
 	}

@@ -25,14 +25,14 @@ int main()
 
 	const auto NUM_IOCP_THREADS = thread::hardware_concurrency() - 1;
 	vector<thread> IocpWokers; IocpWokers.reserve(NUM_IOCP_THREADS);
-	for (int i = 0; i < NUM_IOCP_THREADS; i++)
+	for (size_t i = 0; i < NUM_IOCP_THREADS; i++)
 	{
 		IocpWokers.emplace_back(&IOCP::ProcessQueuedCompleteOperationLoop, &IOCP::get());
 	}
 	cerr << NUM_IOCP_THREADS << " threads are do GQCS work(except main thread)." << endl;
 
 	// ToDo On MainThread.
-	IOCP::get().ProcessQueuedCompleteOperationLoop();
+	IOCP::get().RepeatSendLoop();
 	//
 
 

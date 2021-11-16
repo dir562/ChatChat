@@ -10,23 +10,29 @@
     <Filter Include="Server">
       <UniqueIdentifier>{7e1253c4-9993-467f-9659-24aa60b27a06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\GameData">
-      <UniqueIdentifier>{5fcd6ec0-936d-47ff-bb51-4a63dfc449ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Server\ListenSocket">
-      <UniqueIdentifier>{586c08bd-4bdd-4e83-af47-580c69ae3917}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Server\MainThread">
       <UniqueIdentifier>{3f12df2f-835d-41db-8929-71ed97bb876f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\IocpHelper">
-      <UniqueIdentifier>{faea5df5-c103-4daa-93bd-73f007da2917}</UniqueIdentifier>
+    <Filter Include="Server\Network">
+      <UniqueIdentifier>{53663c63-53d9-4b34-8919-face550d4dbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\IocpThread">
+    <Filter Include="Server\Network\Session">
+      <UniqueIdentifier>{3a99e9f3-407e-489d-9580-6513a19a2655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Network\IocpThread">
       <UniqueIdentifier>{6d1583e9-adc1-4607-a361-2dd3e3ee2a51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\Session">
-      <UniqueIdentifier>{3a99e9f3-407e-489d-9580-6513a19a2655}</UniqueIdentifier>
+    <Filter Include="Server\Network\ListenSocket">
+      <UniqueIdentifier>{586c08bd-4bdd-4e83-af47-580c69ae3917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Network\IocpHelper">
+      <UniqueIdentifier>{faea5df5-c103-4daa-93bd-73f007da2917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Game">
+      <UniqueIdentifier>{62639a44-3c75-43ad-935b-5bb220965cb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Server\Game\GameData">
+      <UniqueIdentifier>{5fcd6ec0-936d-47ff-bb51-4a63dfc449ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,19 +64,19 @@
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="GameData.h">
-      <Filter>Server\GameData</Filter>
+      <Filter>Server\Game\GameData</Filter>
     </ClInclude>
     <ClInclude Include="ListenSocket.h">
-      <Filter>Server\ListenSocket</Filter>
+      <Filter>Server\Network\ListenSocket</Filter>
     </ClInclude>
     <ClInclude Include="IOCP.h">
-      <Filter>Server\IocpThread</Filter>
+      <Filter>Server\Network\IocpThread</Filter>
     </ClInclude>
     <ClInclude Include="IocpHelper.h">
-      <Filter>Server\IocpHelper</Filter>
+      <Filter>Server\Network\IocpHelper</Filter>
     </ClInclude>
     <ClInclude Include="Session.h">
-      <Filter>Server\Session</Filter>
+      <Filter>Server\Network\Session</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -84,16 +90,16 @@
       <Filter>Server\MainThread</Filter>
     </ClCompile>
     <ClCompile Include="GameData.cpp">
-      <Filter>Server\GameData</Filter>
+      <Filter>Server\Game\GameData</Filter>
     </ClCompile>
     <ClCompile Include="ListenSocket.cpp">
-      <Filter>Server\ListenSocket</Filter>
+      <Filter>Server\Network\ListenSocket</Filter>
     </ClCompile>
     <ClCompile Include="IOCP.cpp">
-      <Filter>Server\IocpThread</Filter>
+      <Filter>Server\Network\IocpThread</Filter>
     </ClCompile>
     <ClCompile Include="Session.cpp">
-      <Filter>Server\Session</Filter>
+      <Filter>Server\Network\Session</Filter>
     </ClCompile>
     <ClCompile Include="server_main.cpp">
       <Filter>Server\MainThread</Filter>
