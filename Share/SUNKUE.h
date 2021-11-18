@@ -71,7 +71,7 @@ namespace MY_NAME_SPACE
 	namespace timer {
 		class TIMER {
 		public:
-			static TIMER& instance() {
+			static TIMER& get() {
 				static TIMER instance_;
 				return instance_;
 			}

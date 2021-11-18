@@ -9,7 +9,7 @@ namespace THREAD_POOL {
 	class Thread_Pool
 	{
 	public:
-		static Thread_Pool& instance();
+		static Thread_Pool& get();
 
 		Thread_Pool(const Thread_Pool&) = delete;
 		Thread_Pool& operator=(const Thread_Pool&) = delete;
@@ -38,7 +38,7 @@ namespace THREAD_POOL {
 
 	/* --------------------------- */
 
-	Thread_Pool& Thread_Pool::instance()
+	Thread_Pool& Thread_Pool::get()
 	{
 		static Thread_Pool instance_;
 		return instance_;

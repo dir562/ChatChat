@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Share">
+      <UniqueIdentifier>{b9d86efc-d2c3-46fe-a7de-f6f08e7a9df0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helper">
+      <UniqueIdentifier>{63afb123-c6b5-40ec-b093-6e69a3b155e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server">
+      <UniqueIdentifier>{def1100b-59b9-401a-944c-a7185e95b8a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server\MainThread">
+      <UniqueIdentifier>{6dfc9931-c7a3-49b5-bc70-c3087e3f0b12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server\Game">
+      <UniqueIdentifier>{784272b9-8dc3-439e-aab4-79c1e9222fd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server\ListenSocket">
+      <UniqueIdentifier>{1895ac01-7042-4874-b435-7638f14c17ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server\Session">
+      <UniqueIdentifier>{e20992fe-d461-4bfc-af36-b6bef753613b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server\Server">
+      <UniqueIdentifier>{f4471be9-e55f-4b7a-8db9-6b328f05fc10}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Share\enum.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\includes.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Protocol.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SocketUtil.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Spinlock.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\SUNKUE.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\Thread_Pool.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Share\types.h">
+      <Filter>Share</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="ListenSocket.h">
+      <Filter>server\ListenSocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>server\Session</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>server\Server</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Share\SocketUtil.cpp">
+      <Filter>Share</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>helper</Filter>
+    </ClCompile>
+    <ClCompile Include="server_main.cpp">
+      <Filter>server\MainThread</Filter>
+    </ClCompile>
+    <ClCompile Include="ListenSocket.cpp">
+      <Filter>server\ListenSocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>server\Session</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>server\Server</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

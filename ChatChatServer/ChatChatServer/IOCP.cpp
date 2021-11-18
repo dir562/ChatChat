@@ -83,16 +83,17 @@ void IOCP::OnRecvComplete(NetID net_id, DWORD returned_bytes, EXP_OVER* ex_over)
 		remain_bytes -= need_bytes;
 		need_bytes = *reinterpret_cast<packet_size_t*>(pck_start);
 
-		if (0 == remain_bytes || 0 == need_bytes)
+		if (0 == remain_bytes)
 		{
 			break;
 		}
 	}
 
+	client.set_prerecv_size(remain_bytes);
+	
 	// remain_bytes가 남아있으면 미완성패킷의 데이터임. prerecv 해주기.
 	if (0 != remain_bytes)
 	{
-		client.set_prerecv_size(remain_bytes);
 		memmove(&ex_over->net_buf, pck_start, remain_bytes);
 	}
 

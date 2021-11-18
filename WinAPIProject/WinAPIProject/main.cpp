@@ -42,6 +42,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
     std::cerr << "Hi" << std::endl;
     std::cout << "Hi~~" << std::endl;
+    
     thread networking{ []{ Networker::get().do_recv(); } };
 
     // 전역 문자열을 초기화합니다.

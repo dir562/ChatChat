@@ -243,6 +243,9 @@
     <ClCompile Include="Networker.cpp">
       <Filter>Network</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="WinAPIProject.rc">

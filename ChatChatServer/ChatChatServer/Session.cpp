@@ -37,7 +37,7 @@ void Session::do_recv() // 유일성 보장 함수
 		res = ::WSARecv(socket_, &recv_over_.wsa_buf, 1, 0, &recv_flag, &recv_over_.wsa_over, NULL);
 		UNLOCK_SHARED(connection_lock_);
 	}
-
+	
 	HandleIoError(res);
 }
 

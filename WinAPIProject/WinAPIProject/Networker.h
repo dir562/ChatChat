@@ -27,6 +27,7 @@ private:
 
 	void connect(const char* server_ip)
 	{
+		//server_ip = "192.168.120.70";
 		SOCKADDR_IN server_addr; ZeroMemory(&server_addr, sizeof(server_addr));
 		server_addr.sin_family = AF_INET;
 		server_addr.sin_port = ::htons(SERVER_PORT);
@@ -44,7 +45,6 @@ private:
 			exit(-1);
 		}
 	}
-
 public:
 	void do_recv()
 	{
