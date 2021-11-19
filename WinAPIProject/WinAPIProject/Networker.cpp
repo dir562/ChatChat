@@ -77,6 +77,7 @@ void Networker::process_packet(const char* const packet)
 	{
 		auto pck = reinterpret_cast<const sc_hi_ok*>(packet);
 		//=pck->your_netid 내 넷아이디로 등록
+		cout << "!!!!0" << endl;
 		CEventMgr::GetInst()->CallCreatePlayer((int)pck->your_netid, 7, 0, 0);
 
 	}
@@ -84,14 +85,14 @@ void Networker::process_packet(const char* const packet)
 	{
 		auto pck = reinterpret_cast<const sc_info*>(packet);
 		// 캐릭터의정보, 이미 있는경우, 없다가 생긴경우, 내 정보 모두 포함
-		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
+		
 	}
 	CASE PAKCET_TYPE::SC_NEW_CHARACTOR :
 	{
 		// 새캐릭터의 접속! => 새캐릭터 생성
 		auto pck = reinterpret_cast<const sc_new_charactor*>(packet);
 		cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
-
+		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
 		cs_my_info my_info;
 		// 내 정보 입력
 		do_send(&my_info, sizeof(my_info));
