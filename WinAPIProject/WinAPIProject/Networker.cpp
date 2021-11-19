@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Networker.h"
 #include "CEventMgr.h"
-
+#include "CPlayer.h"
+#include "CSceneMgr.h"
+#include "CScene.h"
 void Networker::do_recv()
 {
 	cs_hi hi_packet; do_send(&hi_packet, sizeof(hi_packet));
@@ -85,7 +87,19 @@ void Networker::process_packet(const char* const packet)
 	{
 		auto pck = reinterpret_cast<const sc_info*>(packet);
 		// 캐릭터의정보, 이미 있는경우, 없다가 생긴경우, 내 정보 모두 포함
-		
+		auto PLAYER = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
+		if (pck->netid == PLAYER->GetID()) {
+			//
+		}
+		auto player =CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+		auto p=find_if(player.begin(), player.end(), [&](CObj* o) { return o->GetID() == (int)pck->netid; });
+		if (p == player.end()) {
+			CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
+		}
+		else {
+		//
+		}
+
 	}
 	CASE PAKCET_TYPE::SC_NEW_CHARACTOR :
 	{
@@ -94,6 +108,10 @@ void Networker::process_packet(const char* const packet)
 		cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
 		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
 		cs_my_info my_info;
+		auto PLAYER = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
+		my_info.hp = PLAYER->GetID();
+		my_info.x = PLAYER->GetPos().x;
+		my_info.y = PLAYER->GetPos().y;
 		// 내 정보 입력
 		do_send(&my_info, sizeof(my_info));
 	}
