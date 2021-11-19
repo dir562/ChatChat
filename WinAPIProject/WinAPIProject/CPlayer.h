@@ -40,7 +40,8 @@ private:
 
 public:
 	virtual void init();
-
+	void SetLife(int _Life) { m_iLife = _Life; }
+	int GetLife() { return m_iLife; }
 	float GetJumpPower() { return m_fJumpPower; }
 	virtual void update();	
 	virtual void render(HDC _dc);

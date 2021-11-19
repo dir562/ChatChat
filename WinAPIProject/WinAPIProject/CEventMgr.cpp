@@ -70,23 +70,38 @@ void CEventMgr::ExcuteEvent(const tEvent& _event)
 		break;
 	}
 }
-#include "CTestPlayer.h"
+#include "CPlayer.h"
 
-void CEventMgr::CallCreateObj(int netid, int hp, float x, float y)
+void CEventMgr::CallCreatePlayer(int netid, int hp, float x, float y)
 {
+	tEvent Type;
+	Type.eEvent = EVENT_TYPE::CREATE_OBJECT;
+	CPlayer* pObj = new CPlayer();
+	pObj->SetID(netid);
+	pObj->SetLife(hp);
+	pObj->SetPos(Vec2(x+(float)WIN_X / 2.f+200.f, y+(float)WIN_Y / 2.f+200.f));
+	pObj->init();
+	
+	pObj->SetScale(Vec2(50.f, 50.f));
+	Type.wParam = (DWORD_PTR)pObj;
+	Type.lParam = (DWORD_PTR)OBJ_TYPE::PLAYER;
+	AddEvent(Type);
+
+}
+#include "CTestPlayer.h"
+void CEventMgr::CallCreateOtherPlayer(int netid, int hp, float x, float y)
+{
+
 	tEvent Type;
 	Type.eEvent = EVENT_TYPE::CREATE_OBJECT;
 	CTestPlayer* pObj = new CTestPlayer();
 	pObj->SetID(netid);
 	pObj->SetLife(hp);
-	
+	pObj->SetPos(Vec2(x + (float)WIN_X / 2.f + 200.f, y + (float)WIN_Y / 2.f + 200.f));
 	pObj->init();
-	pObj->SetPos(Vec2((float)WIN_X / 2.f - 200, (float)WIN_Y / 2.f + 200.f));
+
 	pObj->SetScale(Vec2(50.f, 50.f));
-	pObj->SetJumpPower(0.f);
 	Type.wParam = (DWORD_PTR)pObj;
 	Type.lParam = (DWORD_PTR)OBJ_TYPE::OTHERPLAYER;
-
 	AddEvent(Type);
-
 }

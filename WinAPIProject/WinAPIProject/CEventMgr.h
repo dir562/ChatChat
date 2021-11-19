@@ -12,7 +12,8 @@ private:
 public:
 	void update();
 	void AddEvent(const tEvent& _event) { m_vecEvent.push_back(_event); }
-	void CallCreateObj(int netid, int hp, float x, float y);
+	void CallCreatePlayer(int netid, int hp, float x, float y);
+	void CallCreateOtherPlayer(int netid, int hp, float x, float y);
 private:
 	void ExcuteEvent(const tEvent& _event);
 };

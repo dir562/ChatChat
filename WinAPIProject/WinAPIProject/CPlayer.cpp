@@ -27,7 +27,7 @@ CPlayer::CPlayer()
 	, m_fJumpPower(1200.f)
 	, m_bJump(false)
 
-	, m_iLife(0)
+	, m_iLife(7)
 {
 }
 
@@ -45,14 +45,17 @@ void CPlayer::init()
 	AddCollider(pCollider);
 
 	m_vStartPos = GetPos();
-	m_BrushColor.push_back(RGB(255, 0, 0));
-	m_BrushColor.push_back(RGB(255, 127, 0));
-	m_BrushColor.push_back(RGB(255, 255, 0));
-	m_BrushColor.push_back(RGB(0, 255, 0));
-	m_BrushColor.push_back(RGB(0, 0, 255));
-	m_BrushColor.push_back(RGB(0, 0, 128));
-	m_BrushColor.push_back(RGB(112, 93, 168));
-	m_BrushColor.push_back(RGB(0, 0, 0));
+	m_BrushColor.push_back(RGB(0, 0, 0));	m_BrushColor.push_back(RGB(112, 93, 168));
+	m_BrushColor.push_back(RGB(0, 0, 128));	m_BrushColor.push_back(RGB(0, 0, 255));
+	m_BrushColor.push_back(RGB(0, 255, 0));	m_BrushColor.push_back(RGB(255, 255, 0));
+	m_BrushColor.push_back(RGB(255, 127, 0)); m_BrushColor.push_back(RGB(255, 0, 0));
+	
+
+
+
+
+
+
 	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
 
 }
@@ -85,7 +88,7 @@ void CPlayer::render(HDC _dc)
 
 void CPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-	if (7 == m_iLife)
+	if (0 == m_iLife)
 		return;
 	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
 	bool  b = false;
@@ -93,7 +96,7 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 		b = true;
 	}
 	if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
-		m_iLife += 1;
+		m_iLife -= 1;
 		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
 	}
 
@@ -145,7 +148,7 @@ void CPlayer::CheckState()
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
-			if (7 == m_iLife) {
+			if (0 == m_iLife) {
 				PressSpaceBar();
 				return;
 			}
@@ -183,7 +186,7 @@ void CPlayer::Jumping()
 
 void CPlayer::Move()
 {
-	if (PLAYER_STATE::MOVE != m_eState || 7 == m_iLife)
+	if (PLAYER_STATE::MOVE != m_eState || 0 == m_iLife)
 		return;
 
 	Vec2 vPos = GetPos();

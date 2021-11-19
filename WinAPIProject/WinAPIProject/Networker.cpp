@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Networker.h"
+#include "CEventMgr.h"
 
 void Networker::do_recv()
 {
@@ -76,11 +77,14 @@ void Networker::process_packet(const char* const packet)
 	{
 		auto pck = reinterpret_cast<const sc_hi_ok*>(packet);
 		//=pck->your_netid 내 넷아이디로 등록
+		CEventMgr::GetInst()->CallCreatePlayer((int)pck->your_netid, 7, 0, 0);
+
 	}
 	CASE PAKCET_TYPE::SC_INFO :
 	{
 		auto pck = reinterpret_cast<const sc_info*>(packet);
 		// 캐릭터의정보, 이미 있는경우, 없다가 생긴경우, 내 정보 모두 포함
+		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
 	}
 	CASE PAKCET_TYPE::SC_NEW_CHARACTOR :
 	{
