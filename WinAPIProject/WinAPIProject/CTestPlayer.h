@@ -44,7 +44,8 @@ public:
 	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }
 	virtual void OnCollisionEnter(CCollider* _pOther);
 
-	
+	void SetLife(int _Life) { m_iLife = _Life; }
+	int GetLife() { return m_iLife; }
 	virtual CTestPlayer* Clone() { return new CTestPlayer(*this); }
 
 

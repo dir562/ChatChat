@@ -2,6 +2,7 @@
 #include "CSceneMgr.h"
 #include "CStartScene.h"
 #include "CStage01Scene.h"
+#include "CTestPlayer.h"
 
 CSceneMgr::CSceneMgr()
 	: m_arrScene{}
@@ -58,5 +59,7 @@ void CSceneMgr::ChangeScene(SCENE_TYPE _eNextScene)
 
 	m_pCurScene->Enter();
 }
+
+
 
 
