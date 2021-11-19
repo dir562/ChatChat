@@ -25,7 +25,7 @@ CTestPlayer::CTestPlayer()
 	, m_fMoveSpeed(100.f)
 	,m_fJumpPower(-1.f)
 	,m_bJump(false)
-	, m_iLife(0)
+	, m_iLife(7)
 	
 {
 }
@@ -44,14 +44,15 @@ void CTestPlayer::init()
 	AddCollider(pCollider);
 
 	m_vStartPos = GetPos();
-	m_BrushColor.push_back(RGB(255, 0, 0));
-	m_BrushColor.push_back(RGB(255, 127, 0));
-	m_BrushColor.push_back(RGB(255, 255, 0));
-	m_BrushColor.push_back(RGB(0, 255, 0));
-	m_BrushColor.push_back(RGB(0, 0, 255));
-	m_BrushColor.push_back(RGB(0, 0, 128));
-	m_BrushColor.push_back(RGB(112, 93, 168));
 	m_BrushColor.push_back(RGB(0, 0, 0));
+	m_BrushColor.push_back(RGB(112, 93, 168));
+	m_BrushColor.push_back(RGB(0, 0, 128));
+	m_BrushColor.push_back(RGB(0, 0, 255));
+	m_BrushColor.push_back(RGB(0, 255, 0));
+	m_BrushColor.push_back(RGB(255, 255, 0));
+	m_BrushColor.push_back(RGB(255, 127, 0));
+	m_BrushColor.push_back(RGB(255, 0, 0));
+
 	m_Color = (CreateSolidBrush(m_BrushColor[m_iLife]));
 
 }
@@ -83,7 +84,7 @@ void CTestPlayer::render(HDC _dc)
 
 void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-	if (7 == m_iLife)
+	if (0 == m_iLife)
 		return;
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
 	bool  b=false;
@@ -93,7 +94,7 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 
 
 	if (GetPos().y > _pOther->GetObj()->GetPos().y&&b) {
-		m_iLife += 1;
+		m_iLife -= 1;
 		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
 	}
 }

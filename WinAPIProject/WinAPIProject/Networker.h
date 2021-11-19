@@ -1,7 +1,9 @@
 #pragma once
 
-#include "includes.h"
+#include <includes.h>
+#include "CEventMgr.h"
 
+class CObj;
 class Networker
 {
 	SINGLE_TON(Networker)
@@ -93,8 +95,7 @@ public:
 		}
 	}
 
-	void process_packet(const char* const packet)
-	{
+	void process_packet(const char* const packet) {
 		const packet_base<void>* pck_base = reinterpret_cast<const packet_base<void>*>(packet);
 		packet_size_t pck_size = pck_base->size;
 		PAKCET_TYPE pck_type = pck_base->packet_type;
@@ -104,10 +105,13 @@ public:
 		case PAKCET_TYPE::NONE:
 		{
 		}
-		CASE PAKCET_TYPE::SC_INFO:
+		CASE PAKCET_TYPE::SC_INFO :
 		{
+
 			auto pck = reinterpret_cast<const sc_info*>(pck_base);
 			cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
+			CEventMgr::GetInst()->CallCreateObj((int)pck->netid, (int)pck->hp, pck->x, pck->y);
+
 		}
 		break; default: break;
 		}

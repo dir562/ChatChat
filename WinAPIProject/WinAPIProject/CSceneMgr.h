@@ -22,7 +22,7 @@ private:
 public:
 	CScene* GetCurScene() { return m_pCurScene; }
 
-
+	
 	friend class CEventMgr;
 };
 
