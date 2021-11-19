@@ -76,14 +76,19 @@ PACKET(cs_hi)
 {
 };
 
-PACKET(cs_info)
+PACKET(sc_hi_ok)
+{
+	NetID your_netid;
+};
+
+PACKET(cs_my_info)
 {
 	uint8 hp;
 	float x;
 	float y;
 };
 
-PACKET(sc_info)
+PACKET(sc_new_charactor)
 {
 	NetID netid;
 	uint8 hp;

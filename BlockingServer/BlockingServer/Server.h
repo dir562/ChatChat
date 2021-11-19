@@ -50,7 +50,7 @@ public:
 		case PAKCET_TYPE::CS_HI:
 		{
 			cout << net_id << "::hi" << endl;
-			sc_info new_charactor_packet;
+			sc_newcharactor new_charactor_packet;
 			new_charactor_packet.netid = net_id;
 			new_charactor_packet.hp = 7;
 			new_charactor_packet.x = 0;
@@ -65,8 +65,8 @@ public:
 		}
 		CASE PAKCET_TYPE::CS_INFO :
 		{
-			auto p = reinterpret_cast<const cs_info*>(packet);
-			sc_info info_packet;
+			auto p = reinterpret_cast<const cs_my_info*>(packet);
+			sc_newcharactor info_packet;
 			info_packet.netid = net_id;
 			info_packet.x = p->x;
 			info_packet.y = p->y;

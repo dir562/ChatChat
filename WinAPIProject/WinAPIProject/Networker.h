@@ -108,6 +108,7 @@ public:
 		{
 			auto pck = reinterpret_cast<const sc_info*>(pck_base);
 			cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
+
 		}
 		break; default: break;
 		}
