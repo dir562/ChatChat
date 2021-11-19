@@ -43,7 +43,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     std::cerr << "Hi" << std::endl;
     std::cout << "Hi~~" << std::endl;
     
-    thread networking{ []{ Networker::get().do_recv(); } };
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -59,6 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // Core  초기화
     CCore::GetInst()->init(hWnd, POINT{WIN_X, WIN_Y});
 
+    thread networking{ [] { Networker::get().do_recv(); } };
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINAPIPROJECT));
 

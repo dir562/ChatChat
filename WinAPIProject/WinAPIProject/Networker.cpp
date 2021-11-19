@@ -91,13 +91,15 @@ void Networker::process_packet(const char* const packet)
 		if (pck->netid == PLAYER->GetID()) {
 			//
 		}
-		auto player =CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
-		auto p=find_if(player.begin(), player.end(), [&](CObj* o) { return o->GetID() == (int)pck->netid; });
+		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+		auto p = find_if(player.begin(), player.end(), [&](CObj* o) { return o->GetID() == (int)pck->netid; });
 		if (p == player.end()) {
-			CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
+			// 없던경우
+			cout << "!!!!!" << endl;
+			CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, pck->x - 200.f - (float)WIN_X / 2.f, pck->y - 200.f - (float)WIN_Y / 2.f);
 		}
 		else {
-		//
+			// 이미있는경우
 		}
 
 	}
@@ -106,7 +108,7 @@ void Networker::process_packet(const char* const packet)
 		// 새캐릭터의 접속! => 새캐릭터 생성
 		auto pck = reinterpret_cast<const sc_new_charactor*>(packet);
 		cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
-		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, 0, 0);
+		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, 7, pck->x - 200.f - (float)WIN_X / 2.f, pck->y - 200.f - (float)WIN_Y / 2.f);
 		cs_my_info my_info;
 		auto PLAYER = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
 		my_info.hp = PLAYER->GetID();
