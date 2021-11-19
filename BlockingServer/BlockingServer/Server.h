@@ -49,12 +49,12 @@ public:
 		{
 		case PAKCET_TYPE::CS_HI:
 		{
-			cout << net_id << "::hi" << endl;
+			cout << (int)net_id << "::hi" << endl;
 			sc_new_charactor new_charactor_packet;
 			new_charactor_packet.netid = net_id;
 			new_charactor_packet.hp = 7;
-			new_charactor_packet.x = 0;
-			new_charactor_packet.y = 0;
+			new_charactor_packet.x = 840.f;
+			new_charactor_packet.y = 584.f;
 			for (auto& s : sessions_)
 			{
 				if (s.check_state(SESSION_STATE::disconnected))
