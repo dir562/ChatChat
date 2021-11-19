@@ -48,6 +48,8 @@ private:
 public:
 	void do_recv()
 	{
+		cs_hi hi_packet; do_send(&hi_packet);
+
 		auto prerecved = 0;
 		while (true)
 		{
@@ -99,21 +101,15 @@ public:
 
 		switch (pck_type)
 		{
-		case PAKCET_TYPE::SC_TEST_HEART_BIT:
+		case PAKCET_TYPE::NONE:
 		{
-			auto pck = reinterpret_cast<const sc_test_heart_bit*>(pck_base);
-			cout << ".";
-			//cout << boolalpha << "alive ::" << pck->time_after_send << "::" << endl;
 		}
-		CASE PAKCET_TYPE::SC_TEST_CHAT:
+		CASE PAKCET_TYPE::SC_INFO:
 		{
-			auto pck = reinterpret_cast<const sc_test_chat*>(pck_base);
-			cout << (int)pck->chatter_id << "::" << pck->chat << endl;
+			auto pck = reinterpret_cast<const sc_info*>(pck_base);
+			cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
 		}
-		break; default:
-			SocketUtil::DisplayError(WSAGetLastError());
-			cerr << "###########couldn't be here!! PAKCET_TYPE ERROR ::" << pck_type << "::" << endl;
-			// Beep(500, 2000);
+		break; default: break;
 		}
 	}
 

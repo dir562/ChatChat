@@ -37,17 +37,17 @@ BETTER_ENUM
 	, CS_NONE = 10
 	, CS_TEST_CHAT
 	, CS_TEST_MOVE
-
-
+	, CS_INFO
+	, CS_HI
 
 	/* Server 2 Client */
 
 	, SC_NONE = 100
 	, SC_TEST_CHAT
 	, SC_TEST_HEART_BIT
-
-
-
+	, SC_REPL
+	, SC_INFO
+	, SC_NEW_CHARACTOR
 
 );
 
@@ -70,6 +70,26 @@ PACKET(none)
 {
 };
 
+//=============== 위치정보 =================
+
+PACKET(cs_hi)
+{
+};
+
+PACKET(cs_info)
+{
+	uint8 hp;
+	float x;
+	float y;
+};
+
+PACKET(sc_info)
+{
+	NetID netid;
+	uint8 hp;
+	float x;
+	float y;
+};
 
 //=============== MOVE_INPUT =================
 
