@@ -50,23 +50,33 @@ public:
 		case PAKCET_TYPE::CS_HI:
 		{
 			cout << net_id << "::hi" << endl;
-			sc_newcharactor new_charactor_packet;
+			sc_new_charactor new_charactor_packet;
 			new_charactor_packet.netid = net_id;
 			new_charactor_packet.hp = 7;
 			new_charactor_packet.x = 0;
 			new_charactor_packet.y = 0;
 			for (auto& s : sessions_)
 			{
-				if (false == s.check_state(SESSION_STATE::disconnected))
+				if (s.check_state(SESSION_STATE::disconnected))
+				{
+					continue;
+				}
+
+				if (s.get_net_id() == net_id)
+				{
+					sc_hi_ok hi_ok; hi_ok.your_netid = net_id;
+					s.do_send(&hi_ok, sizeof(hi_ok));
+				}
+				else
 				{
 					s.do_send(&new_charactor_packet, sizeof(new_charactor_packet));
 				}
 			}
 		}
-		CASE PAKCET_TYPE::CS_INFO :
+		CASE PAKCET_TYPE::CS_MY_INFO :
 		{
 			auto p = reinterpret_cast<const cs_my_info*>(packet);
-			sc_newcharactor info_packet;
+			sc_info info_packet;
 			info_packet.netid = net_id;
 			info_packet.x = p->x;
 			info_packet.y = p->y;
@@ -74,10 +84,17 @@ public:
 
 			for (auto& s : sessions_)
 			{
-				if (false == s.check_state(SESSION_STATE::disconnected))
+				if (s.check_state(SESSION_STATE::disconnected))
 				{
-					s.do_send(&info_packet, sizeof(info_packet));
+					continue;
 				}
+
+				if (s.get_net_id() == net_id)
+				{
+					continue;
+				}
+
+				s.do_send(&info_packet, sizeof(info_packet));
 			}
 		}
 		break; default: break;

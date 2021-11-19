@@ -195,16 +195,12 @@ void CPlayer::Move()
 	{
 		vPos.x -= fDT * m_fMoveSpeed;
 
-		cs_test_move packet; packet.dir |= MOVE_DIR::LEFT;
-		Networker::get().do_send(&packet);
 
 	} break;
 	case DIR::RIGHT:
 	{
 		vPos.x += fDT * m_fMoveSpeed;
 
-		cs_test_move packet; packet.dir |= MOVE_DIR::RIGHT;
-		Networker::get().do_send(&packet);
 
 	}break;
 	}
