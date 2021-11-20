@@ -47,7 +47,11 @@ public:
 		auto packet_type = reinterpret_cast<const packet_base<void>*>(packet)->packet_type;
 		switch (packet_type)
 		{
-		case PAKCET_TYPE::CS_HI:
+		case PAKCET_TYPE::CS_HEART_BEAT:
+		{
+			//
+		}
+		CASE PAKCET_TYPE::CS_HI:
 		{
 			cout << (int)net_id << "::hi" << endl;
 			sc_new_charactor new_charactor_packet;

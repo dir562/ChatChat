@@ -39,10 +39,10 @@ public:
 
 	void set_option()
 	{
-		//	BOOL opt = 1; => 두시간짜리,,
-		//	setsockopt(socket_, SOL_SOCKET, SO_KEEPALIVE, (char*)&opt, sizeof(opt));
-		//DWORD time = 1000;
-		//setsockopt(socket_, SOL_SOCKET, SO_RCVTIMEO, (char*)&time, sizeof(time));
+		//BOOL opt = 1; => 두시간짜리,,
+	//setsockopt(socket_, SOL_SOCKET, SO_KEEPALIVE, (char*)&opt, sizeof(opt));
+		DWORD time = 5000;
+		setsockopt(socket_, SOL_SOCKET, SO_RCVTIMEO, (char*)&time, sizeof(time));
 	}
 
 	void disconnect()
@@ -70,6 +70,19 @@ public:
 	}
 
 	void do_recv();
+
+	void do_send_heart_beat()
+	{
+		static clk::time_point prev_time = clk::now();
+		sc_heart_beat heart_beat;
+		while (state_ != SESSION_STATE::disconnected)
+		{
+			if (1s < duration_cast<milliseconds>(prev_time - clk::now()))
+			{
+				do_send(&heart_beat, sizeof(heart_beat));
+			}
+		}
+	}
 
 	void do_send(void* packet, size_t packet_len)
 	{

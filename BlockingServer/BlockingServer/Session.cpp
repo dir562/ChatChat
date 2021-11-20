@@ -16,13 +16,8 @@ void Session::do_recv()
 
 		if (0 == ret || SOCKET_ERROR == ret) [[unlikely]]
 		{
-			if (false == check_client_alive())
-			{
-				disconnect();
-				return;
-			};
-			cout << "ok" << endl;
-			continue;
+			disconnect();
+			return;
 		};
 
 		auto pck_start = net_buf_.data();
