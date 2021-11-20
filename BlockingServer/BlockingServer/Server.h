@@ -110,7 +110,7 @@ public:
 
 public:
 	//GET_REF(packet_queue);
-	GET_REF(sessions);
+	GET_REF_UNSAFE(sessions);
 
 private:
 	//concurrent_queue<pair<void*, NetID>> packet_queue_;

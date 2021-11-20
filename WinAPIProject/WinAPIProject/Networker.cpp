@@ -88,7 +88,7 @@ void Networker::process_packet(const char* const packet)
 		auto pck = reinterpret_cast<const sc_info*>(packet);
 		// 캐릭터의정보, 이미 있는경우, 없다가 생긴경우, 내 정보 모두 포함
 		auto PLAYER = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
-	
+
 		if (pck->netid == PLAYER->GetID()) {
 			//
 		}
@@ -117,12 +117,14 @@ void Networker::process_packet(const char* const packet)
 		// 내 정보 입력
 		do_send(&my_info, sizeof(my_info));
 	}
-	CASE PAKCET_TYPE::SC_HEART_BEAT:{
+	CASE PAKCET_TYPE::SC_HEART_BEAT:
+	{
 		cout << ".";
 		static cs_heart_beat csheartbeat;
 		do_send(&csheartbeat, sizeof(csheartbeat));
 	}
-	CASE PAKCET_TYPE::SC_DISCONNECT : {
+	CASE PAKCET_TYPE::SC_DISCONNECT :
+	{
 		auto pck = reinterpret_cast<const sc_disconnect*>(packet);
 		cout << (int)pck->DisconnectID << "::" << "Disconnect" << endl;
 		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);

@@ -45,14 +45,7 @@ public:
 		setsockopt(socket_, SOL_SOCKET, SO_RCVTIMEO, (char*)&time, sizeof(time));
 	}
 
-	void disconnect()
-	{
-		cout << "diss" << net_id_ << endl;
-		UNIQUE_LOCK lck{ connection_lock_ };
-		cout << "disconnect" << net_id_ << endl;
-		state_ = SESSION_STATE::disconnected;
-		::closesocket(socket_);
-	}
+	void disconnect();
 
 	bool check_client_alive()
 	{

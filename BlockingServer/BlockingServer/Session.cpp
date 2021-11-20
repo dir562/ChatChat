@@ -2,6 +2,33 @@
 #include "Server.h"
 #include "Session.h"
 
+void Session::disconnect()
+{
+	sc_disconnect disconnect_packet; disconnect_packet.DisconnectID = net_id_;
+	auto& sessions = Server::get().get_sessions();
+	for (auto& s : sessions)
+	{
+		if (s.check_state(SESSION_STATE::disconnected))
+		{
+			continue;
+		}
+
+		if (s.get_net_id() == net_id_)
+		{
+			continue;
+		}
+		else
+		{
+			s.do_send(&disconnect_packet, sizeof(disconnect_packet));
+		}
+	}
+
+	UNIQUE_LOCK lck{ connection_lock_ };
+	cout << "disconnect" << net_id_ << endl;
+	state_ = SESSION_STATE::disconnected;
+	::closesocket(socket_);
+}
+
 void Session::do_recv()
 {
 	cout << "do_recv" << net_id_ << endl;
