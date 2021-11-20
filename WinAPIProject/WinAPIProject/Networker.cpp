@@ -88,6 +88,7 @@ void Networker::process_packet(const char* const packet)
 		auto pck = reinterpret_cast<const sc_info*>(packet);
 		// 캐릭터의정보, 이미 있는경우, 없다가 생긴경우, 내 정보 모두 포함
 		auto PLAYER = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
+	
 		if (pck->netid == PLAYER->GetID()) {
 			//
 		}

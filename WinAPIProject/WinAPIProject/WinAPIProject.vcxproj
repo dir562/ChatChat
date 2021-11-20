@@ -94,7 +94,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Sunkue 01077661299\SUNKUE\_core\학업\3-2\넷겜플%2803%29 김재경\ChatChat\Share;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Sunkue 01077661299\SUNKUE\_core\학업\3-2\넷겜플%2803%29 김재경\ChatChat\Share;C:\Users\user\Documents\GitHub\ChatChat\Share;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,7 +127,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Sunkue 01077661299\SUNKUE\_core\학업\3-2\넷겜플%2803%29 김재경\ChatChat\Share;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Sunkue 01077661299\SUNKUE\_core\학업\3-2\넷겜플%2803%29 김재경\ChatChat\Share;C:\Users\user\Documents\GitHub\ChatChat\Share;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

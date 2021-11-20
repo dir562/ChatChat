@@ -39,12 +39,13 @@ BETTER_ENUM
 	, CS_TEST_MOVE
 	, CS_MY_INFO
 	, CS_HI
+	, CS_HEART_BEAT
 
 	/* Server 2 Client */
 
 	, SC_NONE = 100
 	, SC_TEST_CHAT
-	, SC_TEST_HEART_BIT
+	, SC_HEART_BEAT
 	, SC_NEW_CHARACTOR
 	, SC_HI_OK
 	, SC_INFO
@@ -138,10 +139,13 @@ PACKET(sc_test_chat)
 //===============  test heart_bit =================
 #include <chrono>
 
-PACKET(sc_test_heart_bit)
+PACKET(sc_heart_beat)
 {
-	std::chrono::milliseconds time_after_send;
+	
 };
+PACKET(cs_heart_beat)
+{
 
+};
 
 #pragma pack(pop)
