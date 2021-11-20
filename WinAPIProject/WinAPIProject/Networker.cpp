@@ -126,13 +126,13 @@ void Networker::process_packet(const char* const packet)
 		auto pck = reinterpret_cast<const sc_disconnect*>(packet);
 		cout << (int)pck->DisconnectID << "::" << "Disconnect" << endl;
 		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
-		auto p = find_if(player.begin(), player.end(), [&](CObj* o) { return o->GetID() == (int)pck->DisconnectID; });
-		if (p == player.end()) {
-			cout<<"ERROR!!!!"<< (int)pck->DisconnectID << "is not exists" << endl;
+		for (auto p : player) {
+			if (p->GetID() == (int)pck->DisconnectID) {
+				DeleteObject(p);
+				return;
+			}
 		}
-		else {
-		
-		}
+		cout << "ERROR!!!!" << (int)pck->DisconnectID << "is not exists" << endl;
 	}
 
 	break; default: break;
