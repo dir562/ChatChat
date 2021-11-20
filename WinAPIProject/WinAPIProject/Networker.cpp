@@ -117,6 +117,23 @@ void Networker::process_packet(const char* const packet)
 		// 내 정보 입력
 		do_send(&my_info, sizeof(my_info));
 	}
+	
+	CASE PAKCET_TYPE::SC_HEART_BEAT:{
+		cs_heart_beat csheartbeat;
+		do_send(&csheartbeat, sizeof(csheartbeat));
+	}
+	CASE PAKCET_TYPE::SC_DISCONNECT : {
+		auto pck = reinterpret_cast<const sc_disconnect*>(packet);
+		cout << (int)pck->DisconnectID << "::" << "Disconnect" << endl;
+		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+		auto p = find_if(player.begin(), player.end(), [&](CObj* o) { return o->GetID() == (int)pck->DisconnectID; });
+		if (p == player.end()) {
+			cout<<"ERROR!!!!"<< (int)pck->DisconnectID << "is not exists" << endl;
+		}
+		else {
+		
+		}
+	}
 
 	break; default: break;
 	}
