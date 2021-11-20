@@ -32,6 +32,8 @@ public:
 				cout << "new_session" << i << endl;
 				sessions_[i].new_session(new_socket, i);
 				thread recv_thread([&]() { sessions_[i].do_recv(); });
+				thread heartbeat_thread([&]() { sessions_[i].do_send_heart_beat(); });
+				heartbeat_thread.detach();
 				recv_thread.detach();
 				goto CONTINUING_ACCEPT;
 			}
@@ -49,6 +51,7 @@ public:
 		{
 		case PAKCET_TYPE::CS_HEART_BEAT:
 		{
+			cout << ".";
 			//
 		}
 		CASE PAKCET_TYPE::CS_HI:

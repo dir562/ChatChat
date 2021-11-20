@@ -41,7 +41,7 @@ public:
 	{
 		//BOOL opt = 1; => 두시간짜리,,
 	//setsockopt(socket_, SOL_SOCKET, SO_KEEPALIVE, (char*)&opt, sizeof(opt));
-		DWORD time = 5000;
+		DWORD time = 3000;
 		setsockopt(socket_, SOL_SOCKET, SO_RCVTIMEO, (char*)&time, sizeof(time));
 	}
 
@@ -73,13 +73,14 @@ public:
 
 	void do_send_heart_beat()
 	{
-		static clk::time_point prev_time = clk::now();
+		clk::time_point prev_time = clk::now();
 		sc_heart_beat heart_beat;
 		while (state_ != SESSION_STATE::disconnected)
 		{
-			if (1s < duration_cast<milliseconds>(prev_time - clk::now()))
+			if (1s < duration_cast<milliseconds>(clk::now() - prev_time))
 			{
 				do_send(&heart_beat, sizeof(heart_beat));
+				prev_time = clk::now();
 			}
 		}
 	}
@@ -103,6 +104,6 @@ private:
 	NetID net_id_{};
 	shared_mutex connection_lock_;
 private:
-	atomic<SESSION_STATE> state_{ SESSION_STATE::disconnected };
+	volatile atomic<SESSION_STATE> state_{ SESSION_STATE::disconnected };
 };
 

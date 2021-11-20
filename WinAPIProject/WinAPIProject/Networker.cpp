@@ -117,9 +117,9 @@ void Networker::process_packet(const char* const packet)
 		// 내 정보 입력
 		do_send(&my_info, sizeof(my_info));
 	}
-	
 	CASE PAKCET_TYPE::SC_HEART_BEAT:{
-		cs_heart_beat csheartbeat;
+		cout << ".";
+		static cs_heart_beat csheartbeat;
 		do_send(&csheartbeat, sizeof(csheartbeat));
 	}
 	CASE PAKCET_TYPE::SC_DISCONNECT : {
