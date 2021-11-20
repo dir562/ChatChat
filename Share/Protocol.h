@@ -49,6 +49,7 @@ BETTER_ENUM
 	, SC_NEW_CHARACTOR
 	, SC_HI_OK
 	, SC_INFO
+	, SC_DISCONNECT
 
 );
 
@@ -146,6 +147,9 @@ PACKET(sc_heart_beat)
 PACKET(cs_heart_beat)
 {
 
+};
+PACKET(sc_disconnect) {
+	NetID DisconnectID;
 };
 
 #pragma pack(pop)
