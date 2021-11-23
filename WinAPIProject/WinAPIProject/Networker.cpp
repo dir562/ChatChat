@@ -140,11 +140,11 @@ void Networker::process_packet(const char* const packet)
 	CASE PACKET_TYPE::SC_KEY_INPUT:
 	{
 		auto pck = reinterpret_cast<const sc_key_input*>(packet);
-		auto press = pck->key & KEY_INPUT::PRESS;
+		
 		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
 		for (auto p : player) {
 			if (p->GetID() == (int)pck->netid) {
-				dynamic_cast<CTestPlayer*>(p)->MovingData(pck->key, press);
+				dynamic_cast<CTestPlayer*>(p)->MovingData(pck->key);
 				return;
 			}
 		}

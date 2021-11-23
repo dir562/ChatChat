@@ -138,16 +138,22 @@ void CPlayer::CheckState()
 	// 현재상태를 이전상태로 저장해둠
 	m_ePrevState = m_eState;
 	m_ePrevDir = m_eDir;
-
+	static bool bleft = false;
+	static bool bSpace = false;
+	static bool bright = false;
 	if (PLAYER_STATE::IDLE == m_eState || PLAYER_STATE::MOVE == m_eState)
 	{
 		if (KEY_TAP(KEY_TYPE::KEY_LEFT))
 		{
+			
 			m_eState = PLAYER_STATE::MOVE;
 			m_eDir = DIR::LEFT;
-			cs_key_input pck;
-			pck.key = KEY_INPUT::LEFT;
-			Networker::get().do_send(&pck, sizeof(pck));
+			if (bleft == false) {
+				cs_key_input pck;
+				pck.key = KEY_INPUT::LEFT;
+				Networker::get().do_send(&pck, sizeof(pck));
+				bleft = true;
+			}
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
@@ -155,27 +161,49 @@ void CPlayer::CheckState()
 				PressSpaceBar();
 				return;
 			}
+			if (bSpace == false) {
+				cs_key_input pck;
+				pck.key = KEY_INPUT::SPACE;
+				Networker::get().do_send(&pck, sizeof(pck));
+				bSpace = true;
+			}
 			m_bJump = true;
-			cs_key_input pck;
-			pck.key = KEY_INPUT::SPACE;
-			Networker::get().do_send(&pck, sizeof(pck));
+			
+			
 		}
 		if (KEY_TAP(KEY_TYPE::KEY_RIGHT))
 		{
 			m_eState = PLAYER_STATE::MOVE;
 			m_eDir = DIR::RIGHT;
-			cs_key_input pck;
-			pck.key = KEY_INPUT::RIGHT;
-			Networker::get().do_send(&pck, sizeof(pck));
+			if (bright == false) {
+				cs_key_input pck;
+				pck.key = KEY_INPUT::RIGHT;
+				Networker::get().do_send(&pck, sizeof(pck));
+				bright = true;
+			}
+		}
+		if (KEY_AWAY(KEY_TYPE::KEY_LEFT)) {
+			if (bleft == true) {
+				bleft = false;
+				m_eState = PLAYER_STATE::IDLE;
+				cs_key_input pck;
+				pck.key = KEY_INPUT::NONE;
+				Networker::get().do_send(&pck, sizeof(pck));
+			}
+		}
+		if (KEY_AWAY(KEY_TYPE::KEY_RIGHT)) {
+			if (bright == true) {
+				bright = false;
+				m_eState = PLAYER_STATE::IDLE;
+				cs_key_input pck;
+				pck.key = KEY_INPUT::NONE;
+				Networker::get().do_send(&pck, sizeof(pck));
+			}
+		}
+		if (KEY_AWAY(KEY_TYPE::SPACE)) {
+			bSpace = false;
 		}
 
-		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT))
-		{
-			m_eState = PLAYER_STATE::IDLE;
-			cs_key_input pck;
-			pck.key = KEY_INPUT::NONE;
-			Networker::get().do_send(&pck, sizeof(pck));
-		}
 	}
 }
 

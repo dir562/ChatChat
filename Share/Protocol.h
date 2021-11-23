@@ -11,7 +11,7 @@ using packet_size_t = uint8;
 //====================================
 
 const uint16_t SERVER_PORT = 8282;
-const auto SERVER_IP = "127.0.0.1";
+const auto SERVER_IP = "192.168.181.40";
 
 //====================================
 
@@ -116,7 +116,7 @@ enum KEY_INPUT : int8
 	LEFT = 2,
 	RIGHT = 3,
 
-	PRESS = 1 << 2,
+	
 };
 
 PACKET(cs_key_input)

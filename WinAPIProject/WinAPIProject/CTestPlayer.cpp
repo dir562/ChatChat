@@ -101,16 +101,14 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 	}
 }
 
-void CTestPlayer::MovingData(UINT _uKey, int _bPress)
+void CTestPlayer::MovingData(UINT _uKey)
 {
 	if (0 == _uKey) {
 		m_eDir = DIR::NONE;
 		m_eState = TESTPLAYER_STATE::IDLE;
 	}
 	else if (1 == _uKey) {
-		if (_bPress) {
-			return;
-		}
+		
 		m_bJump = true;
 	}
 	else if (2 == _uKey) {

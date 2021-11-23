@@ -48,7 +48,7 @@ public:
 	int GetLife() { return m_iLife; }
 	virtual CTestPlayer* Clone() { return new CTestPlayer(*this); }
 
-	void MovingData(UINT _uKey,int _bPress);
+	void MovingData(UINT _uKey);
 
 	void SetJumpPower(float _Power) { m_fJumpPower = _Power; }
 private:
