@@ -68,14 +68,14 @@ void Networker::process_packet(const char* const packet)
 {
 	const packet_base<void>* pck_base = reinterpret_cast<const packet_base<void>*>(packet);
 	packet_size_t pck_size = pck_base->size;
-	PAKCET_TYPE pck_type = pck_base->packet_type;
+	PACKET_TYPE pck_type = pck_base->packet_type;
 
 	switch (pck_type)
 	{
-	case PAKCET_TYPE::NONE:
+	case PACKET_TYPE::NONE:
 	{
 	}
-	CASE PAKCET_TYPE::SC_HI_OK :
+	CASE PACKET_TYPE::SC_HI_OK :
 	{
 		auto pck = reinterpret_cast<const sc_hi_ok*>(packet);
 		//=pck->your_netid 내 넷아이디로 등록
@@ -83,7 +83,7 @@ void Networker::process_packet(const char* const packet)
 		CEventMgr::GetInst()->CallCreatePlayer((int)pck->your_netid, 7, 200.f + (float)WIN_X / 2.f, 200.f + (float)WIN_Y / 2.f);
 
 	}
-	CASE PAKCET_TYPE::SC_INFO :
+	CASE PACKET_TYPE::SC_INFO :
 	{
 		auto pck = reinterpret_cast<const sc_info*>(packet);
 		// 캐릭터의정보, 이미 있는경우, 없다가 생긴경우, 내 정보 모두 포함
@@ -103,7 +103,7 @@ void Networker::process_packet(const char* const packet)
 		}
 
 	}
-	CASE PAKCET_TYPE::SC_NEW_CHARACTOR :
+	CASE PACKET_TYPE::SC_NEW_CHARACTOR :
 	{
 		// 새캐릭터의 접속! => 새캐릭터 생성
 		auto pck = reinterpret_cast<const sc_new_charactor*>(packet);
@@ -117,13 +117,13 @@ void Networker::process_packet(const char* const packet)
 		// 내 정보 입력
 		do_send(&my_info, sizeof(my_info));
 	}
-	CASE PAKCET_TYPE::SC_HEART_BEAT:
+	CASE PACKET_TYPE::SC_HEART_BEAT:
 	{
 		cout << ".";
 		static cs_heart_beat csheartbeat;
 		do_send(&csheartbeat, sizeof(csheartbeat));
 	}
-	CASE PAKCET_TYPE::SC_DISCONNECT :
+	CASE PACKET_TYPE::SC_DISCONNECT :
 	{
 		auto pck = reinterpret_cast<const sc_disconnect*>(packet);
 		cout << (int)pck->DisconnectID << "::" << "Disconnect" << endl;

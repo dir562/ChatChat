@@ -23,7 +23,6 @@ void Session::disconnect()
 		}
 	}
 
-	UNIQUE_LOCK lck{ connection_lock_ };
 	cout << "disconnect" << net_id_ << endl;
 	state_ = SESSION_STATE::disconnected;
 	::closesocket(socket_);
@@ -34,10 +33,8 @@ void Session::do_recv()
 	cout << "do_recv" << net_id_ << endl;
 	while (state_ != SESSION_STATE::disconnected)
 	{
-		TRY_LOCK_SHARED_OR_RETURN(connection_lock_);
 		auto buf_len = net_buf_.size() - prerecv_size_;
 		auto buf_start = net_buf_.data() + prerecv_size_;
-		UNLOCK_SHARED(connection_lock_);
 		auto ret = ::recv(socket_, buf_start, buf_len, NULL);
 		cout << "recv" << net_id_ << "::" << ret << endl;
 
@@ -53,12 +50,8 @@ void Session::do_recv()
 		for (auto need_bytes = reinterpret_cast<packet_base<void>*>(pck_start)->size;
 			need_bytes <= remain_bytes;)
 		{
-			//auto new_packet = std::malloc(need_bytes * 8);
-			//memcpy(new_packet, pck_start, need_bytes);
-
 			Server::get().process_packet(net_id_, pck_start);
-			//packet_queue.push(make_pair(new_packet, net_id_));
-			//cout << "push" << (int)need_bytes << net_id_ << endl;
+
 			pck_start += need_bytes;
 			remain_bytes -= need_bytes;
 			need_bytes = reinterpret_cast<packet_base<void>*>(pck_start)->size;

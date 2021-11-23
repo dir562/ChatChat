@@ -28,7 +28,7 @@ const int MAX_PACKET_SIZE = 256;
 
 BETTER_ENUM
 (
-	PAKCET_TYPE, int8
+	PACKET_TYPE, int8
 
 	, NONE = 0
 
@@ -36,10 +36,10 @@ BETTER_ENUM
 
 	, CS_NONE = 10
 	, CS_TEST_CHAT
-	, CS_TEST_MOVE
 	, CS_MY_INFO
 	, CS_HI
 	, CS_HEART_BEAT
+	, CS_KEY_INPUT
 
 	/* Server 2 Client */
 
@@ -50,6 +50,7 @@ BETTER_ENUM
 	, SC_HI_OK
 	, SC_INFO
 	, SC_DISCONNECT
+	, SC_KEY_INPUT
 
 );
 
@@ -64,7 +65,7 @@ template<class T>
 struct packet_base
 {
 	packet_size_t size = sizeof(T);
-	PAKCET_TYPE packet_type = +PAKCET_TYPE::_from_string_nocase(typeid(T).name() + 7);
+	PACKET_TYPE packet_type = +PACKET_TYPE::_from_string_nocase(typeid(T).name() + 7);
 };
 #define PACKET(name) struct name : packet_base<name>											
 
@@ -72,7 +73,7 @@ PACKET(none)
 {
 };
 
-//=============== 위치정보 =================
+//=============== new connection =================
 
 PACKET(cs_hi)
 {
@@ -106,20 +107,27 @@ PACKET(sc_new_charactor)
 	float y;
 };
 
-//=============== MOVE_INPUT =================
+//=============== key_input =================
 
-// 이동연잔자들, 비트연산으로 press,unpress 설정
 enum MOVE_DIR : int8
 {
-	FORWARD = 1 << 0,
-	BACK = 1 << 1,
-	LEFT = 1 << 2,
-	RIGHT = 1 << 3
+	NONE = 0,
+	SPACE = 1,
+	LEFT = 2,
+	RIGHT = 3,
+
+	PRESS = 1 << 2,
 };
 
-PACKET(cs_test_move)
+PACKET(cs_key_input)
 {
-	int8 dir{};
+	int8 key;
+};
+
+PACKET(sc_key_input)
+{
+	NetID netid;
+	int8 key;
 };
 
 //===============  test CHATTING =================
@@ -137,17 +145,18 @@ PACKET(sc_test_chat)
 	char padding = '\0';
 };
 
-//===============  test heart_bit =================
-#include <chrono>
+//===============  heart_bit & disconnect =================
 
 PACKET(sc_heart_beat)
 {
-	
+
 };
+
 PACKET(cs_heart_beat)
 {
 
 };
+
 PACKET(sc_disconnect) {
 	NetID DisconnectID;
 };

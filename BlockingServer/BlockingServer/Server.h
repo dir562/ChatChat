@@ -49,12 +49,12 @@ public:
 		auto packet_type = reinterpret_cast<const packet_base<void>*>(packet)->packet_type;
 		switch (packet_type)
 		{
-		case PAKCET_TYPE::CS_HEART_BEAT:
+		case PACKET_TYPE::CS_HEART_BEAT:
 		{
 			cout << ".";
 			//
 		}
-		CASE PAKCET_TYPE::CS_HI:
+		CASE PACKET_TYPE::CS_HI:
 		{
 			cout << (int)net_id << "::hi" << endl;
 			sc_new_charactor new_charactor_packet;
@@ -80,7 +80,7 @@ public:
 				}
 			}
 		}
-		CASE PAKCET_TYPE::CS_MY_INFO :
+		CASE PACKET_TYPE::CS_MY_INFO :
 		{
 			auto p = reinterpret_cast<const cs_my_info*>(packet);
 			sc_info info_packet;
@@ -104,16 +104,37 @@ public:
 				s.do_send(&info_packet, sizeof(info_packet));
 			}
 		}
+		CASE PACKET_TYPE::CS_KEY_INPUT :
+		{
+			auto p = reinterpret_cast<const cs_key_input*>(packet);
+			sc_key_input key_input_packet;
+			key_input_packet.netid = net_id;
+			key_input_packet.key = p->key;
+
+			for (auto& s : sessions_)
+			{
+				if (s.check_state(SESSION_STATE::disconnected))
+				{
+					continue;
+				}
+
+				if (s.get_net_id() == net_id)
+				{
+					continue;
+				}
+
+				s.do_send(&key_input_packet, sizeof(key_input_packet));
+			}
+		}
 		break; default: break;
 		}
 	}
 
 public:
-	//GET_REF(packet_queue);
 	GET_REF_UNSAFE(sessions);
 
 private:
-	//concurrent_queue<pair<void*, NetID>> packet_queue_;
 	array<Session, 20> sessions_;
 };
 
+// 필료없는 부분 제거,,ㄴ => 닥치지않은 일 대비하지 말 것..
