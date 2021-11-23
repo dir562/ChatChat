@@ -4,6 +4,7 @@
 #include "CPlayer.h"
 #include "CSceneMgr.h"
 #include "CScene.h"
+#include "CTestPlayer.h"
 void Networker::do_recv()
 {
 	cs_hi hi_packet; do_send(&hi_packet, sizeof(hi_packet));
@@ -136,6 +137,19 @@ void Networker::process_packet(const char* const packet)
 		}
 		cout << "ERROR!!!!" << (int)pck->DisconnectID << "is not exists" << endl;
 	}
+	CASE PACKET_TYPE::SC_KEY_INPUT:
+	{
+		auto pck = reinterpret_cast<const sc_key_input*>(packet);
+		auto press = pck->key & KEY_INPUT::PRESS;
+		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+		for (auto p : player) {
+			if (p->GetID() == (int)pck->netid) {
+				dynamic_cast<CTestPlayer*>(p)->MovingData(pck->key, press);
+				return;
+			}
+		}
+	}
+
 
 	break; default: break;
 	}

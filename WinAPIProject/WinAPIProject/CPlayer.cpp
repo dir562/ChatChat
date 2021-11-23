@@ -108,7 +108,7 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 
 void CPlayer::OnCollision(CCollider* _pOther)
 {
-	if (7 == m_iLife)
+	if (0 == m_iLife)
 		return;
 	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
 	bool b = false;
@@ -132,7 +132,7 @@ void CPlayer::PressSpaceBar()
 	SetPos(vPos);
 
 }
-
+#include "Networker.h"
 void CPlayer::CheckState()
 {
 	// 현재상태를 이전상태로 저장해둠
@@ -145,6 +145,9 @@ void CPlayer::CheckState()
 		{
 			m_eState = PLAYER_STATE::MOVE;
 			m_eDir = DIR::LEFT;
+			cs_key_input pck;
+			pck.key = KEY_INPUT::LEFT;
+			Networker::get().do_send(&pck, sizeof(pck));
 		}
 		if (KEY_TAP(KEY_TYPE::SPACE))
 		{
@@ -153,16 +156,25 @@ void CPlayer::CheckState()
 				return;
 			}
 			m_bJump = true;
+			cs_key_input pck;
+			pck.key = KEY_INPUT::SPACE;
+			Networker::get().do_send(&pck, sizeof(pck));
 		}
 		if (KEY_TAP(KEY_TYPE::KEY_RIGHT))
 		{
 			m_eState = PLAYER_STATE::MOVE;
 			m_eDir = DIR::RIGHT;
+			cs_key_input pck;
+			pck.key = KEY_INPUT::RIGHT;
+			Networker::get().do_send(&pck, sizeof(pck));
 		}
 
 		if (KEY_NONE(KEY_TYPE::KEY_LEFT) && KEY_NONE(KEY_TYPE::KEY_RIGHT))
 		{
 			m_eState = PLAYER_STATE::IDLE;
+			cs_key_input pck;
+			pck.key = KEY_INPUT::NONE;
+			Networker::get().do_send(&pck, sizeof(pck));
 		}
 	}
 }

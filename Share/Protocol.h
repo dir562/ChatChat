@@ -109,7 +109,7 @@ PACKET(sc_new_charactor)
 
 //=============== key_input =================
 
-enum MOVE_DIR : int8
+enum KEY_INPUT : int8
 {
 	NONE = 0,
 	SPACE = 1,
@@ -121,13 +121,13 @@ enum MOVE_DIR : int8
 
 PACKET(cs_key_input)
 {
-	int8 key;
+	KEY_INPUT key;
 };
 
 PACKET(sc_key_input)
 {
 	NetID netid;
-	int8 key;
+	KEY_INPUT key;
 };
 
 //===============  test CHATTING =================

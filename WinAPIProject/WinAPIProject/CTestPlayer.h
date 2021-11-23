@@ -48,12 +48,17 @@ public:
 	int GetLife() { return m_iLife; }
 	virtual CTestPlayer* Clone() { return new CTestPlayer(*this); }
 
+	void MovingData(UINT _uKey,int _bPress);
 
 	void SetJumpPower(float _Power) { m_fJumpPower = _Power; }
 private:
-
+	void CheckState();
+	void Jumping();
+	void Move();
+	void ValueInit();
 
 public:
+
 	CTestPlayer();
 	~CTestPlayer();
 };
