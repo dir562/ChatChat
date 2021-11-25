@@ -221,6 +221,7 @@ void CTestPlayer::ValueInit()
 	vPos.y = m_vStartPos.y;
 	SetPos(vPos);
 	m_bJump = false;
+	m_bAttack = false;
 	m_fJumpPower = 1200.f;
 }
 
