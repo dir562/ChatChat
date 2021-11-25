@@ -167,6 +167,9 @@ void CPlayer::CheckState()
 				Networker::get().do_send(&pck, sizeof(pck));
 				bSpace = true;
 			}
+			if (!m_bJump) {
+				m_fJumpPower = 1200.f;
+			}
 			m_bJump = true;
 			
 			

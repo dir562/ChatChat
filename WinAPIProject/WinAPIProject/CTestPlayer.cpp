@@ -123,7 +123,9 @@ void CTestPlayer::MovingData(UINT _uKey)
 		m_eState = TESTPLAYER_STATE::IDLE;
 	}
 	else if (1 == _uKey) {
-		
+		if (!m_bJump) {
+			m_fJumpPower = 1200.f;
+		}
 		m_bJump = true;
 	}
 	else if (2 == _uKey) {
