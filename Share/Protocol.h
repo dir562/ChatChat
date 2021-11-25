@@ -25,7 +25,7 @@ const int MAX_PACKET_SIZE = std::numeric_limits<packet_size_t>::max() + 1;
 
 constexpr int MAX_HP = 7;
 constexpr float DEFAULT_X = 840.f;
-constexpr float DEFAULT_Y = 584.f;
+constexpr float DEFAULT_Y = 639.5f;
 
 //====================================
 
