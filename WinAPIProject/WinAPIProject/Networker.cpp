@@ -81,7 +81,7 @@ void Networker::process_packet(const char* const packet)
 		auto pck = reinterpret_cast<const sc_hi_ok*>(packet);
 		//=pck->your_netid 내 넷아이디로 등록
 		cout << "!!!!0" << endl;
-		CEventMgr::GetInst()->CallCreatePlayer((int)pck->your_netid, 7, 200.f + (float)WIN_X / 2.f, 200.f + (float)WIN_Y / 2.f);
+		CEventMgr::GetInst()->CallCreatePlayer((int)pck->your_netid, 7, 200.f + (float)WIN_X / 2.f, 255.5f + (float)WIN_Y / 2.f);
 
 	}
 	CASE PACKET_TYPE::SC_INFO :
@@ -109,7 +109,7 @@ void Networker::process_packet(const char* const packet)
 		// 새캐릭터의 접속! => 새캐릭터 생성
 		auto pck = reinterpret_cast<const sc_new_charactor*>(packet);
 		cout << (int)pck->netid << "::" << pck->x << ", " << pck->y << "::" << pck->hp << endl;
-		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, (int)pck->hp, pck->x, pck->y);
+		CEventMgr::GetInst()->CallCreateOtherPlayer((int)pck->netid, (int)pck->hp, pck->x, pck->y	);
 		cs_my_info my_info;
 		auto PLAYER = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
 		my_info.hp = dynamic_cast<CPlayer*>(PLAYER)->GetLife();

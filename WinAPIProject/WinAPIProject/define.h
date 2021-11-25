@@ -89,4 +89,3 @@ struct Disconnet_Packet {
 };
 
 
-#define PACKET 

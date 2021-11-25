@@ -25,7 +25,7 @@ void CSceneMgr::init()
 	m_arrScene[(UINT)SCENE_TYPE::START] = new CStartScene;
 	m_arrScene[(UINT)SCENE_TYPE::STAGE_01] = new CStage01Scene;
 	
-	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::START];
+	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_01];
 	m_pCurScene->Enter();
 }
 

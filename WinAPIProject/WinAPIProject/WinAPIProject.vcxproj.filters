@@ -50,9 +50,6 @@
     <Filter Include="Game\06. Component\Collider">
       <UniqueIdentifier>{af2f3603-3368-4dff-a916-e3c56eaed2fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server">
-      <UniqueIdentifier>{49b8aee6-1b00-44f5-ac72-36bf62acfb73}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\03. Object\Player\Test">
       <UniqueIdentifier>{2c4af8b1-4e9f-4a16-8f1d-2bbf9f2e3c58}</UniqueIdentifier>
     </Filter>
@@ -136,9 +133,6 @@
     <ClInclude Include="func.h">
       <Filter>Game\00. Header</Filter>
     </ClInclude>
-    <ClInclude Include="CProcessServer.h">
-      <Filter>Server</Filter>
-    </ClInclude>
     <ClInclude Include="CTestPlayer.h">
       <Filter>Game\03. Object\Player\Test</Filter>
     </ClInclude>
@@ -168,6 +162,9 @@
     </ClInclude>
     <ClInclude Include="Networker.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Game\03. Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +228,6 @@
     <ClCompile Include="func.cpp">
       <Filter>Game\00. Header</Filter>
     </ClCompile>
-    <ClCompile Include="CProcessServer.cpp">
-      <Filter>Server</Filter>
-    </ClCompile>
     <ClCompile Include="CTestPlayer.cpp">
       <Filter>Game\03. Object\Player\Test</Filter>
     </ClCompile>
@@ -245,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Game\03. Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

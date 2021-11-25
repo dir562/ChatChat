@@ -112,9 +112,9 @@ void CPlayer::OnCollision(CCollider* _pOther)
 		return;
 	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
 	bool b = false;
-	if (player->GetJumpPower() < 0)
+	if (player->GetJumpPower() <= 0)
 		b = true;
-	if (!b)
+	if (!b&&nullptr!=player)
 		m_fJumpPower = 700.f;
 
 }
@@ -213,7 +213,7 @@ void CPlayer::Jumping()
 	if (m_bJump) {
 		Vec2 vPos = GetPos();
 		if (vPos.y > m_vStartPos.y) {
-			ValueInit();
+ 			ValueInit();
 			return;
 		}
 		vPos.y -= m_fJumpPower * fDT;

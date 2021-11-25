@@ -99,6 +99,21 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 		m_iLife -= 1;
 		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
 	}
+	if (player->GetJumpPower() < 0 && m_fJumpPower > 0) {
+		m_fJumpPower = -100.f;
+	}
+}
+
+void CTestPlayer::OnCollision(CCollider* _pOther)
+{
+	if (0 == m_iLife)
+		return;
+	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
+	bool b = false;
+	if (player->GetJumpPower() < 0)
+		b = true;
+	if (!b)
+		m_fJumpPower = 700.f;
 }
 
 void CTestPlayer::MovingData(UINT _uKey)

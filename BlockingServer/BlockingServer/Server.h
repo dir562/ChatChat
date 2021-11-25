@@ -61,7 +61,7 @@ public:
 			new_charactor_packet.netid = net_id;
 			new_charactor_packet.hp = 7;
 			new_charactor_packet.x = 840.f;
-			new_charactor_packet.y = 584.f;
+			new_charactor_packet.y = 584.f+55.5f;
 			for (auto& s : sessions_)
 			{
 				if (s.check_state(SESSION_STATE::disconnected))
