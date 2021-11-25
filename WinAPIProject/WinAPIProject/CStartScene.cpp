@@ -18,7 +18,7 @@ void CStartScene::init()
 	// 충돌 그룹 지정
 	CCollisionMgr::GetInst()->CollisionCheckClear();
 	CCollisionMgr::GetInst()->CollisionCheck(OBJ_TYPE::PLAYER, OBJ_TYPE::OTHERPLAYER);
-
+	//CCollisionMgr::GetInst()->CollisionCheck(OBJ_TYPE::OTHERPLAYER, OBJ_TYPE::OTHERPLAYER);
 	// 카메라 초기화
 	CCamera::GetInst()->init();
 }

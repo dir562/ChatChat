@@ -89,32 +89,71 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 	if (0 == m_iLife)
 		return;
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
-	bool  b=false;
-	if (player->GetJumpPower() < 0) {
-		b = true;
+	bool  b = false;
+	if (nullptr == player) {
+		CTestPlayer* player2 = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
+		if (nullptr == player2) {
+			return;
+		}
+		else {
+			if (player2->GetJumpPower() < 0) {
+				b = true;
+			}
+			if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
+				m_iLife -= 1;
+				m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
+			}
+			if (player2->GetJumpPower() < 0 && m_fJumpPower > 0) {
+				m_fJumpPower = -100.f;
+			}
+		}
+	}
+	else {
+		if (player->GetJumpPower() < 0) {
+			b = true;
+		}
+		if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
+			m_iLife -= 1;
+			m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
+		}
+		if (player->GetJumpPower() < 0 && m_fJumpPower > 0) {
+			m_fJumpPower = -100.f;
+		}
 	}
 
+	
 
-	if (GetPos().y > _pOther->GetObj()->GetPos().y&&b) {
-		m_iLife -= 1;
-		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
-	}
-	if (player->GetJumpPower() < 0 && m_fJumpPower > 0) {
-		m_fJumpPower = -100.f;
-	}
+
+	
 }
 
 void CTestPlayer::OnCollision(CCollider* _pOther)
 {
-	if (0 == m_iLife||m_fJumpPower==0.f)
+	if (0 == m_iLife || m_fJumpPower == 0.f)
 		return;
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
-	bool b = false;
-	if (player->GetJumpPower() < 0)
-		b = true;
-	if (m_bAttack) {
-		m_fJumpPower = 700.f;
+	if (player == nullptr)
+	{
+		CTestPlayer* player2 = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
+		if (nullptr == player2) {
+			return;
+		}
+		bool b = false;
+		if (player2->GetJumpPower() < 0)
+			b = true;
+		if (m_bAttack) {
+			m_fJumpPower = 700.f;
+		}
 	}
+	else {
+		bool b = false;
+		if (player->GetJumpPower() < 0)
+			b = true;
+		if (m_bAttack) {
+			m_fJumpPower = 700.f;
+		}
+	}
+
 }
 
 void CTestPlayer::MovingData(UINT _uKey)

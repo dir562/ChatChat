@@ -12,7 +12,7 @@ using packet_size_t = uint8;
 
 const uint16_t SERVER_PORT = 8282;
 const auto SERVER_IP = 
-"192.168.183.132";
+"127.0.0.1";
 //"127.0.0.1";
 //====================================
 

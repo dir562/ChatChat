@@ -156,6 +156,14 @@ void Networker::process_packet(const char* const packet)
 		for (auto p : player) {
 			if (p->GetID() == (int)pck->attacker_id) {
 				dynamic_cast<CTestPlayer*>(p)->SetAttack(true);
+				auto player2 = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+				for (auto p2 : player2) {
+					if (p2->GetID() == (int)pck->be_attacked_id) {
+						p2->OnCollisionEnter(p->GetCollider());
+						p2->OnCollision(p->GetCollider());
+					}
+
+				}
 			}
 		}
 	}
