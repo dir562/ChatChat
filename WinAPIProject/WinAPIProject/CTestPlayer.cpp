@@ -23,7 +23,7 @@ CTestPlayer::CTestPlayer()
 	, m_ePrevDir(DIR::NONE)
 	, m_ePrevState(TESTPLAYER_STATE::IDLE)
 	, m_fMoveSpeed(100.f)
-	,m_fJumpPower(0.f)
+	,m_fJumpPower(0.0f)
 	,m_bJump(false)
 	, m_iLife(7)
 	
@@ -106,14 +106,15 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 
 void CTestPlayer::OnCollision(CCollider* _pOther)
 {
-	if (0 == m_iLife)
+	if (0 == m_iLife||m_fJumpPower==0.f)
 		return;
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
 	bool b = false;
 	if (player->GetJumpPower() < 0)
 		b = true;
-	if (!b)
+	if (m_bAttack) {
 		m_fJumpPower = 700.f;
+	}
 }
 
 void CTestPlayer::MovingData(UINT _uKey)

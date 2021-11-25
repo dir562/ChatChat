@@ -149,6 +149,16 @@ void Networker::process_packet(const char* const packet)
 			}
 		}
 	}
+	CASE PACKET_TYPE::SC_ATTACK:
+	{
+		auto pck = reinterpret_cast<const sc_attack*>(packet);
+		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+		for (auto p : player) {
+			if (p->GetID() == (int)pck->attacker_id) {
+				dynamic_cast<CTestPlayer*>(p)->SetAttack(true);
+			}
+		}
+	}
 
 
 	break; default: break;

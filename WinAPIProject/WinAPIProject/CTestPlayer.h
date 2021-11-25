@@ -35,8 +35,11 @@ private:
 	float m_fJumpPower;
 	int m_iLife;
 	vector<COLORREF> m_BrushColor;
+	bool m_bAttack;
 
 public:
+	bool GetAttack() { return m_bAttack; }
+	void SetAttack(bool _bAtt) { m_bAttack = _bAtt; }
 	virtual void init();
 	float GetJumpPower() { return m_fJumpPower; }
 	virtual void update();	

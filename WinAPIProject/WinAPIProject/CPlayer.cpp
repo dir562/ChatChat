@@ -98,6 +98,7 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 	if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
 		m_iLife -= 1;
 		m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
+		
 	}
 
 	if (player->GetJumpPower() < 0 && m_fJumpPower > 0) {
@@ -108,15 +109,18 @@ void CPlayer::OnCollisionEnter(CCollider* _pOther)
 
 void CPlayer::OnCollision(CCollider* _pOther)
 {
-	if (0 == m_iLife)
+	if (0 == m_iLife||m_fJumpPower==0.f)
 		return;
 	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
 	bool b = false;
-	if (player->GetJumpPower() <= 0)
+	if (player->GetJumpPower() < 0)
 		b = true;
-	if (!b&&nullptr!=player)
+	if (!b && nullptr != player) {
 		m_fJumpPower = 700.f;
-
+		cs_attack pck;
+		pck.be_attacked_id = player->GetID();
+		Networker::get().do_send(&pck, sizeof(pck));
+	}
 }
 
 
