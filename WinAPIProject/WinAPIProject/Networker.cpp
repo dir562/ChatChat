@@ -160,10 +160,8 @@ void Networker::process_packet(const char* const packet)
 				for (auto p2 : player2) {
 					if (p2->GetID() == (int)pck->be_attacked_id) {
 						p2->OnCollisionEnter(p->GetCollider());
-						dynamic_cast<CTestPlayer*>(p)->SetAttack(true);
 						p2->OnCollision(p->GetCollider());
 
-						p2->SetID(p2->GetID() - 1);
 					}
 
 				}
