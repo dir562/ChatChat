@@ -34,6 +34,11 @@ CTestPlayer::~CTestPlayer()
 {
 }
 
+bool CTestPlayer::IsAttack(CObj* _Obj1, CObj* _Obj2)
+{
+	return false;
+}
+
 void CTestPlayer::init()
 {
 
@@ -86,8 +91,6 @@ void CTestPlayer::render(HDC _dc)
 
 void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 {
-	if (0 == m_iLife)
-		return;
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
 	bool  b = false;
 	if (nullptr == player) {
@@ -99,7 +102,7 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 			if (player2->GetJumpPower() < 0) {
 				b = true;
 			}
-			if (GetPos().y > _pOther->GetObj()->GetPos().y && b) {
+			if (GetPos().y > _pOther->GetObj()->GetPos().y && b&&player2->GetAttack()) {
 				m_iLife -= 1;
 				m_Color = CreateSolidBrush(m_BrushColor[m_iLife]);
 			}
@@ -129,8 +132,6 @@ void CTestPlayer::OnCollisionEnter(CCollider* _pOther)
 
 void CTestPlayer::OnCollision(CCollider* _pOther)
 {
-	if (0 == m_iLife || m_fJumpPower == 0.f)
-		return;
 	CPlayer* player = dynamic_cast<CPlayer*>(_pOther->GetObj());
 	if (player == nullptr)
 	{
@@ -139,10 +140,10 @@ void CTestPlayer::OnCollision(CCollider* _pOther)
 			return;
 		}
 		bool b = false;
-		if (player2->GetJumpPower() < 0)
+		if (player2->GetJumpPower() <= 0)
 			b = true;
-		if (m_bAttack) {
-			m_fJumpPower = 700.f;
+		if (!b) {
+			player2->SetJumpPower(700.f);
 		}
 	}
 	else {

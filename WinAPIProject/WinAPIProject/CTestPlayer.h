@@ -38,6 +38,7 @@ private:
 	bool m_bAttack;
 
 public:
+	bool IsAttack(CObj* _Obj1, CObj* _Obj2);
 	bool GetAttack() { return m_bAttack; }
 	void SetAttack(bool _bAtt) { m_bAttack = _bAtt; }
 	virtual void init();

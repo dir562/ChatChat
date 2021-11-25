@@ -113,9 +113,10 @@ void CPlayer::OnCollision(CCollider* _pOther)
 		return;
 	CTestPlayer* player = dynamic_cast<CTestPlayer*>(_pOther->GetObj());
 	bool b = false;
-	if (player->GetJumpPower() < 0)
+	if (player->GetJumpPower() < 0.f)
 		b = true;
-	if (!b && nullptr != player) {
+
+	if (!b && nullptr != player&&m_bJump) {
 		m_fJumpPower = 700.f;
 		cs_attack pck;
 		pck.be_attacked_id = player->GetID();
@@ -192,6 +193,14 @@ void CPlayer::CheckState()
 		if (KEY_AWAY(KEY_TYPE::KEY_LEFT)) {
 			if (bleft == true) {
 				bleft = false;
+				if (KEY_HOLD(KEY_TYPE::KEY_RIGHT)) {
+					m_eState = PLAYER_STATE::MOVE;
+					m_eDir = DIR::RIGHT;
+					cs_key_input pck;
+					pck.key = KEY_INPUT::RIGHT;
+					Networker::get().do_send(&pck, sizeof(pck));
+					return;
+				}
 				m_eState = PLAYER_STATE::IDLE;
 				cs_key_input pck;
 				pck.key = KEY_INPUT::NONE;
@@ -201,6 +210,14 @@ void CPlayer::CheckState()
 		if (KEY_AWAY(KEY_TYPE::KEY_RIGHT)) {
 			if (bright == true) {
 				bright = false;
+				if (KEY_HOLD(KEY_TYPE::KEY_LEFT)) {
+					m_eState = PLAYER_STATE::MOVE;
+					m_eDir = DIR::LEFT;
+					cs_key_input pck;
+					pck.key = KEY_INPUT::LEFT;
+					Networker::get().do_send(&pck, sizeof(pck));
+					return;
+				}
 				m_eState = PLAYER_STATE::IDLE;
 				cs_key_input pck;
 				pck.key = KEY_INPUT::NONE;
