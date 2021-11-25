@@ -59,7 +59,7 @@ public:
 		}
 	}
 
-	void do_send(void* packet, size_t packet_len)
+	void do_send(const void* packet, size_t packet_len)
 	{
 		auto res = ::send(socket_, reinterpret_cast<const char*>(packet), packet_len, NULL);
 		CHECK_ERR_DISPLAY(res, "send");

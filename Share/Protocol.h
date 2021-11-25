@@ -19,7 +19,13 @@ const int MAX_NAME_SIZE = 10;
 const int MAX_PLAYER = 20;
 const int MAX_ENEMY = 30;
 const int MAX_OBJECT = MAX_PLAYER + MAX_ENEMY;
-const int MAX_PACKET_SIZE = 256;
+const int MAX_PACKET_SIZE = std::numeric_limits<packet_size_t>::max() + 1;
+
+//====================================
+
+constexpr int MAX_HP = 7;
+constexpr float DEFAULT_X = 840.f;
+constexpr float DEFAULT_Y = 584.f;
 
 //====================================
 
@@ -40,6 +46,7 @@ BETTER_ENUM
 	, CS_HI
 	, CS_HEART_BEAT
 	, CS_KEY_INPUT
+	, CS_ATTACK
 
 	/* Server 2 Client */
 
@@ -51,7 +58,7 @@ BETTER_ENUM
 	, SC_INFO
 	, SC_DISCONNECT
 	, SC_KEY_INPUT
-
+	, SC_ATTACK
 );
 
 #pragma warning(pop)
@@ -115,8 +122,6 @@ enum KEY_INPUT : int8
 	SPACE = 1,
 	LEFT = 2,
 	RIGHT = 3,
-
-	
 };
 
 PACKET(cs_key_input)
@@ -128,6 +133,19 @@ PACKET(sc_key_input)
 {
 	NetID netid;
 	KEY_INPUT key;
+};
+
+//=============== attack =================
+
+PACKET(cs_attack)
+{
+	NetID be_attacked_id;
+};
+
+PACKET(sc_attack)
+{
+	NetID attacker_id;
+	NetID be_attacked_id;
 };
 
 //===============  test CHATTING =================

@@ -31,12 +31,18 @@ private:
 		SOCKADDR_IN server_addr; ZeroMemory(&server_addr, sizeof(server_addr));
 		server_addr.sin_family = AF_INET;
 		server_addr.sin_port = ::htons(SERVER_PORT);
-		::inet_pton(AF_INET, server_ip, &server_addr.sin_addr);
+		auto ret = ::inet_pton(AF_INET, server_ip, &server_addr.sin_addr);
+		if (SOCKET_ERROR == ret)
+		{
+			SocketUtil::ReportError("inet_pton fail.");
+			SocketUtil::DisplayError(WSAGetLastError());
+			exit(-1);
+		}
 
 		char tcp_opt = 1;
 		::setsockopt(socket_, IPPROTO_TCP, TCP_NODELAY, (char*)&tcp_opt, sizeof(tcp_opt));
 
-		auto ret = ::connect(socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
+		ret = ::connect(socket_, reinterpret_cast<sockaddr*>(&server_addr), sizeof(server_addr));
 
 		if (SOCKET_ERROR == ret)
 		{
