@@ -19,7 +19,6 @@ ListenSocket::~ListenSocket()
 {
 	::closesocket(listen_socket_);
 	REPORT_ERROR("Maybe ServerDown");
-
 }
 
 

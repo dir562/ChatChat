@@ -50,7 +50,7 @@ public:
 	GET_REF_UNSAFE(sessions);
 
 private:
-	array<Session, 20> sessions_;
+	array<Session, MAX_PLAYER> sessions_;
 };
 
 // 필료없는 부분 제거,,ㄴ => 닥치지않은 일 대비하지 말 것..

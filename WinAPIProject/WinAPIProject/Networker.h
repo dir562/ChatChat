@@ -27,12 +27,13 @@ private:
 
 	void connect(const char* server_ip)
 	{
-		//server_ip = "192.168.120.70";
 		SOCKADDR_IN server_addr; ZeroMemory(&server_addr, sizeof(server_addr));
 		server_addr.sin_family = AF_INET;
 		server_addr.sin_port = ::htons(SERVER_PORT);
 		auto ret = ::inet_pton(AF_INET, server_ip, &server_addr.sin_addr);
-		if (SOCKET_ERROR == ret)
+		//::inet_addr(server_ip);
+		cout << ret << "!" << endl;
+		if (1 != ret)
 		{
 			SocketUtil::ReportError("inet_pton fail.");
 			SocketUtil::DisplayError(WSAGetLastError());
