@@ -15,6 +15,17 @@ void CBackground::Init()
 
 }
 
+void CBackground::Init(const wchar_t* _pName, const wchar_t* _pPath)
+{
+	m_pTex = CResMgr::GetInst()->FindTexture(_pName);
+	if (nullptr == m_pTex)
+		m_pTex = CResMgr::GetInst()->LoadTexture(_pName, _pPath);
+	Vec2 vPos = GetPos();
+	vPos.x += WIN_X / 2;
+	vPos.y += WIN_Y / 2;
+	SetPos(vPos);
+}
+
 void CBackground::render(HDC _dc)
 {
 	Vec2 vPos = GetPos();

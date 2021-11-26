@@ -6,6 +6,7 @@ class CStage01Scene :
 {
 
 public:
+	virtual void init();
 	virtual void update();
 
 	virtual void Enter();
