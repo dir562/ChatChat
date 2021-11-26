@@ -44,6 +44,7 @@ public:
 	virtual void init();
 	float GetJumpPower() { return m_fJumpPower; }
 	virtual void update();	
+	bool GetJumping() { return m_bJump; }
 	virtual void render(HDC _dc);
 	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }
 	virtual void OnCollisionEnter(CCollider* _pOther);

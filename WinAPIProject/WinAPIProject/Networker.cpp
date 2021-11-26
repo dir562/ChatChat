@@ -169,6 +169,9 @@ void Networker::process_packet(const char* const packet)
 					if ((int)pck->be_attacked_id == p2->GetID()) {
 						dynamic_cast<CTestPlayer*>(p)->SetJumpPower(700.f);
 						dynamic_cast<CTestPlayer*>(p2)->SetLifeandColor();
+						if (dynamic_cast<CTestPlayer*>(p2)->GetJumping()) {
+							dynamic_cast<CTestPlayer*>(p2)->SetJumpPower(-100.f);
+						}
 					}
 				}
 			}
