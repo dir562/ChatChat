@@ -31,8 +31,9 @@ private:
 		server_addr.sin_family = AF_INET;
 		server_addr.sin_port = ::htons(SERVER_PORT);
 		auto ret = ::inet_pton(AF_INET, server_ip, &server_addr.sin_addr);
-		//::inet_addr(server_ip);
-		cout << ret << "!" << endl;
+		char addr[30];
+		::inet_ntop(AF_INET, &server_addr.sin_addr, addr, sizeof(addr));
+		cout << addr << endl;
 		if (1 != ret)
 		{
 			SocketUtil::ReportError("inet_pton fail.");
