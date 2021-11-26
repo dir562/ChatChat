@@ -39,18 +39,19 @@ private:
 	vector<COLORREF> m_BrushColor;
 
 public:
+	bool m_bAttack;
 	virtual void init();
 	void SetLife(int _Life) { m_iLife = _Life; }
 	int GetLife() { return m_iLife; }
 	float GetJumpPower() { return m_fJumpPower; }
+	void SetJumpPower(int _JumpPower) { m_fJumpPower = _JumpPower; }
 	virtual void update();	
 	virtual void render(HDC _dc);
 	void SetStartPos(Vec2 _Pos) { m_vStartPos = _Pos; }
 	virtual void OnCollisionEnter(CCollider* _pOther);
 	virtual void OnCollision(CCollider* _pOther);
-	
 	virtual CPlayer* Clone() { return new CPlayer(*this); }
-
+	void SetLifeandColor();
 	void PressSpaceBar();
 
 private:

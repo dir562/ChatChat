@@ -50,6 +50,7 @@ public:
 	virtual void OnCollision(CCollider* _pOther);
 
 	void SetLife(int _Life) { m_iLife = _Life; }
+	void SetLifeandColor();
 	int GetLife() { return m_iLife; }
 	virtual CTestPlayer* Clone() { return new CTestPlayer(*this); }
 

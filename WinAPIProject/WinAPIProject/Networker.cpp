@@ -152,21 +152,30 @@ void Networker::process_packet(const char* const packet)
 	CASE PACKET_TYPE::SC_ATTACK:
 	{
 		auto pck = reinterpret_cast<const sc_attack*>(packet);
-		auto player = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
-		for (auto p : player) {
-			if (p->GetID() == (int)pck->attacker_id) {
-				dynamic_cast<CTestPlayer*>(p)->SetAttack(true);
-				auto player2 = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
-				for (auto p2 : player2) {
-					if (p2->GetID() == (int)pck->be_attacked_id) {
-						p2->OnCollision(p->GetCollider());
-						p->OnCollision(p2->GetCollider());
-				//		dynamic_cast<CTestPlayer*>(p2)->SetLife(dynamic_cast<CTestPlayer*>(p2)->GetLife() - 1);
-					}
-
+		auto Player= CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::PLAYER)[0];
+		auto Otherplayer = CSceneMgr::GetInst()->GetCurScene()->GetObjects(OBJ_TYPE::OTHERPLAYER);
+		if ((int)pck->be_attacked_id == Player->GetID()) {
+			for (auto p : Otherplayer) {
+				if (p->GetID() == (int)pck->attacker_id) {
+					dynamic_cast<CTestPlayer*>(p)->SetJumpPower(700.f);
+					dynamic_cast<CPlayer*>(Player)->SetLifeandColor();
+					return;
 				}
 			}
 		}
+		for (auto p : Otherplayer) {
+			if (p->GetID() == (int)pck->attacker_id) {
+				for (auto p2 : Otherplayer) {
+					if ((int)pck->be_attacked_id == p2->GetID()) {
+						dynamic_cast<CTestPlayer*>(p)->SetJumpPower(700.f);
+						dynamic_cast<CTestPlayer*>(p2)->SetLifeandColor();
+					}
+				}
+			}
+
+		}
+		
+		
 	}
 
 
