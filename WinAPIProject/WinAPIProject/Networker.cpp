@@ -161,7 +161,7 @@ void Networker::process_packet(const char* const packet)
 					if (p2->GetID() == (int)pck->be_attacked_id) {
 						p2->OnCollision(p->GetCollider());
 						p->OnCollision(p2->GetCollider());
-						//		dynamic_cast<CTestPlayer*>(p2)->SetLife(dynamic_cast<CTestPlayer*>(p2)->GetLife() - 1);
+				//		dynamic_cast<CTestPlayer*>(p2)->SetLife(dynamic_cast<CTestPlayer*>(p2)->GetLife() - 1);
 					}
 
 				}
